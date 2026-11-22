@@ -1,0 +1,23 @@
+name = "malkoun_counterexamples"
+version = "0.1.0"
+keywords = ["math", "lean4", "geometry", "graph-theory", "mathematical-physics"]
+defaultTargets = ["Matematyka", "Challenge", "Solution"]
+
+[leanOptions]
+pp.unicode.fun = true
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.37.0-rc1"
+
+[[lean_lib]]
+name = "Matematyka"
+
+[[lean_lib]]
+name = "Challenge"
+roots = ["Challenge"]
+
+[[lean_lib]]
+name = "Solution"
+roots = ["Solution"]

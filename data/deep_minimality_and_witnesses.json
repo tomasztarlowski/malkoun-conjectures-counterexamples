@@ -1,0 +1,3651 @@
+{
+  "total_duration_sec": 474.27,
+  "stage_1_n6": {
+    "count": 112,
+    "duration_sec": 75.38,
+    "min_2d_re": 1.3320778578700174,
+    "min_3d_re": 1.207153762391317,
+    "min_3d_abs": 1.2080026810679692,
+    "violations": [],
+    "top_10": [
+      {
+        "name": "tc_n6_5_m5",
+        "collinear_val": 4.000000000000002,
+        "scale": 4.000000000000002,
+        "n": 6,
+        "m": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          2
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 5,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": true,
+        "min_2d_re": 1.3320778578700174,
+        "min_3d_re": 1.207153762391317,
+        "min_3d_abs": 1.2080026810679692,
+        "min_edge_dist_2d": 0.0014018881527158623,
+        "min_all_dist_2d": 0.0014018881527158623,
+        "diameter_2d": 18.846978368934398,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_3_m5",
+        "collinear_val": 2.0000000000000004,
+        "scale": 2.0000000000000004,
+        "n": 6,
+        "m": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 5,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": true,
+        "min_2d_re": 1.500000519669386,
+        "min_3d_re": 1.5000000007578183,
+        "min_3d_abs": 1.5046855010046993,
+        "min_edge_dist_2d": 0.012565492943558096,
+        "min_all_dist_2d": 0.012565492943558096,
+        "diameter_2d": 6.256961389846945,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_4_m5",
+        "collinear_val": 8.000000000000002,
+        "scale": 8.000000000000002,
+        "n": 6,
+        "m": 5,
+        "edges": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 5,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": true,
+        "min_2d_re": 1.5000000056118272,
+        "min_3d_re": 2.0430030666414254,
+        "min_3d_abs": 2.0559677486750685,
+        "min_edge_dist_2d": 0.04450881270912355,
+        "min_all_dist_2d": 0.04450881270912355,
+        "diameter_2d": 6.571361958842728,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_2_m5",
+        "collinear_val": 12.000000000000002,
+        "scale": 12.000000000000002,
+        "n": 6,
+        "m": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          1,
+          1,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 5,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": true,
+        "min_2d_re": 2.2500000000361307,
+        "min_3d_re": 2.2500000019882025,
+        "min_3d_abs": 2.2500000019660376,
+        "min_edge_dist_2d": 0.03786665034989627,
+        "min_all_dist_2d": 0.03786665034989627,
+        "diameter_2d": 23.105856026066604,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_18_m6",
+        "collinear_val": 4.0,
+        "scale": 4.0,
+        "n": 6,
+        "m": 6,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "deg_seq": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "is_regular": true,
+        "node_connectivity": 2,
+        "edge_connectivity": 2,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 2.4062500004322103,
+        "min_3d_re": 2.414235570038512,
+        "min_3d_abs": 2.4183175211517574,
+        "min_edge_dist_2d": 0.013482527443910939,
+        "min_all_dist_2d": 0.013482527443910939,
+        "diameter_2d": 9.957650601242564,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_1_m5",
+        "collinear_val": 6.000000000000003,
+        "scale": 6.000000000000003,
+        "n": 6,
+        "m": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          4
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 5,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": true,
+        "min_2d_re": 3.000000000006061,
+        "min_3d_re": 2.66666669036238,
+        "min_3d_abs": 2.666666666799274,
+        "min_edge_dist_2d": 0.005679012822639475,
+        "min_all_dist_2d": 0.005679012822639475,
+        "diameter_2d": 161.77497994934873,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_17_m6",
+        "collinear_val": 8.000000000000002,
+        "scale": 8.000000000000002,
+        "n": 6,
+        "m": 6,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "deg_seq": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 1,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 3.024472014331659,
+        "min_3d_re": 2.9264207389949393,
+        "min_3d_abs": 2.925838211715329,
+        "min_edge_dist_2d": 0.014687651729940366,
+        "min_all_dist_2d": 0.014687651729940366,
+        "diameter_2d": 6.721280524376288,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_16_m6",
+        "collinear_val": 96.00000000000001,
+        "scale": 96.00000000000001,
+        "n": 6,
+        "m": 6,
+        "edges": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        "deg_seq": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 2,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 3.3697412311671293,
+        "min_3d_re": 4.414240367738749,
+        "min_3d_abs": 4.3339331831528325,
+        "min_edge_dist_2d": 0.00026235534876112055,
+        "min_all_dist_2d": 0.00026235534876112055,
+        "diameter_2d": 5.911575148614387,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_13_m6",
+        "collinear_val": 16.000000000000004,
+        "scale": 16.000000000000004,
+        "n": 6,
+        "m": 6,
+        "edges": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 2,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 3.765247725720493,
+        "min_3d_re": 3.9766904090067317,
+        "min_3d_abs": 4.043997640450007,
+        "min_edge_dist_2d": 0.3097110639832008,
+        "min_all_dist_2d": 0.3097110639832008,
+        "diameter_2d": 32.75405102438175,
+        "violates": false
+      },
+      {
+        "name": "tc_n6_12_m6",
+        "collinear_val": 48.00000000000001,
+        "scale": 48.00000000000001,
+        "n": 6,
+        "m": 6,
+        "edges": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 2,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 3.7830414682181983,
+        "min_3d_re": 6.002006771741311,
+        "min_3d_abs": 5.318797691118084,
+        "min_edge_dist_2d": 0.03991016724026357,
+        "min_all_dist_2d": 0.03991016724026357,
+        "diameter_2d": 2.4081205919895825,
+        "violates": false
+      }
+    ]
+  },
+  "stage_2_n7_nonbip_le11": {
+    "count": 445,
+    "duration_sec": 339.49,
+    "min_2d_re": 1.9461646005174578,
+    "violations": [],
+    "top_15_lowest": [
+      {
+        "name": "tc_n7_22_m7_k2",
+        "collinear_val": 4.0,
+        "scale": 4.0,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "is_regular": true,
+        "node_connectivity": 2,
+        "edge_connectivity": 2,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 1.9461646005174578,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.015862854830562087,
+        "min_all_dist_2d": 0.015862854830562087,
+        "diameter_2d": 5.706054576126903,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_17_m7_k1",
+        "collinear_val": 8.000000000000002,
+        "scale": 8.000000000000002,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 2,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 3.311267738301153,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.0018221949933012024,
+        "min_all_dist_2d": 0.0018221949933012024,
+        "diameter_2d": 6.779716456650276,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_18_m7_k1",
+        "collinear_val": 16.000000000000004,
+        "scale": 16.000000000000004,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 2,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 3.3269161120634534,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.20935535167145136,
+        "min_all_dist_2d": 0.20935535167145136,
+        "diameter_2d": 6.826382537066997,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_15_m7_k1",
+        "collinear_val": 8.000000000000004,
+        "scale": 8.000000000000004,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 4.141200505636845,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.06895226438748638,
+        "min_all_dist_2d": 0.06895226438748638,
+        "diameter_2d": 24.68757078410189,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_21_m7_k1",
+        "collinear_val": 24.000000000000007,
+        "scale": 24.000000000000007,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 2,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 4.194059804494303,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.0011104351336488078,
+        "min_all_dist_2d": 0.0011104351336488078,
+        "diameter_2d": 127.40675839998012,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_14_m7_k1",
+        "collinear_val": 8.000000000000004,
+        "scale": 8.000000000000004,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 4.711763671114255,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.0025169278263329226,
+        "min_all_dist_2d": 0.0025169278263329226,
+        "diameter_2d": 9.382191503592125,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_20_m7_k1",
+        "collinear_val": 16.000000000000007,
+        "scale": 16.000000000000007,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 4.809002471306208,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.0021133304539020905,
+        "min_all_dist_2d": 0.0021133304539020905,
+        "diameter_2d": 19.569721299182255,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_13_m7_k1",
+        "collinear_val": 48.00000000000001,
+        "scale": 48.00000000000001,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 2,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 5.222475438062176,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.024729906346578987,
+        "min_all_dist_2d": 0.024729906346578987,
+        "diameter_2d": 5.918950862147851,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_16_m7_k1",
+        "collinear_val": 48.00000000000001,
+        "scale": 48.00000000000001,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 5.705548938804969,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.0006651091735188413,
+        "min_all_dist_2d": 0.0006651091735188413,
+        "diameter_2d": 156.05256362448864,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_19_m7_k1",
+        "collinear_val": 24.000000000000007,
+        "scale": 24.000000000000007,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 5.904197670111297,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.17103433684275188,
+        "min_all_dist_2d": 0.17103433684275188,
+        "diameter_2d": 759.160318015593,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_9_m7_k1",
+        "collinear_val": 24.000000000000007,
+        "scale": 24.000000000000007,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          1,
+          2,
+          3,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 6.295256011340635,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.0007808132014226049,
+        "min_all_dist_2d": 0.0007808132014226049,
+        "diameter_2d": 12.595042993703244,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_6_m7_k1",
+        "collinear_val": 16.000000000000007,
+        "scale": 16.000000000000007,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          4
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 6.745082985812981,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 8.25145539762493e-05,
+        "min_all_dist_2d": 8.25145539762493e-05,
+        "diameter_2d": 29.94847942212991,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_5_m7_k1",
+        "collinear_val": 24.00000000000001,
+        "scale": 24.00000000000001,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          4
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 6.759142332080722,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.00035790728043897415,
+        "min_all_dist_2d": 0.00035790728043897415,
+        "diameter_2d": 11.536065658119385,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_12_m7_k1",
+        "collinear_val": 48.000000000000014,
+        "scale": 48.000000000000014,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 6.800761881512739,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.0005041487448475344,
+        "min_all_dist_2d": 0.0005041487448475344,
+        "diameter_2d": 16.230840344602672,
+        "violates": false
+      },
+      {
+        "name": "tc_n7_11_m7_k1",
+        "collinear_val": 48.000000000000014,
+        "scale": 48.000000000000014,
+        "n": 7,
+        "m": 7,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            6
+          ]
+        ],
+        "deg_seq": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        "is_regular": false,
+        "node_connectivity": 1,
+        "edge_connectivity": 1,
+        "is_biconnected": false,
+        "is_bridgeless": false,
+        "num_bridges": 4,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 6.884385545295394,
+        "min_3d_re": Infinity,
+        "min_3d_abs": Infinity,
+        "min_edge_dist_2d": 0.12218457237093441,
+        "min_all_dist_2d": 0.12218457237093441,
+        "diameter_2d": 35.501388012182765,
+        "violates": false
+      }
+    ]
+  },
+  "stage_3_n8_trifree_bip": {
+    "count": 7,
+    "duration_sec": 57.03,
+    "rows": [
+      {
+        "name": "Wagner_M8",
+        "collinear_val": 2304.000000000001,
+        "scale": 2304.000000000001,
+        "n": 8,
+        "m": 12,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "deg_seq": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "is_regular": true,
+        "node_connectivity": 3,
+        "edge_connectivity": 3,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": false,
+        "is_planar": false,
+        "is_tree": false,
+        "min_2d_re": -1002.3186361335311,
+        "min_3d_re": -2372.592402709837,
+        "min_3d_abs": 871.7063763629747,
+        "min_edge_dist_2d": 0.00032095812795639937,
+        "min_all_dist_2d": 0.00032095812795639937,
+        "diameter_2d": 109.75819587118494,
+        "best_2d_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.7259372877184549,
+            0.020861114547252063,
+            0.0
+          ],
+          [
+            -5.366269324197859,
+            12.19406693436239,
+            0.0
+          ],
+          [
+            -0.0031427072845326594,
+            -0.006321912339615434,
+            0.0
+          ],
+          [
+            -0.00295207380654274,
+            -0.005326753790774562,
+            0.0
+          ],
+          [
+            104.37747989988652,
+            13.974815973018815,
+            0.0
+          ],
+          [
+            -0.0653183572232781,
+            0.1012210488234478,
+            0.0
+          ],
+          [
+            -0.00024517849186993923,
+            0.00020712707941179147,
+            0.0
+          ]
+        ],
+        "best_3d_re_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            8.22579538756457,
+            30.413948235926075,
+            4.82914976513609
+          ],
+          [
+            118.76985235227598,
+            -168.68944713264938,
+            174.4740384672143
+          ],
+          [
+            -15.840531892745927,
+            -2.860059200959006,
+            -10.21731051220402
+          ],
+          [
+            -15.839978601247594,
+            -2.862579438766921,
+            -10.217825902601273
+          ],
+          [
+            464.31225932934115,
+            400.5929827900637,
+            147.27389575707662
+          ],
+          [
+            7.284900378161608,
+            -18.17649481703218,
+            6.620202095859256
+          ],
+          [
+            0.0023128021793525837,
+            -0.022824635905178095,
+            8.513465354555596e-05
+          ]
+        ],
+        "best_3d_abs_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.1356151943132926,
+            5.232782244008817,
+            0.0866142798257732
+          ],
+          [
+            1.7686973592420707,
+            16.01588486566659,
+            -2.1082961970942242
+          ],
+          [
+            -17.68347643778923,
+            -86.53187319456238,
+            -18.445994920151563
+          ],
+          [
+            0.17909823628686086,
+            -0.759047910088265,
+            0.5035973797259959
+          ],
+          [
+            1.1354435683828918,
+            5.231565881313473,
+            0.08594132896871524
+          ],
+          [
+            1.135321536866721,
+            5.231690639487496,
+            0.08543124064112242
+          ],
+          [
+            -0.2658113335453309,
+            -0.17587369549270623,
+            -0.9046403161734031
+          ]
+        ],
+        "violates": true,
+        "girth": 4,
+        "mp50_checks": {
+          "2d_re": {
+            "mp_re": "-1002.3186361335313438158408093",
+            "mp_im": "-1.95298336290876380627460749989e-47",
+            "mp_abs": "1002.3186361335313438158408093",
+            "float_val": -1002.3186361335311,
+            "rel_err": 2.268476981734387e-16,
+            "min_edge_dist": 0.00032095812795639937,
+            "min_all_dist": 0.00032095812795639937,
+            "diameter": 109.75819587118494,
+            "ok": false
+          },
+          "3d_re": {
+            "mp_re": "-2372.59240270983733121025522349",
+            "mp_im": "-1813.05676020537838207289960527",
+            "mp_abs": "2986.02905630920843018272431088",
+            "float_val": -2372.592402709837,
+            "rel_err": 0.0,
+            "min_edge_dist": 0.002631227347104506,
+            "min_all_dist": 0.002631227347104506,
+            "diameter": 666.4997282832637,
+            "ok": false
+          }
+        },
+        "verified_mp50": false
+      },
+      {
+        "name": "C5_chord_triFree_2conn_n8",
+        "collinear_val": 64.00000000000003,
+        "scale": 64.00000000000003,
+        "n": 8,
+        "m": 10,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "deg_seq": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 2,
+        "edge_connectivity": 2,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 28.4219883261215,
+        "min_3d_re": 28.410718271819547,
+        "min_3d_abs": 28.410403024222397,
+        "min_edge_dist_2d": 0.02796164296783582,
+        "min_all_dist_2d": 0.02796164296783582,
+        "diameter_2d": 13.659915390503402,
+        "best_2d_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -4.043916948711401,
+            1.7504843794136808,
+            0.0
+          ],
+          [
+            -9.723092850298944,
+            3.5825944323242065,
+            0.0
+          ],
+          [
+            -13.069356960730541,
+            -3.9161727933771964,
+            0.0
+          ],
+          [
+            -2.948189891312373,
+            -8.079642524595155,
+            0.0
+          ],
+          [
+            -13.078587647738042,
+            -3.942566881632529,
+            0.0
+          ],
+          [
+            -7.444086877642959,
+            -6.69191905468673,
+            0.0
+          ],
+          [
+            -3.0698562946318306,
+            -8.335319060925073,
+            0.0
+          ]
+        ],
+        "best_3d_re_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -0.3262790388601434,
+            -0.3739422340236463,
+            -2.2595227100018342
+          ],
+          [
+            -0.8650528770989717,
+            -1.023019354639927,
+            -4.881859223736124
+          ],
+          [
+            -3.499997461563707,
+            -4.464534235232453,
+            -3.9371656924354332
+          ],
+          [
+            -2.5744255264077696,
+            -3.365040928507974,
+            1.3619541771537167
+          ],
+          [
+            -3.6283416808739424,
+            -4.631610459018197,
+            -3.870095856507496
+          ],
+          [
+            -3.225554211010173,
+            -4.155520164534619,
+            -0.9888082170597138
+          ],
+          [
+            -2.7315400244857795,
+            -3.569332037871955,
+            1.4190049594012903
+          ]
+        ],
+        "best_3d_abs_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -0.25600818137769854,
+            -0.2733445117742837,
+            -2.13508466124649
+          ],
+          [
+            -0.7374570076147533,
+            -0.838093683430668,
+            -4.834949694630171
+          ],
+          [
+            -3.122539983323204,
+            -4.163411875202033,
+            -4.121750508801071
+          ],
+          [
+            -2.3441342746195466,
+            -3.2835124539281133,
+            1.1050391460588198
+          ],
+          [
+            -3.731728430211554,
+            -5.016254361714832,
+            -3.834381834997456
+          ],
+          [
+            -3.3842081442122263,
+            -4.643866704314509,
+            -0.9345289392784946
+          ],
+          [
+            -2.985617725310987,
+            -4.1773089424013605,
+            1.296577825738815
+          ]
+        ],
+        "violates": false,
+        "girth": 5
+      },
+      {
+        "name": "C5_b_C5_triFree_n8",
+        "collinear_val": 16.000000000000004,
+        "scale": 16.000000000000004,
+        "n": 8,
+        "m": 9,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "deg_seq": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 2,
+        "edge_connectivity": 2,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": false,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 6.314536982218626,
+        "min_3d_re": 6.314538072458169,
+        "min_3d_abs": 6.314539237869409,
+        "min_edge_dist_2d": 0.6040678043028698,
+        "min_all_dist_2d": 0.6040678043028698,
+        "diameter_2d": 5.272316547683727,
+        "best_2d_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -1.967647128286222,
+            -0.49003636961180486,
+            0.0
+          ],
+          [
+            -3.034649915178888,
+            0.7262182346690125,
+            0.0
+          ],
+          [
+            -2.735649184247618,
+            1.4877308120009423,
+            0.0
+          ],
+          [
+            0.13919758475720903,
+            0.5878111470472892,
+            0.0
+          ],
+          [
+            -2.3009689423671875,
+            3.3226814105177147,
+            0.0
+          ],
+          [
+            0.6849947680078428,
+            4.066367118777374,
+            0.0
+          ],
+          [
+            1.2512866481965423,
+            3.420748878393818,
+            0.0
+          ]
+        ],
+        "best_3d_re_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -2.597168812781942,
+            1.5129749919103892,
+            1.2324821166348445
+          ],
+          [
+            -2.432519116800724,
+            3.0784798433669023,
+            1.6139413622089789
+          ],
+          [
+            -0.4886995201558819,
+            3.9948415931611923,
+            1.2578569278308935
+          ],
+          [
+            1.1094189532479501,
+            0.7166943069376573,
+            -0.14900173564624075
+          ],
+          [
+            2.410629316034764,
+            5.867288641253522,
+            0.8663681875853504
+          ],
+          [
+            4.422783419065284,
+            4.694530948824218,
+            -0.08752651938859399
+          ],
+          [
+            4.156113272713622,
+            2.153380733966375,
+            -0.7056978914109518
+          ]
+        ],
+        "best_3d_abs_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -2.600403588595726,
+            1.5013330918378696,
+            1.2405256889703344
+          ],
+          [
+            -2.440936041240727,
+            3.0620734181689087,
+            1.6263772761492692
+          ],
+          [
+            -0.43737773113479045,
+            4.016676700848485,
+            1.2598845561384302
+          ],
+          [
+            1.1661747683107309,
+            0.7592737269195271,
+            -0.15561154424915896
+          ],
+          [
+            2.3711892551519167,
+            5.846481610829515,
+            0.8841733903198348
+          ],
+          [
+            4.463931916107987,
+            4.639397702003453,
+            -0.11165078125639213
+          ],
+          [
+            4.21651581122629,
+            2.211048339725642,
+            -0.7109083122535489
+          ]
+        ],
+        "violates": false,
+        "girth": 5
+      },
+      {
+        "name": "Q3_cube",
+        "collinear_val": 2304.0000000000014,
+        "scale": 2304.0000000000014,
+        "n": 8,
+        "m": 12,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "deg_seq": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "is_regular": true,
+        "node_connectivity": 3,
+        "edge_connectivity": 3,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 791.3442679723236,
+        "min_3d_re": 699.2692577539461,
+        "min_3d_abs": 465.3948417591462,
+        "min_edge_dist_2d": 0.0014273665330020824,
+        "min_all_dist_2d": 0.0014273665330020824,
+        "diameter_2d": 120.1322777240042,
+        "best_2d_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.526123618320044,
+            -0.41196754571882477,
+            0.0
+          ],
+          [
+            0.007073245827425901,
+            0.01771015266734586,
+            0.0
+          ],
+          [
+            0.005661100198014521,
+            0.01750225860569733,
+            0.0
+          ],
+          [
+            -29.017944309662322,
+            -52.944381512374704,
+            0.0
+          ],
+          [
+            -1.283703385681906,
+            1.9403228616594799,
+            0.0
+          ],
+          [
+            -31.970179055774302,
+            67.1516153449774,
+            0.0
+          ],
+          [
+            1.5254007123787128,
+            -0.4311472345526126,
+            0.0
+          ]
+        ],
+        "best_3d_re_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.8417858500718483,
+            1.2339542306374434,
+            0.6581628084162483
+          ],
+          [
+            79.1326718356698,
+            20.983570808451287,
+            248.1761519722409
+          ],
+          [
+            -11.600269399596323,
+            -16.101878512106712,
+            27.85749980857504
+          ],
+          [
+            1.3770876632442983,
+            -2.9849407083092605,
+            -2.9981278697838323
+          ],
+          [
+            -1.8608271869886537,
+            -11.226227658619868,
+            -1.3390877056116226
+          ],
+          [
+            4.665540800498239,
+            -1.0033778418122554,
+            -1.2977015218201091
+          ],
+          [
+            4.6644956505963675,
+            -1.0019634948743703,
+            -1.2990863285067833
+          ]
+        ],
+        "best_3d_abs_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.14466904671958053,
+            -0.3673915768300268,
+            1.073090856141942
+          ],
+          [
+            79.20197463758538,
+            20.332964062753078,
+            248.03435235504386
+          ],
+          [
+            1.2138356854647896,
+            -8.35180765355928,
+            -1.3492975339027415
+          ],
+          [
+            0.1596466835438678,
+            -0.44905050165046706,
+            1.1393315650476448
+          ],
+          [
+            1.2045833110277797,
+            -8.350622904147786,
+            -1.365035923146842
+          ],
+          [
+            0.18344881279155456,
+            -0.43702308809663964,
+            1.2273662196826975
+          ],
+          [
+            0.1595081267086138,
+            -0.44712414348162377,
+            1.140612413867442
+          ]
+        ],
+        "violates": false,
+        "girth": 4
+      },
+      {
+        "name": "K4_4_bip",
+        "collinear_val": 110075314176.00009,
+        "scale": 110075314176.00009,
+        "n": 8,
+        "m": 16,
+        "edges": [
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "deg_seq": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "is_regular": true,
+        "node_connectivity": 4,
+        "edge_connectivity": 4,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": true,
+        "is_planar": false,
+        "is_tree": false,
+        "min_2d_re": 8915615.315625202,
+        "min_3d_re": 9317900.283367818,
+        "min_3d_abs": 9287917.551051995,
+        "min_edge_dist_2d": 0.18969584098183373,
+        "min_all_dist_2d": 0.0360338828839554,
+        "diameter_2d": 55.80424422911699,
+        "best_2d_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -0.588935549793679,
+            -0.31959305836132545,
+            0.0
+          ],
+          [
+            0.017309075240721027,
+            0.031604376753950905,
+            0.0
+          ],
+          [
+            2.356182057067297,
+            1.2073738882835505,
+            0.0
+          ],
+          [
+            -0.39930818096759685,
+            -0.3246894372622857,
+            0.0
+          ],
+          [
+            0.20792152188731888,
+            -0.1265712410600227,
+            0.0
+          ],
+          [
+            0.6887990218201048,
+            0.32812350116871003,
+            0.0
+          ],
+          [
+            -43.458843573863135,
+            33.06796240168242,
+            0.0
+          ]
+        ],
+        "best_3d_re_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -7.6590580414817655,
+            -9.506470508692436,
+            9.373568000249644
+          ],
+          [
+            0.18588846826778638,
+            0.07933371815499064,
+            0.20936075147307429
+          ],
+          [
+            -0.0783406520061415,
+            -0.18856388544092903,
+            0.020829747133679206
+          ],
+          [
+            2.0995191823032227,
+            1.9904458962598528,
+            12.487251721773418
+          ],
+          [
+            -0.12670272676089764,
+            -0.145408891163017,
+            0.04582848008333851
+          ],
+          [
+            -0.046557547904049146,
+            -0.371907592479494,
+            0.08116726730637502
+          ],
+          [
+            5.574259915657325,
+            6.943584664426936,
+            -8.245339976997982
+          ]
+        ],
+        "best_3d_abs_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -7.659004281385064,
+            -9.50653451579289,
+            9.373533601053383
+          ],
+          [
+            0.1863400398215023,
+            0.07875118395698857,
+            0.207545510630357
+          ],
+          [
+            -0.07621324426439695,
+            -0.18919641056069098,
+            0.01855428333780778
+          ],
+          [
+            2.099468683509528,
+            1.9905119613213988,
+            12.487259563432731
+          ],
+          [
+            -0.12825822905915782,
+            -0.14360958499273882,
+            0.04733230805257033
+          ],
+          [
+            -0.05028076856446797,
+            -0.3683171477450976,
+            0.08563533705998551
+          ],
+          [
+            5.574203164927916,
+            6.943689326914299,
+            -8.245286821646648
+          ]
+        ],
+        "violates": false,
+        "girth": 4
+      },
+      {
+        "name": "K3_5_bip",
+        "collinear_val": 13436928000.000006,
+        "scale": 13436928000.000006,
+        "n": 8,
+        "m": 15,
+        "edges": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ]
+        ],
+        "deg_seq": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        "is_regular": false,
+        "node_connectivity": 3,
+        "edge_connectivity": 3,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": true,
+        "is_planar": false,
+        "is_tree": false,
+        "min_2d_re": 2008740.1747770722,
+        "min_3d_re": 2073290.0364532387,
+        "min_3d_abs": 2080621.9087161291,
+        "min_edge_dist_2d": 0.15019479792602694,
+        "min_all_dist_2d": 0.15019479792602694,
+        "diameter_2d": 5.401703468594466,
+        "best_2d_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -0.17286106523384115,
+            -1.254391273240197,
+            0.0
+          ],
+          [
+            -2.1567201339629345,
+            0.07500149132636338,
+            0.0
+          ],
+          [
+            -0.025578421904064286,
+            -1.2249582934754195,
+            0.0
+          ],
+          [
+            -1.6082346092802335,
+            -2.8994955861064646,
+            0.0
+          ],
+          [
+            0.8359830653120568,
+            1.3793967077597802,
+            0.0
+          ],
+          [
+            -4.410877691563664,
+            1.7182519292904432,
+            0.0
+          ],
+          [
+            -1.343976345172855,
+            -0.2706128019217461,
+            0.0
+          ]
+        ],
+        "best_3d_re_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.557160733483387,
+            -0.41059937926019274,
+            -0.3163069367118188
+          ],
+          [
+            -6.0681219915585825,
+            3.32319765222854,
+            -0.21297006354629572
+          ],
+          [
+            2.2122565631559725,
+            12.792316675617212,
+            1.4893811487321347
+          ],
+          [
+            -0.06933824672769726,
+            0.02533624794730852,
+            -0.09467684292412737
+          ],
+          [
+            -0.09487714079567418,
+            0.018851228368312305,
+            0.1152781256482219
+          ],
+          [
+            0.5701642123316545,
+            -0.6173005211315095,
+            0.3136178122843398
+          ],
+          [
+            194.18478854400482,
+            -231.7225911352294,
+            -228.17106921108166
+          ]
+        ],
+        "best_3d_abs_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.557383787083487,
+            -0.41021638512171266,
+            -0.3158774174778003
+          ],
+          [
+            -6.0681676056834455,
+            3.3231825158199424,
+            -0.2128571481398708
+          ],
+          [
+            2.2122671114424075,
+            12.792293440302263,
+            1.4893701561340436
+          ],
+          [
+            -0.06670076094092602,
+            0.023091856007966274,
+            -0.09558221189530085
+          ],
+          [
+            -0.09511499803801632,
+            0.019650064001332592,
+            0.11150744842893187
+          ],
+          [
+            0.5701132924389404,
+            -0.6176530075584081,
+            0.3128852524100137
+          ],
+          [
+            194.1847871626052,
+            -231.72259247808782,
+            -228.1710689898407
+          ]
+        ],
+        "violates": false,
+        "girth": 4
+      },
+      {
+        "name": "C4_eq_C4_2conn",
+        "collinear_val": 64.00000000000001,
+        "scale": 64.00000000000001,
+        "n": 8,
+        "m": 10,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "deg_seq": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "is_regular": false,
+        "node_connectivity": 2,
+        "edge_connectivity": 2,
+        "is_biconnected": true,
+        "is_bridgeless": true,
+        "num_bridges": 0,
+        "is_bipartite": true,
+        "is_planar": true,
+        "is_tree": false,
+        "min_2d_re": 9.509691796440048,
+        "min_3d_re": 35.21386048325754,
+        "min_3d_abs": 36.81663039263072,
+        "min_edge_dist_2d": 0.00013297405685017355,
+        "min_all_dist_2d": 0.00013297405685017355,
+        "diameter_2d": 9.869973324046224,
+        "best_2d_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.814896514203973,
+            0.6389156371527536,
+            0.0
+          ],
+          [
+            3.039563962089234,
+            0.6213693788209124,
+            0.0
+          ],
+          [
+            3.03428178594173,
+            0.6436234707805806,
+            0.0
+          ],
+          [
+            3.041145779823156,
+            0.633001110771722,
+            0.0
+          ],
+          [
+            3.039687641828172,
+            0.6214182196027584,
+            0.0
+          ],
+          [
+            9.86573044698625,
+            -0.2893720179847839,
+            0.0
+          ],
+          [
+            9.865709322552545,
+            -0.28952021250237586,
+            0.0
+          ]
+        ],
+        "best_3d_re_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            5.731209721574904,
+            -7.642799005451247,
+            -16.535998056067655
+          ],
+          [
+            4.481847105428931,
+            5.205300948875179,
+            -2.0679038439762802
+          ],
+          [
+            -7.298001749510339,
+            4.310137455063809,
+            8.499770063795648
+          ],
+          [
+            -7.3027968488035375,
+            4.389773902205063,
+            8.655601214819011
+          ],
+          [
+            -7.300346124882734,
+            4.3905751148984065,
+            8.656097649883655
+          ],
+          [
+            -17.984277477921268,
+            9.435124795702869,
+            33.4451517812871
+          ],
+          [
+            -15.783816734847907,
+            17.255882288721423,
+            37.75570181053893
+          ]
+        ],
+        "best_3d_abs_pts": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -2.3358811191599322,
+            0.2945999943910087,
+            1.3156543350710828
+          ],
+          [
+            -2.3056149273944153,
+            -1.8394055340406374,
+            3.0830049697826696
+          ],
+          [
+            1.0744549511985462,
+            -2.265913016207839,
+            1.1795158696360883
+          ],
+          [
+            1.151608854097003,
+            -2.5732487592120203,
+            1.385386790092515
+          ],
+          [
+            -2.2284211890635492,
+            -2.1468230293928374,
+            3.2889024554469444
+          ],
+          [
+            -1.189392044576982,
+            -4.337719128809609,
+            4.429432910325131
+          ],
+          [
+            1.1808275031375335,
+            -4.636675212917472,
+            3.094585731445627
+          ]
+        ],
+        "violates": false,
+        "girth": 4
+      }
+    ]
+  },
+  "stage_4_integer_witnesses": {
+    "duration_sec": 2.35,
+    "witnesses": [
+      {
+        "name": "K4_2e_K3_2conn_n7",
+        "n": 7,
+        "m": 11,
+        "node_connectivity": 2,
+        "is_planar": true,
+        "is_regular": false,
+        "is_triangle_free": false,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            5,
+            6
+          ]
+        ],
+        "pts_xy_int": [
+          [
+            1,
+            -155
+          ],
+          [
+            -86,
+            -334
+          ],
+          [
+            -13,
+            -103
+          ],
+          [
+            -15,
+            -103
+          ],
+          [
+            -17,
+            -98
+          ],
+          [
+            20,
+            -83
+          ],
+          [
+            2,
+            913
+          ]
+        ],
+        "max_abs_coord": 913,
+        "widened_ratio": 0.0011476815023577045,
+        "mp50_t1_re": "-1.795279322072299390975570571464830505601",
+        "mp50_t1_im": "2.65823885939834e-50",
+        "mp50_t0_col_re": "20736.0",
+        "rel_err_float_vs_mp50": 4.4055700582012804e-13,
+        "verified_mp50": true
+      },
+      {
+        "name": "Wagner_M8",
+        "n": 8,
+        "m": 12,
+        "node_connectivity": 3,
+        "is_planar": false,
+        "is_regular": true,
+        "is_triangle_free": true,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "pts_xy_int": [
+          [
+            183,
+            -1727
+          ],
+          [
+            414,
+            -1680
+          ],
+          [
+            -1609,
+            3064
+          ],
+          [
+            134,
+            -1776
+          ],
+          [
+            174,
+            -1744
+          ],
+          [
+            3967,
+            1
+          ],
+          [
+            1,
+            -1369
+          ],
+          [
+            182,
+            -1726
+          ]
+        ],
+        "max_abs_coord": 3967,
+        "widened_ratio": 0.00010361396517477986,
+        "mp50_t1_re": "-1.486617740256624769007679267283981284792",
+        "mp50_t1_im": "7.61902337829673e-49",
+        "mp50_t0_col_re": "2304.0",
+        "rel_err_float_vs_mp50": 5.106696117507865e-13,
+        "verified_mp50": true
+      },
+      {
+        "name": "K4_eq_K4_2conn",
+        "n": 8,
+        "m": 14,
+        "node_connectivity": 2,
+        "is_planar": true,
+        "is_regular": false,
+        "is_triangle_free": false,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "pts_xy_int": [
+          [
+            17,
+            -1
+          ],
+          [
+            26,
+            -17
+          ],
+          [
+            7,
+            -1
+          ],
+          [
+            6,
+            -4
+          ],
+          [
+            4,
+            -2
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            -9,
+            30
+          ],
+          [
+            -22,
+            16
+          ]
+        ],
+        "max_abs_coord": 30,
+        "widened_ratio": 0.020319511812902275,
+        "mp50_t1_re": "-828.7188643952298309390788077689594256587",
+        "mp50_t1_im": "-8.43462078328884e-47",
+        "mp50_t0_col_re": "82944.0",
+        "rel_err_float_vs_mp50": 5.034646999894364e-14,
+        "verified_mp50": true
+      },
+      {
+        "name": "K4_3e_3conn",
+        "n": 8,
+        "m": 15,
+        "node_connectivity": 3,
+        "is_planar": true,
+        "is_regular": false,
+        "is_triangle_free": false,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "pts_xy_int": [
+          [
+            -3,
+            -37
+          ],
+          [
+            -2,
+            -9
+          ],
+          [
+            1,
+            -8
+          ],
+          [
+            2,
+            -170
+          ],
+          [
+            3,
+            124
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            -5,
+            -6
+          ],
+          [
+            -4,
+            107
+          ]
+        ],
+        "max_abs_coord": 170,
+        "widened_ratio": 0.05041629862033693,
+        "mp50_t1_re": "-123520.0193126507202245580376992548885966",
+        "mp50_t1_im": "1.88627102922987e-45",
+        "mp50_t0_col_re": "3981312.0",
+        "rel_err_float_vs_mp50": 7.657661447167297e-15,
+        "verified_mp50": true
+      },
+      {
+        "name": "K4xK2_4reg_4conn",
+        "n": 8,
+        "m": 16,
+        "node_connectivity": 4,
+        "is_planar": false,
+        "is_regular": true,
+        "is_triangle_free": false,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "pts_xy_int": [
+          [
+            -99378,
+            -897
+          ],
+          [
+            -112396,
+            1
+          ],
+          [
+            -99377,
+            -892
+          ],
+          [
+            -113490,
+            1168
+          ],
+          [
+            99304,
+            3007
+          ],
+          [
+            162749,
+            -20837
+          ],
+          [
+            98045,
+            7343
+          ],
+          [
+            119650,
+            8038
+          ]
+        ],
+        "max_abs_coord": 162749,
+        "widened_ratio": 4.7194223578602676e-05,
+        "mp50_t1_re": "-17938.93033026185835954613689755344192932",
+        "mp50_t1_im": "9.34954522130333e-45",
+        "mp50_t0_col_re": "11943936.0",
+        "rel_err_float_vs_mp50": 4.664353505066988e-15,
+        "verified_mp50": true
+      },
+      {
+        "name": "antiprism_4",
+        "n": 8,
+        "m": 16,
+        "node_connectivity": 4,
+        "is_planar": true,
+        "is_regular": true,
+        "is_triangle_free": false,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ]
+        ],
+        "pts_xy_int": [
+          [
+            1201,
+            1059
+          ],
+          [
+            1236,
+            1010
+          ],
+          [
+            1267,
+            790
+          ],
+          [
+            1031,
+            1140
+          ],
+          [
+            4579,
+            3321
+          ],
+          [
+            1308,
+            714
+          ],
+          [
+            -9066,
+            -6073
+          ],
+          [
+            989,
+            1183
+          ]
+        ],
+        "max_abs_coord": 9066,
+        "widened_ratio": 0.002403517442107052,
+        "mp50_t1_re": "-7242.683899906832011779773194435942415627",
+        "mp50_t1_im": "-2.57629645773391e-45",
+        "mp50_t0_col_re": "11943936.0",
+        "rel_err_float_vs_mp50": 1.7329248463581107e-14,
+        "verified_mp50": true
+      }
+    ]
+  }
+}

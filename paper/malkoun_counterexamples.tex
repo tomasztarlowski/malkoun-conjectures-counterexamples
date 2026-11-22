@@ -1,0 +1,374 @@
+\documentclass[11pt]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\setcounter{MaxMatrixCols}{16}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\emergencystretch=2.5em
+\let\origunderscore\_
+\renewcommand{\_}{\origunderscore\penalty0\relax}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\AG}{\mathcal{A}_G}
+\DeclareMathOperator{\RePart}{Re}
+\DeclareMathOperator{\ImPart}{Im}
+
+\title[Refutation of All Four Malkoun Conjectures A--D and Path Positivity]{Counterexamples to All Four Malkoun Conjectures A--D, Planar Tree Zeros, and Unconditional Path Positivity}
+
+\author{Tomasz Tar{\l}owski}
+\date{November 2026}
+\subjclass[2020]{Primary 05C50, 51M15; Secondary 81Q70, 68V20}
+
+\begin{document}
+
+\begin{abstract}
+In \emph{Finite graphs and configurations of points} (\texttt{arXiv:2508.13472v3}), Joseph Malkoun introduced a Spin$(3)$-equivariant $G$-amplitude function $\AG(\mathbf{x}) \in \C$ on the configuration space $C_G(\R^3)$ of a finite simple graph $G$, and conjectured that $\AG(\mathbf{x}) \neq 0$ (Conjecture~A) and $|\AG(\mathbf{x})| \ge 1$ (Conjecture~B) for all graphs $G$, together with $\RePart(\AG(\mathbf{x})) \ge 1$ for trees (Conjecture~C) and possibly all connected graphs (Section~6), via a matrix-analytic Conjecture~D. In this note we formally refute \textbf{all four main conjectures (A, B, C, and D)} as well as the Section~6 question, backed by machine-checked Lean~4 proofs (zero \texttt{sorry}, zero \texttt{native\_decide}, standard axioms only) and 50-digit arbitrary-precision witnesses:
+\begin{enumerate}
+    \item \textbf{Non-bipartite counterexamples to Conjectures~A, B, and Section~6:} Extending the exact rational planar barbell $B_8 = K_4 \cup \{34\} \cup K_4$ (\texttt{MalkounCounterexample.lean}) and the minimal $n=7$, $m=11$, 2-vertex-connected planar graph $H_7 = K_4 \cup_{2e} K_3$ (\texttt{MalkounN7Counterexample.lean}), we formalize in \texttt{MalkounWagnerCounterexample.lean} a collision-free planar homotopy root $\mathcal{A}_{M_8}(\gamma(t_0)) = 0$ on the \textbf{triangle-free, 3-regular, 3-vertex-connected, vertex-transitive Wagner graph $M_8$} ($n=8, m=12, \kappa=3$, girth~4). We also exhibit $n=8$ 50-digit witnesses for 4-regular 4-connected $K_4 \square K_2$ and the planar vertex-transitive square antiprism $A_4$.
+    \item \textbf{Bipartite reduction and disproof of General and Rank-2 Conjecture~D:} We extend Malkoun's Theorem~4.1 from trees to \emph{all} finite simple bipartite graphs (\texttt{MalkounBipartite.lean}), showing $\AG(\mathbf{x}) = \overline{f_{\sim_1,\sim_2}(H)}$ with $|P_1 \cap P_2| = 1$. In \texttt{MalkounConjectureD.lean}, however, we refute Conjecture~D in full generality at $m=6$ (a rank-3 integer Gram matrix on $C_6$ with $7 < 8$) and \emph{even restricted to rank-2 spinor Gram matrices} at $m=12$ (an explicit $2 \times 12$ Gaussian-integer witness on $C_{12}$ yielding $\RePart(f) = -38243634152693760 < 0 < 46450162760601600$). We also exhibit 50-digit 3D bipartite even cycle witnesses on $C_{18}$--$C_{28}$ violating Conjecture~B ($|\mathcal{A}_{C_{18}}| \approx 0.9598 < 1$, $|\mathcal{A}_{C_{20}}| \approx 0.9026 < 1$) and Section~6 ($\RePart(\mathcal{A}_{C_{24}}) \approx -9962.05 < 0$).
+    \item \textbf{Formal disproof of Conjecture~C and Tree Conjecture~D on trees (\texttt{MalkounConjectureC.lean}):} While proving Conjecture~C unconditionally in Lean~4 for $LG_3, LG_4, K_{1,3}$, and $LG_5$ (\texttt{MalkounConjectureD.lean}, Malkoun Theorem~4.4), we construct an exact planar $120^\circ$ pinwheel configuration on the 10-vertex cubic cherry tree $T_{10}$ (\texttt{cherryTree10}) satisfying $\mathcal{A}_{T_{10}}(\mathbf{x}) = 0$. This simultaneously refutes \textbf{Conjecture~C}, \textbf{tree-restricted Conjecture~D} (\texttt{MalkounTreeConjectureDProp}), and \textbf{Conjectures~A and B even when restricted to finite trees}.
+    \item \textbf{Negative real part on linear paths ($LG_{15}$):} Reconstructing pairwise-distinct 3D integer Hopf coordinates from a $2 \times 14$ Gaussian-integer spinor transfer matrix on the 15-vertex path graph \texttt{pathGraph15} ($LG_{15}$), we certify in Lean~4 the exact rational value $\RePart(\mathcal{A}_{LG_{15}}(\mathbf{x})) = -40605770611892600000 / 58001564658819600000 \approx -0.700081 < 0$. Thus Conjecture~C fails even on paths, leaving small non-star trees ($6 \le n \le 9$) as the remaining tree positivity frontier.
+    \item \textbf{Unconditional Path Conjecture~B and Planar Path Positivity (\texttt{MalkounPathPositivity.lean}):} Resolving the surviving linear-path question affirmatively for \emph{all} $n \in \mathbb{N}$, we prove in Lean~4 via an exact hyperbolic $\mathrm{SU}(2)$ Lyapunov transfer identity that $|\mathcal{A}_{LG_n}(\mathbf{x})| \ge 1$ and $\mathcal{A}_{LG_n}(\mathbf{x}) \neq 0$ for every $n \in \mathbb{N}$ and every $\mathbf{x} \in C_{LG_n}(\R^3)$, and that $\RePart(\mathcal{A}_{LG_n}(\mathbf{x})) \ge 1$ holds unconditionally on all planar configurations ($z_u \equiv 0$).
+\end{enumerate}
+\end{abstract}
+
+\maketitle
+
+\section{Introduction and Malkoun's Conjectures}
+
+Let $G = (V, E)$ be a finite simple graph with $n = |V|$ vertices and $m = |E|$ edges. Following Malkoun~\cite{Malkoun2026}, consider the edge-noncollision configuration space
+\[
+    C_G(\R^3) := \bigl\{\mathbf{x} : V \to \R^3 \;\big|\; \mathbf{x}_u \neq \mathbf{x}_v \text{ whenever } \{u, v\} \in E\bigr\}.
+\]
+For each ordered adjacent pair $(u, v) \in S_G := \{(u, v) \in V \times V : \{u, v\} \in E\}$, let $v_{uv} = (\mathbf{x}_v - \mathbf{x}_u)/\|\mathbf{x}_v - \mathbf{x}_u\| \in S^2$ be the unit direction vector and choose any unit spinor $\psi_{uv} \in S^3 \subset \C^2$ satisfying the $+1$-eigenvalue Pauli equation
+\[
+    (v_{uv} \cdot \vec{\sigma})\psi_{uv} = \psi_{uv},
+\]
+where $\vec{\sigma} = (\sigma_1, \sigma_2, \sigma_3)$ are the Pauli matrices. Using the skew-symmetric bilinear form $\omega((a_1, a_2), (b_1, b_2)) := a_1 b_2 - a_2 b_1$, any choice of orientation $\Delta_\Gamma \subset S_G$ defines the phase-invariant, $SO(3)$-invariant $G$-amplitude
+\begin{equation}\label{eq:amplitude}
+    \AG(\mathbf{x}) := \frac{\sum_{\sigma \in P_G} \prod_{(u, v) \in \Delta_\Gamma} \omega(\psi_{u, \sigma_u(v)}, \psi_{v, \sigma_v(u)})}{\prod_{(u, v) \in \Delta_\Gamma} \omega(\psi_{uv}, \psi_{vu})} \in \C,
+\end{equation}
+where $P_G = \prod_{u \in V} S_{\deg(u)}$ is the source-preserving permutation group acting on outgoing neighbors at each vertex $u$. When $G = K_n$, $\AG(\mathbf{x}) = a_n D_n(\mathbf{x})$ recovers the Atiyah--Sutcliffe normalized determinant $D_n$ up to the factorial factor $a_n = \prod_{k=1}^{n-1} (k!)^2$.
+
+In~\cite{Malkoun2026}, Malkoun posed four open conjectures and a connected-graph question:
+\begin{itemize}
+    \item \textbf{Conjecture~A:} $\AG(\mathbf{x}) \neq 0$ for all finite simple graphs $G$ and all $\mathbf{x} \in C_G(\R^3)$.
+    \item \textbf{Conjecture~B:} $c_G := \inf_{\mathbf{x} \in C_G(\R^3)} |\AG(\mathbf{x})| \ge 1$ for every finite simple graph $G$.
+    \item \textbf{Conjecture~C:} For every finite tree $T$, $\RePart(\mathcal{A}_T(\mathbf{x})) \ge 1$ on $C_T(\R^3)$.
+    \item \textbf{Section~6 Question:} Does $\RePart(\AG(\mathbf{x})) \ge 1$ hold for all \emph{connected} graphs $G$?
+    \item \textbf{Conjecture~D (Matrix Analysis):} For any finite index set $E$, equivalence relations $\sim_1, \sim_2$ on $E$ with class-preserving subgroups $P_1, P_2 \le S_E$, and Hermitian positive semidefinite matrix $H \in M_{|E|}(\C)$,
+    \begin{equation}\label{eq:conjD}
+        \RePart\Bigl(\sum_{\sigma_1 \in P_1}\sum_{\sigma_2 \in P_2} \prod_{e \in E} H_{\sigma_1(e),\sigma_2(e)}\Bigr)
+        \;\ge\; |P_1 \cap P_2| \prod_{e \in E} \RePart(H_{ee}).
+    \end{equation}
+\end{itemize}
+Malkoun proved Theorem~4.1~\cite{Malkoun2026} showing that Conjecture~D implies Conjecture~C for all trees, and verified Section~6 numerically on $10{,}000$ random configurations per graph up to $n = 6$ vertices without finding violations.
+
+In Section~\ref{sec:bipartite}, we extend Theorem~4.1 to every finite simple bipartite graph. In Sections~\ref{sec:barbell}--\ref{sec:taxonomy}, we refute Conjectures~A, B, and the Section~6 question on non-bipartite graphs, including a full Lean~4 formal disproof on the triangle-free 3-connected cubic Wagner graph $M_8$. In Section~\ref{sec:conjectureD}, we formally disprove General Conjecture~D ($m=6$) and Rank-2 Spinor Conjecture~D ($m=12$) and exhibit 50-digit 3D geometric counterexamples on bipartite even cycles $C_{18}$--$C_{28}$. Finally, Section~\ref{sec:trees} proves Conjecture~C unconditionally in Lean~4 for $LG_3, LG_4, K_{1,3}, LG_5$, formally disproves \textbf{Conjecture~C}, tree-restricted Conjecture~D, and Conjectures~A and B on trees via an exact planar zero at $n = 10$ ($T_{10}$) and a strictly negative real part on $LG_{15}$, and then closes the surviving linear-path frontier in \texttt{MalkounPathPositivity.lean} by proving Path Conjectures~A and~B ($|\mathcal{A}_{LG_n}(\mathbf{x})| \ge 1$) and planar Path Conjecture~C ($\RePart \ge 1$ for $z_u \equiv 0$) for all $n \in \mathbb{N}$.
+
+\section{Extension of Theorem~4.1 to All Bipartite Graphs}\label{sec:bipartite}
+
+Malkoun's reduction for trees~\cite[Theorem~4.1]{Malkoun2026} uses the fact that a tree is 2-colorable (level-alternating orientation). Notice, however, that absence of cycles is never required for orienting all edges from one vertex class to the other: \emph{any} 2-coloring suffices.
+
+\begin{definition}
+Let $G = (V, E)$ be a finite simple graph with bipartition $V = A \sqcup B$ (encoded by \texttt{part : Fin n -> Bool}). Orient every edge canonically from $A$ to $B$:
+\[
+    E_{\mathrm{bip}} := \{(u, v) \in V \times V \mid \{u, v\} \in E,\ u \in A,\ v \in B\}, \qquad |E_{\mathrm{bip}}| = m.
+\]
+Let $P_1 \le S_{E_{\mathrm{bip}}}$ fix the $A$-endpoint of every edge and $P_2 \le S_{E_{\mathrm{bip}}}$ fix the $B$-endpoint.
+\end{definition}
+
+Using Malkoun's quaternionic time-reversal operator $\tilde{j}(z_0, z_1) = (-\overline{z_1}, \overline{z_0})$ (\cite[Eq.~(22)]{Malkoun2026}), which satisfies $\omega(\psi, \tilde{j}\phi) = \overline{\langle \psi, \phi \rangle}$ and transforms $+1$-spinors of $v$ into $+1$-spinors of $-v$, we set $\psi_{uv}$ cleanly to $\phi_e := \psi_{\mathrm{canon}}(v_{uv})$ when $(u, v) \in E_{\mathrm{bip}}$ and $\tilde{j}\phi_{(v,u)}$ when $(v, u) \in E_{\mathrm{bip}}$.
+
+\begin{theorem}[Bipartite Gram Reduction; formalized in \texttt{MalkounBipartite.lean}]\label{thm:bipartite}
+For every finite simple bipartite graph $G = (A \sqcup B, E)$ and every configuration $\mathbf{x} \in C_G(\R^3)$:
+\begin{enumerate}
+    \item $P_1 \times P_2 \simeq P_G$, and since $G$ is simple, no two distinct edges in $E_{\mathrm{bip}}$ share both endpoints, so $P_1 \cap P_2 = \{\mathrm{id}\}$ and $|P_1 \cap P_2| = 1$.
+    \item Let $H \in M_m(\C)$ be the $m \times m$ Gram matrix $H_{a,b} = \langle \phi_a, \phi_b \rangle = (B^H B)_{a,b}$, where $B \in M_{2 \times m}(\C)$ has columns $\phi_e$. Then $H$ is Hermitian positive semidefinite with unit diagonal ($H_{ee} = 1$) and
+    \[
+        \AG(\mathbf{x}) = \overline{\sum_{\sigma_1 \in P_1} \sum_{\sigma_2 \in P_2} \prod_{e \in E_{\mathrm{bip}}} H_{\sigma_1(e), \sigma_2(e)}}.
+    \]
+    \item Consequently, Malkoun's Conjecture~D implies $\RePart(\AG(\mathbf{x})) \ge 1$, $|\AG(\mathbf{x})| \ge 1$, and $\AG(\mathbf{x}) \neq 0$ for every finite simple bipartite graph $G$.
+\end{enumerate}
+\end{theorem}
+
+Theorem~\ref{thm:bipartite} is completely formalized in \texttt{lean/Matematyka/MalkounBipartite.lean} as \texttt{malkounAmplitude\_bipartite\_eq\_conj\_gram}, \texttt{conjectureD\_implies\_bipartite\_re\_ge\_one}, and \texttt{conjectureD\_implies\_bipartite\_abs\_ge\_one\_and\_ne\_zero}, using zero \texttt{sorry} and only the standard axioms \{\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}\}.
+
+\section{Exact Rational Counterexample on the $K_4$ Barbell ($n=8, m=13$)}\label{sec:barbell}
+
+For non-bipartite graphs, no bipartite orientation exists, and $\omega$ introduces genuine sign-changing interference between blocks. The mechanism producing a zero from an exact negative real planar configuration is a general homotopy principle on $C_G(\R^3)$.
+
+\begin{lemma}[Planar Homotopy Zero Principle]\label{lem:ivt}
+Suppose a connected graph $G$ admits integer planar coordinates $\{(x_u, y_u)\}_{u \in V} \subset \Z^2$ whose $x$-coordinates $x_u$ are pairwise distinct. Define the straight-line path $\gamma : \R \to C_G(\R^3)$ by $\gamma_u(t) = (x_u, t\,y_u, 0)$. Then:
+\begin{enumerate}
+    \item Every point $\gamma(t)$ lies in $C_G(\R^3)$ (since $x_u \neq x_v$ for $u \neq v$) and in the $z=0$ plane, so $\AG(\gamma(t)) \in \R$ for all $t \in \R$ by~\cite[Proposition~2.7]{Malkoun2026}.
+    \item At $t = 0$ (collinear), $\AG(\gamma(0)) > 0$; if $\AG(\gamma(1)) < 0$, continuity on $[0, 1]$ and the Intermediate Value Theorem yield $t_0 \in (0, 1)$ such that $\AG(\gamma(t_0)) = 0$.
+\end{enumerate}
+\end{lemma}
+
+Let $B_8$ (\texttt{barbellK4Graph}) be the 8-vertex, 13-edge planar graph formed by two copies of $K_4$ on $\{0,1,2,3\}$ and $\{4,5,6,7\}$ joined by the single bridge $\{3, 4\}$. Choosing a symmetric all-Pythagorean configuration in the $xy$-plane eliminates all square roots:
+\[
+\begin{aligned}
+    \mathbf{p}_0 &= (-677, 0), & \mathbf{p}_1 &= (-31, 72), & \mathbf{p}_2 &= (-1326, 0), & \mathbf{p}_3 &= (-1, 0), \\
+    \mathbf{p}_4 &= (1, 0), & \mathbf{p}_5 &= (1326, 0), & \mathbf{p}_6 &= (677, 0), & \mathbf{p}_7 &= (31, 72),
+\end{aligned}
+\]
+for which the slanted edge lengths are exact integers $\|\mathbf{p}_1 - \mathbf{p}_0\| = 650$, $\|\mathbf{p}_1 - \mathbf{p}_2\| = 1297$, and $\|\mathbf{p}_1 - \mathbf{p}_3\| = 78$ (mirrored on $\{4,5,6,7\}$).
+
+\begin{theorem}[Formal Disproof on $B_8$; \texttt{MalkounCounterexample.lean}]\label{thm:barbell}
+Along $\gamma(t)$ for $B_8$:
+\begin{itemize}
+    \item At $t = 0$, the exact Gaussian-integer Dicke evaluation yields $\mathcal{A}_{B_8}(\gamma(0)) = \frac{169869312}{8192} = +20736$.
+    \item At $t = 1$, it yields
+    \[
+        \mathcal{A}_{B_8}(\gamma(1)) = \frac{-421510357090419997394451824640000}{7386806133256753344003200000000}
+        = -\frac{1713503232016128}{30028482030625} \approx -57.0625991107.
+    \]
+    \item Hence there exists $t_0 \in [0, 1]$ with $\gamma(t_0) \in C_{B_8}(\R^3)$ such that $\mathcal{A}_{B_8}(\gamma(t_0)) = 0$.
+\end{itemize}
+This simultaneously refutes Conjecture~A (\texttt{disproof\_malkoun\_conjecture\_A}), Conjecture~B (\texttt{disproof\_malkoun\_conjecture\_B}), and the Section~6 question (\texttt{disproof\_malkoun\_section\_6}) in Lean~4 without \texttt{sorry}, \texttt{native\_decide}, or custom axioms.
+\end{theorem}
+
+\begin{remark}[Closed-form limiting family]
+In the collinear-pair limit $x_3 = -1, x_4 = 1, x_0, x_6 \to \pm\infty$, letting $u = e^{i\theta}$ be the direction phase from $x_3$ to $x_1$ (with $c = \RePart(u) \in [-1, 1]$), symbolic contraction gives $\mathcal{A}_{B_8}(u) = 2592(u^2+1)(5u^2+6u+5)/u^2 = 10368\,c(5c+3)$, whose negative lobe occupies $c \in (-3/5, 0)$ with minimum $-933.12$ at $c = -3/10$.
+\end{remark}
+
+\section{Vertex Minimality and 2-Connected Planar Counterexample at $n = 7$}\label{sec:n7}
+
+To determine the smallest connected counterexample and test whether vertex-cut connectivity ($\kappa = 1$ in $B_8$) is essential, we scanned all non-isomorphic connected graphs from \texttt{networkx.graph\_atlas\_g()} using multi-start BFGS in both 2D ($z = 0$) and 3D:
+\begin{itemize}
+    \item \textbf{Connected $n = 6$ (all $112$ graphs):} Across a multi-scale spectral pass (\texttt{min\_2d\_re = 1.000001}, \texttt{min\_3d\_abs = 1.069541}, 0 violations) and a dedicated tight-cluster / dipole stress pass (\texttt{min\_2d\_re = 1.332078}, \texttt{min\_3d\_abs = 1.208003}, 0 violations), no violation was observed. (We emphasize that this is a numerical global-search observation rather than an analytical proof of impossibility for $n \le 6$.)
+    \item \textbf{Connected $n = 7$ (all $853$ graphs + targeted deep pass on $57$ dense/biconnected candidates + $445$ non-bipartite $m \le 11$ cluster pass + all $12$ non-isomorphic edge deletions $m \in \{9, 10\}$):} No graph on $7$ vertices with $m \le 10$ or with bipartite structure violated $\RePart(\AG) \ge 1$ under numerical search. However, for $n = 7$, $m = 11$, exactly one graph exhibited negative real amplitude---and remarkably it is \textbf{2-vertex-connected} ($\kappa = 2$) and \textbf{planar}.
+\end{itemize}
+
+\begin{definition}
+Let $H_7 := K_4 \cup_{2e} K_3$ (\texttt{k4e2k3Graph}) be the 7-vertex, 11-edge planar graph obtained from $K_4$ on $\{0,1,2,3\}$ and $K_3$ on $\{4,5,6\}$ by adding the 2-edge cut $\{(2,5), (3,4)\}$.
+\end{definition}
+
+Removing any single vertex leaves $H_7$ connected ($\kappa(H_7) = 2$). Multi-start BFGS refined at 50-digit \texttt{mpmath} precision reaches $\mathcal{A}_{H_7} \approx -22.8055729254814467535223667953$ in 2D (imaginary part $< 10^{-47}$) and $\RePart(\mathcal{A}_{H_7}) \approx -16.4837001280793932708302120897$ in 3D. Moreover, rational snapping produces the compact integer planar witness (\texttt{max|coord| = 913}):
+\[
+\mathbf{p} = \bigl[(1,-155),\ (-86,-334),\ (-13,-103),\ (-15,-103),\ (-17,-98),\ (20,-83),\ (2,913)\bigr],
+\]
+whose $x$-coordinates are pairwise distinct.
+
+\begin{theorem}[Formal Disproof on Biconnected Planar $H_7$; \texttt{MalkounN7Counterexample.lean}]\label{thm:n7}
+Along the homotopy $\gamma(t) = (x_u, t\,y_u, 0)$ for $H_7$:
+\begin{enumerate}
+    \item $H_7$ is connected and 2-vertex-connected (\texttt{IsTwoVertexConnected k4e2k3Graph}: for every $c \in \mathrm{Fin}\ 7$, the vertex-deleted induced subgraph $H_7 - c$ is connected).
+    \item Crossing the 2-edge cut $\{(2,5), (3,4)\}$ factors $\mathrm{malkounNum}(H_7, \psi)$ into $4$ binary cut terms combining 4-vertex $K_4$-block sums ($\mathrm{sumBits}\ 6$) with 3-vertex $K_3$-block sums ($\mathrm{sumBits}\ 3$) via Dicke polynomial coefficients.
+    \item At $t = 0$, exact Gaussian-integer reduction yields $\mathcal{A}_{H_7}(\gamma(0)) = \frac{-42467328}{-2048} = +20736$.
+    \item At $t = 1$, using closed integer interval arithmetic (\texttt{IntIv}, \texttt{CIntIv}) at scale $S = 10^6$ grounded by the kernel-checked lookup bounds $\mathrm{lo}^2 \le S^2(\Delta x^2 + \Delta y^2) \le (\mathrm{lo}+1)^2$ for all $11$ edges, Lean's kernel certifies $\RePart(\mathcal{N}\overline{\mathcal{D}}) < 0$, proving $\RePart(\mathcal{A}_{H_7}(\gamma(1))) < 0$ (50-digit value $-1.795279322072299390975570571464830505601$).
+    \item By continuity and IVT, there exists $t_0 \in [0, 1]$ with $\mathcal{A}_{H_7}(\gamma(t_0)) = 0$.
+\end{enumerate}
+\end{theorem}
+
+Theorem~\ref{thm:n7} is formalized in \texttt{lean/Matematyka/MalkounN7Counterexample.lean} as \texttt{k4e2k3Graph\_twoVertexConnected}, \texttt{malkounAmplitude\_n7Path\_zero}, \texttt{n7AmpOne\_re\_neg}, \texttt{disproof\_malkoun\_n7\_biconnected\_conjecture\_A}, \texttt{disproof\_malkoun\_n7\_biconnected\_conjecture\_B}, and \texttt{disproof\_malkoun\_n7\_biconnected\_section\_6}, using zero \texttt{sorry}, zero \texttt{native\_decide}, and only the standard Lean axioms \{\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}\}.
+
+\section{Higher Connectivity, Regularity, and Triangle-Free Wagner Graph $M_8$}\label{sec:taxonomy}
+
+We further tested whether restricting Malkoun's conjectures to $3$-connected, $4$-connected, regular, vertex-transitive, or triangle-free ($\mathrm{girth} \ge 4$) graphs could salvage Conjectures~A, B, or Section~6. All five classes admit counterexamples already at $n = 8$. Table~\ref{tab:taxonomy} summarizes the verified integer planar witnesses across our suite; every coordinate tuple has pairwise distinct $x$-coordinates, positive rational collinear value $\AG(t=0) > 0$, and negative planar value $\AG(t=1) < 0$ verified to 50 digits with \texttt{mpmath} ($|\ImPart(\AG)| < 10^{-44}$), hence an exact collision-free zero at some $t_0 \in (0, 1)$ by Lemma~\ref{lem:ivt}. For the first three rows ($B_8$, $H_7$, and triangle-free cubic 3-connected Wagner graph $M_8$), complete machine-checked Lean~4 proofs establish $\AG(\gamma(t_0)) = 0$.
+
+\begin{table}[htbp]
+\centering
+\caption{Counterexample taxonomy across connectivity $\kappa$, regularity, planarity, and girth. All $t=1$ entries are 50-digit \texttt{mpmath} evaluations (truncated to 6 decimals in display) on integer coordinates in $C_G(\R^3)$ with distinct $x$-coordinates; the first three rows carry complete Lean~4 IVT proofs of $\AG = 0$.}
+\label{tab:taxonomy}
+\small
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Graph & $(n, m)$ & $\kappa$ & Planar & Reg. & Girth & $\AG(t=0)$ & $\AG(t=1)$ \\
+\midrule
+\texttt{barbell\_K4\_8} ($B_8$) & $(8, 13)$ & $1$ & Yes & No & $3$ & $+20736$ & $-57.062599$ (exact $\mathbb{Q}$) \\
+\texttt{K4\_2e\_K3\_2conn\_n7} ($H_7$) & $(7, 11)$ & $2$ & Yes & No & $3$ & $+20736$ & $-1.795279$ (Lean $S=10^6$) \\
+\texttt{Wagner\_M8} ($M_8$) & $(8, 12)$ & $3$ & No & $3$-reg & $4$ & $+2304$ & $-1.486618$ (Lean $S=10^6$) \\
+\texttt{K4\_eq\_K4\_2conn} & $(8, 14)$ & $2$ & Yes & No & $3$ & $+82944$ & $-828.718864$ \\
+\texttt{K4\_3e\_3conn} & $(8, 15)$ & $3$ & Yes & No & $3$ & $+3981312$ & $-123520.019313$ \\
+\texttt{K4xK2\_4reg\_4conn} & $(8, 16)$ & $4$ & No & $4$-reg & $3$ & $+11943936$ & $-17938.930330$ \\
+\texttt{antiprism\_4} ($A_4$) & $(8, 16)$ & $4$ & Yes & $4$-reg & $3$ & $+11943936$ & $-7242.683900$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Explicit integer $(x_u, y_u)$ coordinates for the five $n=8$ non-barbell witnesses (vertex indices $0,\dots,7$):
+\begin{itemize}
+    \item \texttt{Wagner\_M8} (cubic M\"obius ladder $M_8$, edges $\{0,1\},\allowbreak \{0,4\},\allowbreak \{0,7\},\allowbreak \{1,2\},\allowbreak \{1,5\},\allowbreak \{2,3\},\allowbreak \{2,6\},\allowbreak \{3,4\},\allowbreak \{3,7\},\allowbreak \{4,5\},\allowbreak \{5,6\},\allowbreak \{6,7\}$; $\kappa = 3$, triangle-free):
+    $[(183,-1727),\allowbreak (414,-1680),\allowbreak (-1609,3064),\allowbreak (134,-1776),\allowbreak (174,-1744),\allowbreak (3967,1),\allowbreak (1,-1369),\allowbreak (182,-1726)]$.
+    \item \texttt{K4\_eq\_K4\_2conn} ($K_4 \cup_{2e} K_4$ with bridge edges $(2,5),(3,4)$; tiny witness $\max|\text{coord}| = 30$):
+    $[(17,-1),\allowbreak (26,-17),\allowbreak (7,-1),\allowbreak (6,-4),\allowbreak (4,-2),\allowbreak (5,-1),\allowbreak (-9,30),\allowbreak (-22,16)]$.
+    \item \texttt{K4\_3e\_3conn} ($K_4 \cup_{3e} K_4$ with bridge edges $(1,6),(2,5),(3,4)$):
+    $[(-3,-37),\allowbreak (-2,-9),\allowbreak (1,-8),\allowbreak (2,-170),\allowbreak (3,124),\allowbreak (4,2),\allowbreak (-5,-6),\allowbreak (-4,107)]$.
+    \item \texttt{K4xK2\_4reg\_4conn} ($K_4 \square K_2$, $\kappa=4$, 4-regular):
+    $[(-99378,-897),\allowbreak (-112396,1),\allowbreak (-99377,-892),\allowbreak (-113490,1168),\allowbreak (99304,3007),\allowbreak (162749,-20837),\allowbreak (98045,7343),\allowbreak (119650,8038)]$.
+    \item \texttt{antiprism\_4} ($4$-antiprism, $\kappa=4$, planar, 4-regular, vertex-transitive):
+    $[(1201,1059),\allowbreak (1236,1010),\allowbreak (1267,790),\allowbreak (1031,1140),\allowbreak (4579,3321),\allowbreak (1308,714),\allowbreak (-9066,-6073),\allowbreak (989,1183)]$.
+\end{itemize}
+
+\begin{theorem}[Formal Disproof on Triangle-Free Cubic $3$-Connected $M_8$; \texttt{MalkounWagnerCounterexample.lean}]\label{thm:wagner}
+For the Wagner graph $M_8$ (\texttt{wagnerGraph}):
+\begin{enumerate}
+    \item $M_8$ is connected (\texttt{wagnerGraph\_connected}), $3$-vertex-connected (\texttt{wagnerGraph\_threeVertexConnected}), $3$-regular (\texttt{wagnerGraph\_isRegularOfDegree\_three}), and triangle-free (\texttt{wagnerGraph\_cliqueFree\_three}).
+    \item Factoring $P_{M_8} \simeq (S_3)^8$ into four 3-degree blocks (\texttt{malkounNum\_wagner\_4block}) reduces the collinear point $\mathbf{x} = \gamma(0)$ to $\mathcal{A}_{M_8}(\gamma(0)) = 9437184 / 4096 = +2304$ (\texttt{malkounAmplitude\_wagnerPath\_zero}) and certifies $\RePart(\mathcal{A}_{M_8}(\gamma(1))) < 0$ via closed integer interval arithmetic at scale $S = 10^6$ (\texttt{cert\_wagner\_dot\_neg}, \texttt{wagnerAmpOne\_re\_neg}).
+    \item Continuity (\texttt{continuous\_malkounAmplitude\_wagnerPath}) and IVT yield $t_0 \in [0, 1]$ with $\mathcal{A}_{M_8}(\gamma(t_0)) = 0$, formally refuting Conjecture~A (\texttt{disproof\_malkoun\_wagner\_triangleFree\_conjecture\_A}), Conjecture~B (\texttt{disproof\_malkoun\_wagner\_triangleFree\_conjecture\_B}), and Section~6 (\texttt{disproof\_malkoun\_wagner\_triangleFree\_section\_6}) inside the triangle-free cubic 3-connected class.
+\end{enumerate}
+\end{theorem}
+
+Conversely, all small bipartite graphs tested up to $n = 8$ (\texttt{Q3\_cube}, \texttt{K4\_4\_bip}, \texttt{K3\_5\_bip}, \texttt{K2\_6\_bip}, \texttt{C4\_eq\_C4\_2conn}, \texttt{C8}, \texttt{double\_star\_3\_3}, and all $n \le 7$ bipartite graphs) obeyed $\RePart(\AG) > 1$ and $|\AG| > 1$ under numerical search. As shown next, however, bipartiteness itself fails once even cycles become sufficiently long ($2k \ge 18$) because Malkoun's Conjecture~D fails even in rank~2.
+
+\section{Disproof of General and Rank-2 Conjecture~D and Bipartite Cycle Violations}\label{sec:conjectureD}
+
+By Theorem~\ref{thm:bipartite}, whether $\RePart(\AG(\mathbf{x})) \ge 1$ holds for every bipartite graph reduces to whether Conjecture~D holds for Hermitian Gram matrices $H = B^H B$ of rank~$2$ arising from bipartite spinors. We prove in \texttt{lean/Matematyka/MalkounConjectureD.lean} that Conjecture~D is false both in full generality and in the rank-2 spinor restriction.
+
+\begin{theorem}[Disproof of General Conjecture~D at $m = 6$; \texttt{MalkounConjectureD.lean}]\label{thm:conjD_gen}
+Let $E = \mathrm{Fin}\ 6$ carry the two $6$-cycle equivalence partitions $\sim_1, \sim_2$ (\texttt{cycleKappa1 3}, \texttt{cycleKappa2 3}) corresponding to alternating pairs $\{0,1\},\{2,3\},\{4,5\}$ and $\{1,2\},\{3,4\},\{5,0\}$, so $|P_1 \cap P_2| = 1$ (\texttt{card\_cycleP1\_inf\_cycleP2}). Let $B \in M_{4 \times 6}(\Z)$ (\texttt{c6BGI}) have columns $(1,0,0,0)^T$, $(0,1,-1,0)^T$, $(1,0,0,0)^T$, $(0,0,1,-1)^T$, $(1,0,0,0)^T$, $(0,-1,0,1)^T$ (giving rank-3 Gram matrix $H = B^T B$ with diagonal $(1,2,1,2,1,2)$). Then kernel reduction gives
+\[
+    \RePart\bigl(f_{\sim_1,\sim_2}(H)\bigr) = 7 < 8 = |P_1 \cap P_2| \prod_{e=0}^5 \RePart(H_{ee})
+\]
+(\texttt{cert\_c6\_eval}, \texttt{cert\_c6\_diag}), formally proving \texttt{disproof\_malkoun\_conjecture\_D}. (A related rank-3 witness on $C_8$ in \texttt{data/conjecture\_d\_and\_bipartite\_cycles.json} sharpens the ratio from $7/8$ to $3/4$.)
+\end{theorem}
+
+\begin{theorem}[Disproof of Rank-2 Spinor Conjecture~D at $m = 12$; \texttt{MalkounConjectureD.lean}]\label{thm:conjD_rank2}
+Even restricting Conjecture~D (\texttt{MalkounRank2ConjectureDProp}) to rank-2 matrices $H = B^H B$ ($B \in M_{2 \times |E|}(\C)$) suffices to imply $\RePart(\AG(\mathbf{x})) \ge 1$ for every bipartite graph (\texttt{rank2ConjectureD\_implies\_bipartite\_re\_ge\_one}). However, on $E = \mathrm{Fin}\ 12$ ($C_{12}$ partitions \texttt{cycleKappa1 6}, \texttt{cycleKappa2 6}), the explicit $2 \times 12$ Gaussian-integer matrix $B = B_{\mathrm{Re}} + i B_{\mathrm{Im}}$ (\texttt{c12BGI}), where
+{\small
+\begin{gather*}
+    B_{\mathrm{Re}} = \begin{pmatrix}
+        3 & 0 & 3 & -1 & 0 & 0 & -4 & 3 & -2 & -3 & 2 & 3 \\
+        -3 & 2 & -3 & -3 & 1 & 1 & 2 & 2 & 1 & -3 & -1 & 4
+    \end{pmatrix}, \\
+    B_{\mathrm{Im}} = \begin{pmatrix}
+        3 & -2 & 2 & 1 & 4 & 2 & -2 & -2 & 4 & -1 & 4 & -2 \\
+        0 & -4 & -1 & 4 & -3 & 4 & 2 & -3 & -1 & -1 & -1 & -1
+    \end{pmatrix},
+\end{gather*}
+}
+yields $\mathrm{diag}(B^H B) = (27,24,23,27,26,21,28,26,22,20,22,30)$ and exact Gaussian-integer sum (\texttt{cert\_c12\_eval}, \texttt{cert\_c12\_diag}):
+\[
+    \RePart\bigl(f_{\sim_1,\sim_2}(B^H B)\bigr) = -38243634152693760 < 0 < 46450162760601600 = |P_1 \cap P_2|\prod_{e=0}^{11} \RePart(H_{ee}),
+\]
+with normalized ratio $\approx -0.823326$, formally proving \texttt{disproof\_malkoun\_rank2\_conjecture\_D}.
+\end{theorem}
+
+Transferring the $C_{2k}$ rank-2 Gram cancellation mechanism to 3D spinor edges yields explicit geometric violations of Conjectures~B and Section~6 on bipartite even cycles. We emphasize cleanly that the entries of Table~\ref{tab:even_cycles} are 50-digit \texttt{mpmath} arbitrary-precision evaluations (archived with integer coordinates in \texttt{data/conjecture\_d\_and\_bipartite\_cycles.json}) rather than Lean~4 kernel certificates.
+
+\begin{table}[htbp]
+\centering
+\caption{3D integer helical configurations on bipartite even cycles $C_{2k}$ evaluated at 50-digit \texttt{mpmath} precision, refuting Conjecture~B ($|\mathcal{A}| < 1$ at $C_{18}, C_{20}$) and Section~6 ($\RePart(\mathcal{A}) < 0$ at $C_{24}, C_{28}$) for bipartite graphs.}
+\label{tab:even_cycles}
+\small
+\begin{tabular}{@{}lccccl@{}}
+\toprule
+Graph & $(n, m)$ & Bipartite & $\RePart(\mathcal{A}_G)$ & $\ImPart(\mathcal{A}_G)$ & $|\mathcal{A}_G|$ \\
+\midrule
+$C_{18}$ & $(18, 18)$ & Yes & $0.959587$ & $0.018641$ & $0.959768 < 1$ (violates Conj.~B, Sec.~6) \\
+$C_{20}$ & $(20, 20)$ & Yes & $0.902216$ & $0.027326$ & $0.902630 < 1$ (violates Conj.~B, Sec.~6) \\
+$C_{24}$ & $(24, 24)$ & Yes & $-9962.046736 < 0$ & $34772.980507$ & $36171.847457$ (violates Sec.~6) \\
+$C_{28}$ & $(28, 28)$ & Yes & $-59717.006258 < 0$ & $327852.485457$ & $333246.714998$ (violates Sec.~6) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Small-Tree Positivity, Planar Tree Zeros at $n = 10$, and Negative Path Amplitudes on $LG_{15}$}\label{sec:trees}
+
+With non-bipartite graphs, general Conjecture~D, rank-2 Conjecture~D on $C_{12}$, and bipartite even cycles $C_{18}$--$C_{28}$ all failing, cycles of any parity cannot guarantee positivity. Before showing that even trees eventually fail at $n = 10$, we first record our unconditional Lean~4 proofs for small trees in \texttt{lean/Matematyka/MalkounConjectureD.lean}.
+
+\begin{theorem}[Unconditional Conjecture~C for Trees $LG_3, LG_4, K_{1,3}, LG_5$; \texttt{MalkounConjectureD.lean}]\label{thm:trees}
+For every 3D non-collision configuration $\mathbf{x} \in C_T(\R^3)$ on the path graphs $LG_3$ (\texttt{pathGraph3}), $LG_4$ (\texttt{pathGraph4}), the claw graph $K_{1,3}$ (\texttt{clawGraph}), and the 5-vertex path $LG_5$ (\texttt{pathGraph5}, Malkoun Theorem~4.4),
+\[
+    \RePart\bigl(\mathcal{A}_T(\mathbf{x})\bigr) \ge 1, \qquad \bigl\|\mathcal{A}_T(\mathbf{x})\bigr\| \ge 1, \qquad \mathcal{A}_T(\mathbf{x}) \neq 0.
+\]
+Specifically, \texttt{malkounAmplitude\_path3\_re\_ge\_one}, \texttt{malkounAmplitude\_path4\_re\_ge\_one}, \texttt{malkounAmplitude\_claw\_re\_ge\_one}, and \texttt{malkounAmplitude\_path5\_re\_ge\_one} establish the inequalities unconditionally by combining Theorem~\ref{thm:bipartite} with positive semidefinite principal minor disk bounds (\texttt{posSemidef\_unitDiag\_three\_disk\_bound}).
+\end{theorem}
+
+\begin{theorem}[Tree Reduction Principle; \texttt{treeConjectureD\_implies\_conjecture\_C}]\label{thm:tree_frontier}
+Let \texttt{MalkounTreeConjectureDProp} restrict Conjecture~D to bipartite incidence partitions $(P_1, P_2)$ of finite trees $T$ (\texttt{T.IsTree}) and rank-2 complex matrices $B \in M_{2 \times E}(\C)$. Then \texttt{MalkounTreeConjectureDProp} implies $\RePart(\mathcal{A}_T(\mathbf{x})) \ge 1$, $|\mathcal{A}_T(\mathbf{x})| \ge 1$, and $\mathcal{A}_T(\mathbf{x}) \neq 0$ for every finite tree $T$ and every $\mathbf{x} \in C_T(\R^3)$.
+\end{theorem}
+
+Remarkably, however, both Conjecture~C and \texttt{MalkounTreeConjectureDProp} are \emph{false} once $n \ge 10$.
+
+\begin{theorem}[Planar Zero on the 10-Vertex Cherry Tree $T_{10}$; \texttt{MalkounConjectureC.lean}]\label{thm:cherry10}
+Let $T_{10}$ (\texttt{cherryTree10}) be the 10-vertex, 9-edge cubic tree on $\{0,\dots,9\}$ with edges $\{0,1\},\allowbreak \{1,2\},\allowbreak \{1,3\},\allowbreak \{0,4\},\allowbreak \{4,5\},\allowbreak \{4,6\},\allowbreak \{0,7\},\allowbreak \{7,8\},\allowbreak \{7,9\}$, and consider the planar $120^\circ$ pinwheel configuration $\mathbf{x}_u = (a_u, b_u\sqrt{3}, 0)$ (\texttt{cherryPinwheelConfig}) with lattice pairs
+\begin{align*}
+    (a_u, b_u)_{u=0}^9 = \bigl(&(0,0),(2,0),(3,-1),(4,-2),(-1,1),\\
+    &(0,2),(1,3),(-1,-1),(-3,-1),(-5,-1)\bigr).
+\end{align*}
+Then the points $\mathbf{x}_u$ lie in $z = 0$ with pairwise Euclidean distance $\ge 2$ (hence $\mathbf{x} \in C_{T_{10}}(\R^3)$), and exact algebraic evaluation gives
+\[
+    \mathcal{A}_{T_{10}}(\mathbf{x}) = 0.
+\]
+\end{theorem}
+
+\begin{proof}[Algebraic mechanism formalized in \texttt{MalkounConjectureC.lean}]
+Orienting edges under the leaf/center bipartition gives $P_1 \simeq S_3$ (permuting the hub edges $\{0,1\},\{0,4\},\{0,7\}$) and $P_2 \simeq (S_3)^3$ (acting independently on the stars at vertices $1, 4, 7$). Because each branch has edges pointing along the three $120^\circ$ directions $1, \omega^2, \omega^4$ ($\omega = e^{i\pi/3}$, $\omega^3 = -1$), the unnormalized Gram sum factors across $\pi \in S_3$ into products of three $3 \times 3$ block permanents \texttt{chVal}$(\pi(c), c)$, which reduce by kernel evaluation (\texttt{chVal\_eval\_all}) to $12\omega^2$ on diagonal terms $\pi(c) = c$ and $-6\omega$ on off-diagonal terms $\pi(c) \neq c$. Summing over the $6$ permutations in $S_3$ yields
+\[
+    (12\omega^2)^3 + 3(12\omega^2)(-6\omega)^2 + 2(-6\omega)^3
+    = -1728 + 1296 + 432 = 0.
+\]
+Combined with Theorem~\ref{thm:tree_frontier}, \texttt{malkounAmplitude\_cherryPinwheel\_eq\_zero} formally proves \texttt{disproof\_malkoun\_conjecture\_C}, \texttt{disproof\_malkoun\_tree\_conjecture\_D}, \texttt{disproof\_malkoun\_tree\_conjecture\_A}, and \texttt{disproof\_malkoun\_tree\_conjecture\_B}.
+\end{proof}
+
+Numerically, exhaustive optimization across all $92$ non-isomorphic trees on $4 \le n \le 9$ vertices ($2, 3, 6, 11, 23, 47$ trees across all vertex degrees) keeps $\inf \RePart(\mathcal{A}_T) = 1$, whereas at $n = 10$ four distinct trees fail (atlas indices $49$, $77$, $94 = T_{10}$, and $97$, with $T_{10}$ reaching $0$).
+
+\begin{theorem}[Negative Real Part on $LG_{15}$; \texttt{MalkounConjectureC.lean}]\label{thm:lg15}
+Even restricted to linear paths $LG_n$, Conjecture~C fails at $n = 15$. On \texttt{pathGraph15} ($n=15, m=14$), the $2 \times 14$ Gaussian-integer spinor matrix \texttt{lg15BGI} defines pairwise-distinct 3D integer Hopf coordinates $\mathbf{x} \in C_{LG_{15}}(\R^3)$ (\texttt{lg15NegConfig}):
+\begin{align*}
+    \mathbf{x} = \bigl[&(0,0,0),(0,0,-25),(-16,-8,-36),(-16,-8,-61),(-8,-24,-72),\\
+    &(-18,-24,-96),(2,-24,-117),(2,-34,-141),(2,-14,-162),(12,-14,-186),\\
+    &(2,-14,-210),(12,-4,-233),(12,-14,-257),(-8,-4,-277),(2,-4,-301)\bigr].
+\end{align*}
+Using the unnormalized bipartite reduction (\texttt{malkounAmplitude\_bipartite\_unnorm}) and $6$-step $2 \times 2$ transfer-matrix factorization (\texttt{path15\_gram\_sum\_eq\_toC}), Lean's kernel certifies the exact rational real part
+\[
+    \RePart\bigl(\mathcal{A}_{LG_{15}}(\mathbf{x})\bigr) = \frac{-40605770611892600000}{58001564658819600000} \approx -0.7000806073 < 0
+\]
+(with imaginary part $+1681394136422384600000 / 58001564658819600000 \approx +28.988772$), proving \texttt{malkounAmplitude\_lg15Neg\_re\_eq}, \texttt{malkounAmplitude\_lg15Neg\_re\_neg}, and \texttt{disproof\_malkoun\_path\_conjecture\_C\_neg\_re}.
+\end{theorem}
+
+\begin{theorem}[Unconditional Path Conjecture~B and Planar Path Positivity; \texttt{MalkounPathPositivity.lean}]\label{thm:path_positivity}
+For every $n \in \mathbb{N}$ and every non-collision configuration $\mathbf{x} \in C_{LG_n}(\R^3)$ on \texttt{pathGraphN n} ($LG_n$):
+\begin{enumerate}
+    \item $|\mathcal{A}_{LG_n}(\mathbf{x})| \ge 1$ and $\mathcal{A}_{LG_n}(\mathbf{x}) \neq 0$ unconditionally (\texttt{malkounAmplitude\_pathGraphN\_norm\_ge\_one}, \texttt{malkounAmplitude\_pathGraphN\_ne\_zero}).
+    \item Whenever $\mathbf{x}$ is planar ($\mathbf{x}_u = (x_u, y_u, 0)$ for all $u$), $\RePart(\mathcal{A}_{LG_n}(\mathbf{x})) \ge 1$ unconditionally (\texttt{malkounAmplitude\_pathGraphN\_planar\_re\_ge\_one}).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof mechanism formalized in \texttt{MalkounPathPositivity.lean}]
+By bipartite Gram reduction along the even/odd vertex partition, the conjugate amplitude equals the first coordinate $a_m$ of a $2$-component $\mathrm{SU}(2)$ transfer recurrence $(a_k, \beta_k)$ over orthogonal edge spinors $\phi_k, \tilde{j}\phi_k$ (\texttt{pathGramSum\_eq\_rec}), satisfying the exact hyperbolic Lyapunov identity (\texttt{hyperbolic\_step\_id})
+\[
+    \bigl(|a_{k+1}|^2 - |\beta_{k+1}|^2\bigr) - \bigl(|a_k|^2 - |\beta_k|^2\bigr) = |U|^2\bigl(3|d|^2 + |c|^2\bigr) \ge 0.
+\]
+Inductively $|a_k|^2 - |\beta_k|^2 \ge 1$ (\texttt{pathRecPair\_hyperbolic\_ge\_one}), whence $|\mathcal{A}_{LG_n}(\mathbf{x})| = |a_m| \ge 1$ (explaining why negative real parts on $LG_{15}$--$LG_{17}$ must occur alongside large imaginary parts). For planar configurations ($z_u \equiv 0$), passing to the Cayley-rotated real spinor gauge makes every $\langle \phi_i, \phi_j \rangle$ real (\texttt{cayleySpinor\_spIn\_im\_zero}), keeping $a_k > 0$ real (\texttt{pathRecPair\_planar\_pos}) and forcing $a_m \ge 1$.
+\end{proof}
+
+\begin{remark}[Companion Tree Witnesses and Remaining Open Frontier]
+Companion 50-digit \texttt{mpmath} witnesses archived in \texttt{data/conjecture\_c\_tree\_counterexamples.json} include negative real parts on $LG_{16}$ ($\RePart \approx -5.812604$), exact terminating decimal coordinates on $LG_{17}$ ($\mathcal{A}_{LG_{17}} = -3.3687601152 - 62.147002368\,i$), and 3-legged spiders \texttt{Spider(3,3,4)} ($\RePart \approx 0.734928$), \texttt{Spider(3,4,4)} ($\RePart \approx -0.095328$, $|\mathcal{A}| \approx 2.38 \times 10^{-8}$), and \texttt{Spider(4,4,4)} ($\RePart \approx -2.773079$). With all four original conjectures (A, B, C, and D) refuted and Path Conjecture~B (along with planar paths) now proved unconditionally for all $n$ by Theorem~\ref{thm:path_positivity} (while stars $K_{1,m}$ satisfy $\mathcal{A}_{K_{1,m}}(\mathbf{x}) = \mathrm{perm}(H) \ge 1$ by Lieb's permanent dominance theorem~\cite{Lieb1966} for positive semidefinite Hermitian correlation matrices, attaining $m!$ on collinear configurations), the sole refined positivity problem remaining open is analytically proving $\RePart(\mathcal{A}_T(\mathbf{x})) \ge 1$ for non-star trees on $6 \le n \le 9$ vertices.
+\end{remark}
+
+All Lean~4 proofs in the repository (\texttt{Malkoun.lean}, \texttt{MalkounBipartite.lean}, \texttt{MalkounCounterexample.lean}, \texttt{MalkounN7Counterexample.lean}, \texttt{MalkounWagnerCounterexample.lean}, \texttt{MalkounConjectureD.lean}, \texttt{MalkounConjectureC.lean}, and \texttt{MalkounPathPositivity.lean}) compile cleanly under Lean~4 (\texttt{v4.37.0-rc1}) with Mathlib, avoid \texttt{sorry}, \texttt{admit}, and \texttt{native\_decide}, and depend exclusively on the standard Lean axioms \{\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}\}. Computational scripts and witnesses are archived in \texttt{scripts/} and \texttt{data/} for full reproducibility. A standalone, self-contained reproduction repository containing all Lean~4 proofs, Python/mpmath scripts, witness certificates, and this manuscript is publicly archived at \url{https://github.com/tomasztarlowski/malkoun-conjectures-counterexamples}.
+
+\begin{thebibliography}{9}
+\bibitem{Lieb1966}
+E.~H.~Lieb, \emph{Proofs of some conjectures on permanents}, J.~Math.~Mech. \textbf{16} (1966), 127--134.
+\bibitem{Malkoun2026}
+J.~Malkoun, \emph{Finite graphs and configurations of points}, preprint \texttt{arXiv:2508.13472v3} [math.MG], September 7, 2026.
+\end{thebibliography}
+
+\end{document}

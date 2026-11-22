@@ -1,0 +1,19 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "Challenge.disproof_malkoun_conjecture_A",
+    "Challenge.disproof_malkoun_conjecture_B",
+    "Challenge.disproof_malkoun_section_6",
+    "Challenge.disproof_malkoun_n7_biconnected_conjecture_A",
+    "Challenge.disproof_malkoun_wagner_triangleFree_conjecture_A",
+    "Challenge.disproof_malkoun_conjecture_D",
+    "Challenge.disproof_malkoun_rank2_conjecture_D",
+    "Challenge.disproof_malkoun_conjecture_C",
+    "Challenge.disproof_malkoun_tree_conjecture_A",
+    "Challenge.disproof_malkoun_path_conjecture_C_neg_re",
+    "Challenge.malkounAmplitude_pathGraphN_norm_ge_one",
+    "Challenge.malkounAmplitude_pathGraphN_planar_re_ge_one"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
+}
