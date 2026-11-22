@@ -46,7 +46,8 @@ sources:
       Companion 9-page preprint by the author documenting all formalized counterexamples (B_8, H_7,
       M_8, C_6, C_{12}, T_{10}, LG_{15}), unconditional path positivity for LG_n, and 50-digit
       mpmath witnesses across higher-connectivity graphs, bipartite even cycles C_{18}–C_{28}, and
-      exhaustive trees on 4 <= n <= 10 vertices.
+      exhaustive trees on 4 <= n <= 10 vertices. Archived with permanent Zenodo DOI
+      https://doi.org/10.5281/zenodo.24443725.
     author_endorsement: "participated"
   - title: "Finite graphs and configurations of points"
     authors:
