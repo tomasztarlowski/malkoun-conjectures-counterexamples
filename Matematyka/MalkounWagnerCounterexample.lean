@@ -1,5 +1,6 @@
-import Matematyka.MalkounN7Counterexample
+module
 
+public import Matematyka.MalkounN7Counterexample
 /-!
 # Formal Disproof of Malkoun's Conjectures on the Triangle-Free 3-Connected Cubic Wagner Graph $M_8$
 
@@ -12,11 +13,13 @@ arithmetic at scale $S = 10^6$ (`IntIv`/`CIntIv`) at $t = 1$, and continuity + I
 we refute Malkoun's Conjectures A, B, and Section 6 even on 3-connected triangle-free graphs.
 -/
 
+@[expose] public section
+
 namespace Matematyka.MalkounWagnerCounterexample
 
 open Complex Matematyka.MalkounCounterexample Matematyka.MalkounN7Counterexample
 
-private lemma fin2_cases (b : Fin 2) : b = 0 ∨ b = 1 := by
+lemma wag_fin2_cases (b : Fin 2) : b = 0 ∨ b = 1 := by
   fin_cases b <;> simp
 
 /-! ## Part 1: Wagner Graph $M_8$, 3-Vertex Connectivity, 3-Regularity, and Triangle-Freeness -/
@@ -76,20 +79,20 @@ $n \ge 4$, $G$ is connected, and deleting any two vertices leaves a connected gr
 def IsThreeVertexConnected {n : ℕ} (G : SimpleGraph (Fin n)) : Prop :=
   4 ≤ n ∧ G.Connected ∧ ∀ c₁ c₂ : Fin n, (G.induce {x : Fin n | x ≠ c₁ ∧ x ≠ c₂}).Connected
 
-private def wagnerAnchor (c₁ c₂ : Fin 8) : Fin 8 :=
+def wagnerAnchor (c₁ c₂ : Fin 8) : Fin 8 :=
   if (0 : Fin 8) ≠ c₁ ∧ (0 : Fin 8) ≠ c₂ then 0
   else if (1 : Fin 8) ≠ c₁ ∧ (1 : Fin 8) ≠ c₂ then 1
   else 2
 
-private lemma wagnerAnchor_mem : ∀ c₁ c₂ : Fin 8,
+lemma wagnerAnchor_mem : ∀ c₁ c₂ : Fin 8,
     wagnerAnchor c₁ c₂ ≠ c₁ ∧ wagnerAnchor c₁ c₂ ≠ c₂ := by decide
 
-private def isValidInducedWalk (c₁ c₂ : Fin 8) : Fin 8 → List (Fin 8) → Fin 8 → Bool
+def isValidInducedWalk (c₁ c₂ : Fin 8) : Fin 8 → List (Fin 8) → Fin 8 → Bool
   | a, [], b => a == b
   | a, x :: xs, b =>
       wagnerAdjBool a x && (x != c₁) && (x != c₂) && isValidInducedWalk c₁ c₂ x xs b
 
-private lemma reachable_of_isValidInducedWalk (c₁ c₂ : Fin 8) :
+lemma reachable_of_isValidInducedWalk (c₁ c₂ : Fin 8) :
     ∀ (l : List (Fin 8)) (a b : Fin 8) (ha : a ≠ c₁ ∧ a ≠ c₂) (hb : b ≠ c₁ ∧ b ≠ c₂),
       isValidInducedWalk c₁ c₂ a l b = true →
       (wagnerGraph.induce {x : Fin 8 | x ≠ c₁ ∧ x ≠ c₂}).Reachable ⟨a, ha⟩ ⟨b, hb⟩
@@ -104,7 +107,7 @@ private lemma reachable_of_isValidInducedWalk (c₁ c₂ : Fin 8) :
       have hedge : (wagnerGraph.induce {v : Fin 8 | v ≠ c₁ ∧ v ≠ c₂}).Adj ⟨a, ha⟩ ⟨x, hx⟩ := hadj
       exact hedge.reachable.trans (reachable_of_isValidInducedWalk c₁ c₂ xs x b hx hb hrest)
 
-private def wagnerWalk (c₁ c₂ b : Fin 8) : List (Fin 8) :=
+def wagnerWalk (c₁ c₂ b : Fin 8) : List (Fin 8) :=
   let a := min c₁.val c₂.val
   let d := max c₁.val c₂.val
   match a, d, b.val with
@@ -298,7 +301,7 @@ private def wagnerWalk (c₁ c₂ b : Fin 8) : List (Fin 8) :=
   | 7, 7, 6 => [1, 2, 6]
   | _, _, _ => []
 
-private lemma wagnerWalk_valid : ∀ c₁ c₂ b : Fin 8, b ≠ c₁ → b ≠ c₂ →
+lemma wagnerWalk_valid : ∀ c₁ c₂ b : Fin 8, b ≠ c₁ → b ≠ c₂ →
     isValidInducedWalk c₁ c₂ (wagnerAnchor c₁ c₂) (wagnerWalk c₁ c₂ b) b = true := by decide
 
 /-- `wagnerGraph` is 3-vertex-connected ($\kappa(M_8) = 3$). -/
@@ -321,7 +324,7 @@ theorem wagnerGraph_isRegularOfDegree_three : wagnerGraph.IsRegularOfDegree 3 :=
   intro u
   fin_cases u <;> decide
 
-private lemma wagner_no_triangle : ∀ a b c : Fin 8,
+lemma wagner_no_triangle : ∀ a b c : Fin 8,
     ¬ (wagnerAdjBool a b = true ∧ wagnerAdjBool b c = true ∧ wagnerAdjBool a c = true) := by decide
 
 /-- `wagnerGraph` is triangle-free (`CliqueFree 3`, girth 4). -/
@@ -358,16 +361,16 @@ def wagnerNbrIdx : Fin 8 → Fin 8 → Fin 3
   | 7, 0 => 0 | 7, 3 => 1 | 7, 6 => 2
   | _, _ => 0
 
-private lemma wagnerNbr_adj : ∀ u : Fin 8, ∀ j : Fin 3, wagnerGraph.Adj u (wagnerNbr u j) := by
+lemma wagnerNbr_adj : ∀ u : Fin 8, ∀ j : Fin 3, wagnerGraph.Adj u (wagnerNbr u j) := by
   decide
 
-private lemma wagnerNbr_left_inv : ∀ u : Fin 8, ∀ j : Fin 3, wagnerNbrIdx u (wagnerNbr u j) = j := by
+lemma wagnerNbr_left_inv : ∀ u : Fin 8, ∀ j : Fin 3, wagnerNbrIdx u (wagnerNbr u j) = j := by
   decide
 
-private lemma wagnerNbr_right_inv : ∀ u w : Fin 8, wagnerGraph.Adj u w → wagnerNbr u (wagnerNbrIdx u w) = w := by
+lemma wagnerNbr_right_inv : ∀ u w : Fin 8, wagnerGraph.Adj u w → wagnerNbr u (wagnerNbrIdx u w) = w := by
   decide
 
-private def wagnerNbrEquiv (u : Fin 8) : Fin 3 ≃ { w : Fin 8 // wagnerGraph.Adj u w } where
+def wagnerNbrEquiv (u : Fin 8) : Fin 3 ≃ { w : Fin 8 // wagnerGraph.Adj u w } where
   toFun j := ⟨wagnerNbr u j, wagnerNbr_adj u j⟩
   invFun x := wagnerNbrIdx u x.1
   left_inv := wagnerNbr_left_inv u
@@ -381,51 +384,51 @@ def perm3Fun : Fin 6 → Fin 3 → Fin 3
   | 4, 0 => 1 | 4, 1 => 2 | 4, 2 => 0
   | 5, 0 => 2 | 5, 1 => 0 | 5, 2 => 1
 
-private def perm3InvFun : Fin 6 → Fin 3 → Fin 3
+def perm3InvFun : Fin 6 → Fin 3 → Fin 3
   | 4 => perm3Fun 5
   | 5 => perm3Fun 4
   | i => perm3Fun i
 
-private lemma perm3_left_inv : ∀ i : Fin 6, ∀ x : Fin 3, perm3InvFun i (perm3Fun i x) = x := by decide
-private lemma perm3_right_inv : ∀ i : Fin 6, ∀ x : Fin 3, perm3Fun i (perm3InvFun i x) = x := by decide
-private lemma perm3_inj : ∀ i j : Fin 6, (∀ x : Fin 3, perm3Fun i x = perm3Fun j x) → i = j := by decide
+lemma perm3_left_inv : ∀ i : Fin 6, ∀ x : Fin 3, perm3InvFun i (perm3Fun i x) = x := by decide
+lemma perm3_right_inv : ∀ i : Fin 6, ∀ x : Fin 3, perm3Fun i (perm3InvFun i x) = x := by decide
+lemma perm3_inj : ∀ i j : Fin 6, (∀ x : Fin 3, perm3Fun i x = perm3Fun j x) → i = j := by decide
 
-private def perm3ToEquiv (i : Fin 6) : Equiv.Perm (Fin 3) where
+def perm3ToEquiv (i : Fin 6) : Equiv.Perm (Fin 3) where
   toFun := perm3Fun i
   invFun := perm3InvFun i
   left_inv := perm3_left_inv i
   right_inv := perm3_right_inv i
 
-private noncomputable def perm3Equiv : Fin 6 ≃ Equiv.Perm (Fin 3) :=
+noncomputable def perm3Equiv : Fin 6 ≃ Equiv.Perm (Fin 3) :=
   Equiv.ofBijective perm3ToEquiv <| (Fintype.bijective_iff_injective_and_card perm3ToEquiv).mpr <| by
     refine ⟨fun i j hij => perm3_inj i j fun x => congrFun (congrArg Equiv.toFun hij) x, ?_⟩
     rw [Fintype.card_perm, Fintype.card_fin]
     norm_num
 
-private abbrev Block2Idx := Fin 6 × Fin 6
-private abbrev Half8Idx := Block2Idx × Block2Idx
-private abbrev WagnerPermIdx := Half8Idx × Half8Idx
+abbrev Block2Idx := Fin 6 × Fin 6
+abbrev Half8Idx := Block2Idx × Block2Idx
+abbrev WagnerPermIdx := Half8Idx × Half8Idx
 
-private def pickVert8 (p : WagnerPermIdx) : Fin 8 → Fin 6
+def pickVert8 (p : WagnerPermIdx) : Fin 8 → Fin 6
   | 0 => p.1.1.1 | 4 => p.1.1.2
   | 3 => p.1.2.1 | 7 => p.1.2.2
   | 1 => p.2.1.1 | 2 => p.2.1.2
   | 5 => p.2.2.1 | 6 => p.2.2.2
 
-private def vert8PiEquiv : WagnerPermIdx ≃ (∀ _ : Fin 8, Fin 6) where
+def vert8PiEquiv : WagnerPermIdx ≃ (∀ _ : Fin 8, Fin 6) where
   toFun := pickVert8
   invFun f := (((f 0, f 4), (f 3, f 7)), ((f 1, f 2), (f 5, f 6)))
   left_inv p := by rcases p with ⟨⟨⟨a, b⟩, ⟨c, d⟩⟩, ⟨⟨e, f⟩, ⟨g, h⟩⟩⟩; rfl
   right_inv f := by ext u; fin_cases u <;> rfl
 
-private noncomputable def wagnerSourceEquiv : WagnerPermIdx ≃ SourcePerm wagnerGraph :=
+noncomputable def wagnerSourceEquiv : WagnerPermIdx ≃ SourcePerm wagnerGraph :=
   vert8PiEquiv.trans (Equiv.piCongrRight fun u =>
     perm3Equiv.trans (Equiv.permCongr (wagnerNbrEquiv u)))
 
-private lemma wagnerSourceEquiv_apply (p : WagnerPermIdx) (u w : Fin 8) (hw : wagnerGraph.Adj u w) :
+lemma wagnerSourceEquiv_apply (p : WagnerPermIdx) (u w : Fin 8) (hw : wagnerGraph.Adj u w) :
     ((wagnerSourceEquiv p u ⟨w, hw⟩).1) = wagnerNbr u (perm3Fun (pickVert8 p u) (wagnerNbrIdx u w)) := rfl
 
-private lemma wagnerSourceEquiv_apply' (p : WagnerPermIdx) (u : Fin 8) (y : { w : Fin 8 // wagnerGraph.Adj u w }) :
+lemma wagnerSourceEquiv_apply' (p : WagnerPermIdx) (u : Fin 8) (y : { w : Fin 8 // wagnerGraph.Adj u w }) :
     ((wagnerSourceEquiv p u y).1) = wagnerNbr u (perm3Fun (pickVert8 p u) (wagnerNbrIdx u y.1)) := rfl
 
 def wagnerInternalEdges : Fin 4 → Fin 8 × Fin 8 := ![(0, 4), (3, 7), (1, 2), (5, 6)]
@@ -433,20 +436,20 @@ def wagnerIntraLeftEdges : Fin 2 → Fin 8 × Fin 8 := ![(0, 7), (3, 4)]
 def wagnerIntraRightEdges : Fin 2 → Fin 8 × Fin 8 := ![(1, 5), (2, 6)]
 def wagnerCutEdges : Fin 4 → Fin 8 × Fin 8 := ![(0, 1), (2, 3), (4, 5), (6, 7)]
 
-private lemma wagnerInternalEdges_ok : ∀ i : Fin 4, wagnerGraph.Adj (wagnerInternalEdges i).1 (wagnerInternalEdges i).2 ∧ (wagnerInternalEdges i).1 < (wagnerInternalEdges i).2 := by decide
-private lemma wagnerIntraLeftEdges_ok : ∀ i : Fin 2, wagnerGraph.Adj (wagnerIntraLeftEdges i).1 (wagnerIntraLeftEdges i).2 ∧ (wagnerIntraLeftEdges i).1 < (wagnerIntraLeftEdges i).2 := by decide
-private lemma wagnerIntraRightEdges_ok : ∀ i : Fin 2, wagnerGraph.Adj (wagnerIntraRightEdges i).1 (wagnerIntraRightEdges i).2 ∧ (wagnerIntraRightEdges i).1 < (wagnerIntraRightEdges i).2 := by decide
-private lemma wagnerCutEdges_ok : ∀ i : Fin 4, wagnerGraph.Adj (wagnerCutEdges i).1 (wagnerCutEdges i).2 ∧ (wagnerCutEdges i).1 < (wagnerCutEdges i).2 := by decide
+lemma wagnerInternalEdges_ok : ∀ i : Fin 4, wagnerGraph.Adj (wagnerInternalEdges i).1 (wagnerInternalEdges i).2 ∧ (wagnerInternalEdges i).1 < (wagnerInternalEdges i).2 := by decide
+lemma wagnerIntraLeftEdges_ok : ∀ i : Fin 2, wagnerGraph.Adj (wagnerIntraLeftEdges i).1 (wagnerIntraLeftEdges i).2 ∧ (wagnerIntraLeftEdges i).1 < (wagnerIntraLeftEdges i).2 := by decide
+lemma wagnerIntraRightEdges_ok : ∀ i : Fin 2, wagnerGraph.Adj (wagnerIntraRightEdges i).1 (wagnerIntraRightEdges i).2 ∧ (wagnerIntraRightEdges i).1 < (wagnerIntraRightEdges i).2 := by decide
+lemma wagnerCutEdges_ok : ∀ i : Fin 4, wagnerGraph.Adj (wagnerCutEdges i).1 (wagnerCutEdges i).2 ∧ (wagnerCutEdges i).1 < (wagnerCutEdges i).2 := by decide
 
-private abbrev WagnerEdgeSlot := Fin 4 ⊕ Fin 2 ⊕ Fin 2 ⊕ Fin 4
+abbrev WagnerEdgeSlot := Fin 4 ⊕ Fin 2 ⊕ Fin 2 ⊕ Fin 4
 
-private def wagnerOriToFun : WagnerEdgeSlot → OriEdge wagnerGraph
+def wagnerOriToFun : WagnerEdgeSlot → OriEdge wagnerGraph
   | .inl i => ⟨wagnerInternalEdges i, (wagnerInternalEdges_ok i).1, (wagnerInternalEdges_ok i).2⟩
   | .inr (.inl i) => ⟨wagnerIntraLeftEdges i, (wagnerIntraLeftEdges_ok i).1, (wagnerIntraLeftEdges_ok i).2⟩
   | .inr (.inr (.inl i)) => ⟨wagnerIntraRightEdges i, (wagnerIntraRightEdges_ok i).1, (wagnerIntraRightEdges_ok i).2⟩
   | .inr (.inr (.inr i)) => ⟨wagnerCutEdges i, (wagnerCutEdges_ok i).1, (wagnerCutEdges_ok i).2⟩
 
-private def wagnerOriInvFun (e : OriEdge wagnerGraph) : WagnerEdgeSlot :=
+def wagnerOriInvFun (e : OriEdge wagnerGraph) : WagnerEdgeSlot :=
   match e.1.1.val, e.1.2.val with
   | 0, 4 => .inl 0 | 3, 7 => .inl 1 | 1, 2 => .inl 2 | 5, 6 => .inl 3
   | 0, 7 => .inr (.inl 0) | 3, 4 => .inr (.inl 1)
@@ -455,7 +458,7 @@ private def wagnerOriInvFun (e : OriEdge wagnerGraph) : WagnerEdgeSlot :=
   | 4, 5 => .inr (.inr (.inr 2)) | 6, 7 => .inr (.inr (.inr 3))
   | _, _ => .inl 0
 
-private def wagnerOriEquiv : WagnerEdgeSlot ≃ OriEdge wagnerGraph where
+def wagnerOriEquiv : WagnerEdgeSlot ≃ OriEdge wagnerGraph where
   toFun := wagnerOriToFun
   invFun := wagnerOriInvFun
   left_inv x := by rcases x with i | (i | (i | i)) <;> fin_cases i <;> rfl
@@ -463,73 +466,73 @@ private def wagnerOriEquiv : WagnerEdgeSlot ≃ OriEdge wagnerGraph where
     rcases e with ⟨⟨u, v⟩, hadj, hlt⟩
     fin_cases u <;> fin_cases v <;> first | exact False.elim ((by decide : ¬(wagnerGraph.Adj _ _ ∧ _ < _)) ⟨hadj, hlt⟩) | rfl
 
-private lemma wagnerOri_term_inl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 4) :
+lemma wagnerOri_term_inl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 4) :
     omega (ψ (wagnerOriEquiv (.inl i)).1.1 (σ (wagnerOriEquiv (.inl i)).1.1 ⟨(wagnerOriEquiv (.inl i)).1.2, (wagnerOriEquiv (.inl i)).2.1⟩).1)
           (ψ (wagnerOriEquiv (.inl i)).1.2 (σ (wagnerOriEquiv (.inl i)).1.2 ⟨(wagnerOriEquiv (.inl i)).1.1, (wagnerOriEquiv (.inl i)).2.1.symm⟩).1) =
     omega (ψ (wagnerInternalEdges i).1 (σ (wagnerInternalEdges i).1 ⟨(wagnerInternalEdges i).2, (wagnerInternalEdges_ok i).1⟩).1)
           (ψ (wagnerInternalEdges i).2 (σ (wagnerInternalEdges i).2 ⟨(wagnerInternalEdges i).1, (wagnerInternalEdges_ok i).1.symm⟩).1) := rfl
 
-private lemma wagnerOri_term_inrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 2) :
+lemma wagnerOri_term_inrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 2) :
     omega (ψ (wagnerOriEquiv (.inr (.inl i))).1.1 (σ (wagnerOriEquiv (.inr (.inl i))).1.1 ⟨(wagnerOriEquiv (.inr (.inl i))).1.2, (wagnerOriEquiv (.inr (.inl i))).2.1⟩).1)
           (ψ (wagnerOriEquiv (.inr (.inl i))).1.2 (σ (wagnerOriEquiv (.inr (.inl i))).1.2 ⟨(wagnerOriEquiv (.inr (.inl i))).1.1, (wagnerOriEquiv (.inr (.inl i))).2.1.symm⟩).1) =
     omega (ψ (wagnerIntraLeftEdges i).1 (σ (wagnerIntraLeftEdges i).1 ⟨(wagnerIntraLeftEdges i).2, (wagnerIntraLeftEdges_ok i).1⟩).1)
           (ψ (wagnerIntraLeftEdges i).2 (σ (wagnerIntraLeftEdges i).2 ⟨(wagnerIntraLeftEdges i).1, (wagnerIntraLeftEdges_ok i).1.symm⟩).1) := rfl
 
-private lemma wagnerOri_term_inrrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 2) :
+lemma wagnerOri_term_inrrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 2) :
     omega (ψ (wagnerOriEquiv (.inr (.inr (.inl i)))).1.1 (σ (wagnerOriEquiv (.inr (.inr (.inl i)))).1.1 ⟨(wagnerOriEquiv (.inr (.inr (.inl i)))).1.2, (wagnerOriEquiv (.inr (.inr (.inl i)))).2.1⟩).1)
           (ψ (wagnerOriEquiv (.inr (.inr (.inl i)))).1.2 (σ (wagnerOriEquiv (.inr (.inr (.inl i)))).1.2 ⟨(wagnerOriEquiv (.inr (.inr (.inl i)))).1.1, (wagnerOriEquiv (.inr (.inr (.inl i)))).2.1.symm⟩).1) =
     omega (ψ (wagnerIntraRightEdges i).1 (σ (wagnerIntraRightEdges i).1 ⟨(wagnerIntraRightEdges i).2, (wagnerIntraRightEdges_ok i).1⟩).1)
           (ψ (wagnerIntraRightEdges i).2 (σ (wagnerIntraRightEdges i).2 ⟨(wagnerIntraRightEdges i).1, (wagnerIntraRightEdges_ok i).1.symm⟩).1) := rfl
 
-private lemma wagnerOri_term_inrrr (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 4) :
+lemma wagnerOri_term_inrrr (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (σ : SourcePerm wagnerGraph) (i : Fin 4) :
     omega (ψ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.1 (σ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.1 ⟨(wagnerOriEquiv (.inr (.inr (.inr i)))).1.2, (wagnerOriEquiv (.inr (.inr (.inr i)))).2.1⟩).1)
           (ψ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.2 (σ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.2 ⟨(wagnerOriEquiv (.inr (.inr (.inr i)))).1.1, (wagnerOriEquiv (.inr (.inr (.inr i)))).2.1.symm⟩).1) =
     omega (ψ (wagnerCutEdges i).1 (σ (wagnerCutEdges i).1 ⟨(wagnerCutEdges i).2, (wagnerCutEdges_ok i).1⟩).1)
           (ψ (wagnerCutEdges i).2 (σ (wagnerCutEdges i).2 ⟨(wagnerCutEdges i).1, (wagnerCutEdges_ok i).1.symm⟩).1) := rfl
 
-private lemma wagnerOri_den_inl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 4) :
+lemma wagnerOri_den_inl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 4) :
     omega (ψ (wagnerOriEquiv (.inl i)).1.1 (wagnerOriEquiv (.inl i)).1.2)
           (ψ (wagnerOriEquiv (.inl i)).1.2 (wagnerOriEquiv (.inl i)).1.1) =
     omega (ψ (wagnerInternalEdges i).1 (wagnerInternalEdges i).2)
           (ψ (wagnerInternalEdges i).2 (wagnerInternalEdges i).1) := rfl
 
-private lemma wagnerOri_den_inrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 2) :
+lemma wagnerOri_den_inrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 2) :
     omega (ψ (wagnerOriEquiv (.inr (.inl i))).1.1 (wagnerOriEquiv (.inr (.inl i))).1.2)
           (ψ (wagnerOriEquiv (.inr (.inl i))).1.2 (wagnerOriEquiv (.inr (.inl i))).1.1) =
     omega (ψ (wagnerIntraLeftEdges i).1 (wagnerIntraLeftEdges i).2)
           (ψ (wagnerIntraLeftEdges i).2 (wagnerIntraLeftEdges i).1) := rfl
 
-private lemma wagnerOri_den_inrrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 2) :
+lemma wagnerOri_den_inrrl (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 2) :
     omega (ψ (wagnerOriEquiv (.inr (.inr (.inl i)))).1.1 (wagnerOriEquiv (.inr (.inr (.inl i)))).1.2)
           (ψ (wagnerOriEquiv (.inr (.inr (.inl i)))).1.2 (wagnerOriEquiv (.inr (.inr (.inl i)))).1.1) =
     omega (ψ (wagnerIntraRightEdges i).1 (wagnerIntraRightEdges i).2)
           (ψ (wagnerIntraRightEdges i).2 (wagnerIntraRightEdges i).1) := rfl
 
-private lemma wagnerOri_den_inrrr (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 4) :
+lemma wagnerOri_den_inrrr (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (i : Fin 4) :
     omega (ψ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.1 (wagnerOriEquiv (.inr (.inr (.inr i)))).1.2)
           (ψ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.2 (wagnerOriEquiv (.inr (.inr (.inr i)))).1.1) =
     omega (ψ (wagnerCutEdges i).1 (wagnerCutEdges i).2)
           (ψ (wagnerCutEdges i).2 (wagnerCutEdges i).1) := rfl
 
-private def invBit (b : Fin 2) : Fin 2 := 1 - b
-private def sgnBitC (b : Fin 2) : ℂ := if b = 0 then 1 else -1
-private def sgn2C (b : Fin 2 → Fin 2) : ℂ := sgnBitC (b 0) * sgnBitC (b 1)
-private def sgn4C (b : Fin 4 → Fin 2) : ℂ := ∏ i : Fin 4, sgnBitC (b i)
+def wag_invBit (b : Fin 2) : Fin 2 := 1 - b
+def wag_sgnBitC (b : Fin 2) : ℂ := if b = 0 then 1 else -1
+def sgn2C (b : Fin 2 → Fin 2) : ℂ := wag_sgnBitC (b 0) * wag_sgnBitC (b 1)
+def sgn4C (b : Fin 4 → Fin 2) : ℂ := ∏ i : Fin 4, wag_sgnBitC (b i)
 
-private lemma invBit_val (b : Fin 2) : (invBit b).val = if b = 0 then 1 else 0 := by
+lemma wag_invBit_val (b : Fin 2) : (wag_invBit b).val = if b = 0 then 1 else 0 := by
   fin_cases b <;> decide
 
-private lemma omega_eq_sub_bit (a b : Fin 2 → ℂ) :
-    omega a b = a 0 * b (invBit 0) - a 1 * b (invBit 1) := by
-  have h0 : invBit 0 = 1 := by decide
-  have h1 : invBit 1 = 0 := by decide
+lemma wag_omega_eq_sub_bit (a b : Fin 2 → ℂ) :
+    omega a b = a 0 * b (wag_invBit 0) - a 1 * b (wag_invBit 1) := by
+  have h0 : wag_invBit 0 = 1 := by decide
+  have h1 : wag_invBit 1 = 0 := by decide
   simp [omega, h0, h1]
 
-private lemma prod_fin2_sub (m : ℕ) (f : Fin m → Fin 2 → ℂ) :
-    (∏ i : Fin m, (f i 0 - f i 1)) = ∑ b : Fin m → Fin 2, (∏ i : Fin m, sgnBitC (b i) * f i (b i)) :=
+lemma prod_fin2_sub (m : ℕ) (f : Fin m → Fin 2 → ℂ) :
+    (∏ i : Fin m, (f i 0 - f i 1)) = ∑ b : Fin m → Fin 2, (∏ i : Fin m, wag_sgnBitC (b i) * f i (b i)) :=
   prod_fin2_sub_eq_sumBits m f
 
-private lemma sum_prod2 {A B : Type*} [Fintype A] [Fintype B] (s : ℂ) (fa : A → ℂ) (fb : B → ℂ) :
+lemma sum_prod2 {A B : Type*} [Fintype A] [Fintype B] (s : ℂ) (fa : A → ℂ) (fb : B → ℂ) :
     (∑ p : A × B, s * fa p.1 * fb p.2) = s * (∑ a, fa a) * (∑ b, fb b) := by
   rw [Fintype.sum_prod_type]
   calc ∑ a : A, ∑ b : B, s * fa a * fb b
@@ -551,16 +554,16 @@ noncomputable def block2ValC (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ)
 noncomputable def leftHalf8C (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c : Fin 4 → Fin 2) : ℂ :=
   sumBits 2 fun b =>
     sgn2C b *
-      block2ValC ψ 0 4 1 7 3 5 (c 0) (b 0) (invBit (b 1)) (c 2) *
-      block2ValC ψ 3 7 2 4 0 6 (invBit (c 1)) (b 1) (invBit (b 0)) (invBit (c 3))
+      block2ValC ψ 0 4 1 7 3 5 (c 0) (b 0) (wag_invBit (b 1)) (c 2) *
+      block2ValC ψ 3 7 2 4 0 6 (wag_invBit (c 1)) (b 1) (wag_invBit (b 0)) (wag_invBit (c 3))
 
 noncomputable def rightHalf8C (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c : Fin 4 → Fin 2) : ℂ :=
   sumBits 2 fun r =>
     sgn2C r *
-      block2ValC ψ 1 2 0 5 3 6 (invBit (c 0)) (r 0) (c 1) (r 1) *
-      block2ValC ψ 5 6 1 4 2 7 (invBit (r 0)) (invBit (c 2)) (invBit (r 1)) (c 3)
+      block2ValC ψ 1 2 0 5 3 6 (wag_invBit (c 0)) (r 0) (c 1) (r 1) *
+      block2ValC ψ 5 6 1 4 2 7 (wag_invBit (r 0)) (wag_invBit (c 2)) (wag_invBit (r 1)) (c 3)
 
-private lemma sum_bitFun_eq_sumBits : ∀ (m : ℕ) (f : (Fin m → Fin 2) → ℂ),
+lemma sum_bitFun_eq_sumBits : ∀ (m : ℕ) (f : (Fin m → Fin 2) → ℂ),
     (∑ b : Fin m → Fin 2, f b) = sumBits m f
   | 0, f => by rw [Fintype.sum_unique]; exact congrArg f (Subsingleton.elim _ _)
   | m + 1, f => by
@@ -568,21 +571,21 @@ private lemma sum_bitFun_eq_sumBits : ∀ (m : ℕ) (f : (Fin m → Fin 2) → �
         (fun p => f (Fin.cons p.1 p.2)) f (fun _ => rfl), Fintype.sum_prod_type, Fin.sum_univ_two]
       simp only [sumBits, sum_bitFun_eq_sumBits m]
 
-private def zeroHalf8 : Half8Idx := (((0 : Fin 6), (0 : Fin 6)), ((0 : Fin 6), (0 : Fin 6)))
+def zeroHalf8 : Half8Idx := (((0 : Fin 6), (0 : Fin 6)), ((0 : Fin 6), (0 : Fin 6)))
 
-private lemma wagner_left_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c : Fin 4 → Fin 2) :
+lemma wagner_left_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c : Fin 4 → Fin 2) :
     (∑ L : Half8Idx,
       let σ := wagnerSourceEquiv (L, zeroHalf8)
-      (ψ 0 (σ 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σ 3 ⟨2, by decide⟩).1 (invBit (c 1)) *
-       ψ 4 (σ 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σ 7 ⟨6, by decide⟩).1 (invBit (c 3))) *
+      (ψ 0 (σ 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σ 3 ⟨2, by decide⟩).1 (wag_invBit (c 1)) *
+       ψ 4 (σ 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σ 7 ⟨6, by decide⟩).1 (wag_invBit (c 3))) *
       (omega (ψ 0 (σ 0 ⟨4, by decide⟩).1) (ψ 4 (σ 4 ⟨0, by decide⟩).1) *
        omega (ψ 3 (σ 3 ⟨7, by decide⟩).1) (ψ 7 (σ 7 ⟨3, by decide⟩).1) *
        omega (ψ 0 (σ 0 ⟨7, by decide⟩).1) (ψ 7 (σ 7 ⟨0, by decide⟩).1) *
        omega (ψ 3 (σ 3 ⟨4, by decide⟩).1) (ψ 4 (σ 4 ⟨3, by decide⟩).1))) = leftHalf8C ψ c := by
   have hL : ∀ L : Half8Idx,
       let σ := wagnerSourceEquiv (L, zeroHalf8)
-      ((ψ 0 (σ 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σ 3 ⟨2, by decide⟩).1 (invBit (c 1)) *
-        ψ 4 (σ 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σ 7 ⟨6, by decide⟩).1 (invBit (c 3))) *
+      ((ψ 0 (σ 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σ 3 ⟨2, by decide⟩).1 (wag_invBit (c 1)) *
+        ψ 4 (σ 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σ 7 ⟨6, by decide⟩).1 (wag_invBit (c 3))) *
        (omega (ψ 0 (σ 0 ⟨4, by decide⟩).1) (ψ 4 (σ 4 ⟨0, by decide⟩).1) *
         omega (ψ 3 (σ 3 ⟨7, by decide⟩).1) (ψ 7 (σ 7 ⟨3, by decide⟩).1) *
         omega (ψ 0 (σ 0 ⟨7, by decide⟩).1) (ψ 7 (σ 7 ⟨0, by decide⟩).1) *
@@ -592,28 +595,28 @@ private lemma wagner_left_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c :
                (ψ 4 (wagnerNbr 4 (perm3Fun L.1.2 (wagnerNbrIdx 4 0)))) *
          ((ψ 0 (wagnerNbr 0 (perm3Fun L.1.1 (wagnerNbrIdx 0 1))) (c 0) *
            ψ 0 (wagnerNbr 0 (perm3Fun L.1.1 (wagnerNbrIdx 0 7))) (b 0)) *
-          (ψ 4 (wagnerNbr 4 (perm3Fun L.1.2 (wagnerNbrIdx 4 3))) (invBit (b 1)) *
+          (ψ 4 (wagnerNbr 4 (perm3Fun L.1.2 (wagnerNbrIdx 4 3))) (wag_invBit (b 1)) *
            ψ 4 (wagnerNbr 4 (perm3Fun L.1.2 (wagnerNbrIdx 4 5))) (c 2)))) *
         (omega (ψ 3 (wagnerNbr 3 (perm3Fun L.2.1 (wagnerNbrIdx 3 7))))
                (ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 3)))) *
-         ((ψ 3 (wagnerNbr 3 (perm3Fun L.2.1 (wagnerNbrIdx 3 2))) (invBit (c 1)) *
+         ((ψ 3 (wagnerNbr 3 (perm3Fun L.2.1 (wagnerNbrIdx 3 2))) (wag_invBit (c 1)) *
            ψ 3 (wagnerNbr 3 (perm3Fun L.2.1 (wagnerNbrIdx 3 4))) (b 1)) *
-          (ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 0))) (invBit (b 0)) *
-           ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 6))) (invBit (c 3))))) := by
+          (ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 0))) (wag_invBit (b 0)) *
+           ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 6))) (wag_invBit (c 3))))) := by
     intro L
     let f : Fin 2 → Fin 2 → ℂ := fun i k => match i with
       | 0 => ψ 0 (wagnerNbr 0 (perm3Fun L.1.1 (wagnerNbrIdx 0 7))) k *
-             ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 0))) (invBit k)
+             ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 0))) (wag_invBit k)
       | 1 => ψ 3 (wagnerNbr 3 (perm3Fun L.2.1 (wagnerNbrIdx 3 4))) k *
-             ψ 4 (wagnerNbr 4 (perm3Fun L.1.2 (wagnerNbrIdx 4 3))) (invBit k)
+             ψ 4 (wagnerNbr 4 (perm3Fun L.1.2 (wagnerNbrIdx 4 3))) (wag_invBit k)
     have hf0 : omega (ψ 0 (wagnerNbr 0 (perm3Fun L.1.1 (wagnerNbrIdx 0 7))))
                      (ψ 7 (wagnerNbr 7 (perm3Fun L.2.2 (wagnerNbrIdx 7 0)))) = f 0 0 - f 0 1 :=
-      omega_eq_sub_bit _ _
+      wag_omega_eq_sub_bit _ _
     have hf1 : omega (ψ 3 (wagnerNbr 3 (perm3Fun L.2.1 (wagnerNbrIdx 3 4))))
                      (ψ 4 (wagnerNbr 4 (perm3Fun L.1.2 (wagnerNbrIdx 4 3)))) = f 1 0 - f 1 1 :=
-      omega_eq_sub_bit _ _
+      wag_omega_eq_sub_bit _ _
     have hsplit : (∏ i : Fin 2, (f i 0 - f i 1)) =
-        ∑ b : Fin 2 → Fin 2, ∏ i : Fin 2, sgnBitC (b i) * f i (b i) := prod_fin2_sub 2 f
+        ∑ b : Fin 2 → Fin 2, ∏ i : Fin 2, wag_sgnBitC (b i) * f i (b i) := prod_fin2_sub 2 f
     dsimp only
     simp only [wagnerSourceEquiv_apply, pickVert8] at *
     rw [hf0, hf1, mul_assoc (omega _ _ * omega _ _), ← Fin.prod_univ_two (fun i => f i 0 - f i 1), hsplit, ← mul_assoc, Finset.mul_sum]
@@ -631,31 +634,31 @@ private lemma wagner_left_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c :
             (ψ 4 (wagnerNbr 4 (perm3Fun L1.2 (wagnerNbrIdx 4 0)))) *
       ((ψ 0 (wagnerNbr 0 (perm3Fun L1.1 (wagnerNbrIdx 0 1))) (c 0) *
         ψ 0 (wagnerNbr 0 (perm3Fun L1.1 (wagnerNbrIdx 0 7))) (b 0)) *
-       (ψ 4 (wagnerNbr 4 (perm3Fun L1.2 (wagnerNbrIdx 4 3))) (invBit (b 1)) *
+       (ψ 4 (wagnerNbr 4 (perm3Fun L1.2 (wagnerNbrIdx 4 3))) (wag_invBit (b 1)) *
         ψ 4 (wagnerNbr 4 (perm3Fun L1.2 (wagnerNbrIdx 4 5))) (c 2))))
     (fun L2 : Block2Idx =>
       omega (ψ 3 (wagnerNbr 3 (perm3Fun L2.1 (wagnerNbrIdx 3 7))))
             (ψ 7 (wagnerNbr 7 (perm3Fun L2.2 (wagnerNbrIdx 7 3)))) *
-      ((ψ 3 (wagnerNbr 3 (perm3Fun L2.1 (wagnerNbrIdx 3 2))) (invBit (c 1)) *
+      ((ψ 3 (wagnerNbr 3 (perm3Fun L2.1 (wagnerNbrIdx 3 2))) (wag_invBit (c 1)) *
         ψ 3 (wagnerNbr 3 (perm3Fun L2.1 (wagnerNbrIdx 3 4))) (b 1)) *
-       (ψ 7 (wagnerNbr 7 (perm3Fun L2.2 (wagnerNbrIdx 7 0))) (invBit (b 0)) *
-        ψ 7 (wagnerNbr 7 (perm3Fun L2.2 (wagnerNbrIdx 7 6))) (invBit (c 3))))),
+       (ψ 7 (wagnerNbr 7 (perm3Fun L2.2 (wagnerNbrIdx 7 0))) (wag_invBit (b 0)) *
+        ψ 7 (wagnerNbr 7 (perm3Fun L2.2 (wagnerNbrIdx 7 6))) (wag_invBit (c 3))))),
     Fintype.sum_prod_type, Fintype.sum_prod_type]
   simp only [block2ValC]
 
-private lemma wagner_right_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c : Fin 4 → Fin 2) :
+lemma wagner_right_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c : Fin 4 → Fin 2) :
     (∑ R : Half8Idx,
       let σ := wagnerSourceEquiv (zeroHalf8, R)
-      (ψ 1 (σ 1 ⟨0, by decide⟩).1 (invBit (c 0)) * ψ 2 (σ 2 ⟨3, by decide⟩).1 (c 1) *
-       ψ 5 (σ 5 ⟨4, by decide⟩).1 (invBit (c 2)) * ψ 6 (σ 6 ⟨7, by decide⟩).1 (c 3)) *
+      (ψ 1 (σ 1 ⟨0, by decide⟩).1 (wag_invBit (c 0)) * ψ 2 (σ 2 ⟨3, by decide⟩).1 (c 1) *
+       ψ 5 (σ 5 ⟨4, by decide⟩).1 (wag_invBit (c 2)) * ψ 6 (σ 6 ⟨7, by decide⟩).1 (c 3)) *
       (omega (ψ 1 (σ 1 ⟨2, by decide⟩).1) (ψ 2 (σ 2 ⟨1, by decide⟩).1) *
        omega (ψ 5 (σ 5 ⟨6, by decide⟩).1) (ψ 6 (σ 6 ⟨5, by decide⟩).1) *
        omega (ψ 1 (σ 1 ⟨5, by decide⟩).1) (ψ 5 (σ 5 ⟨1, by decide⟩).1) *
        omega (ψ 2 (σ 2 ⟨6, by decide⟩).1) (ψ 6 (σ 6 ⟨2, by decide⟩).1))) = rightHalf8C ψ c := by
   have hR : ∀ R : Half8Idx,
       let σ := wagnerSourceEquiv (zeroHalf8, R)
-      ((ψ 1 (σ 1 ⟨0, by decide⟩).1 (invBit (c 0)) * ψ 2 (σ 2 ⟨3, by decide⟩).1 (c 1) *
-        ψ 5 (σ 5 ⟨4, by decide⟩).1 (invBit (c 2)) * ψ 6 (σ 6 ⟨7, by decide⟩).1 (c 3)) *
+      ((ψ 1 (σ 1 ⟨0, by decide⟩).1 (wag_invBit (c 0)) * ψ 2 (σ 2 ⟨3, by decide⟩).1 (c 1) *
+        ψ 5 (σ 5 ⟨4, by decide⟩).1 (wag_invBit (c 2)) * ψ 6 (σ 6 ⟨7, by decide⟩).1 (c 3)) *
        (omega (ψ 1 (σ 1 ⟨2, by decide⟩).1) (ψ 2 (σ 2 ⟨1, by decide⟩).1) *
         omega (ψ 5 (σ 5 ⟨6, by decide⟩).1) (ψ 6 (σ 6 ⟨5, by decide⟩).1) *
         omega (ψ 1 (σ 1 ⟨5, by decide⟩).1) (ψ 5 (σ 5 ⟨1, by decide⟩).1) *
@@ -663,30 +666,30 @@ private lemma wagner_right_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c 
       ∑ r : Fin 2 → Fin 2, sgn2C r *
         (omega (ψ 1 (wagnerNbr 1 (perm3Fun R.1.1 (wagnerNbrIdx 1 2))))
                (ψ 2 (wagnerNbr 2 (perm3Fun R.1.2 (wagnerNbrIdx 2 1)))) *
-         ((ψ 1 (wagnerNbr 1 (perm3Fun R.1.1 (wagnerNbrIdx 1 0))) (invBit (c 0)) *
+         ((ψ 1 (wagnerNbr 1 (perm3Fun R.1.1 (wagnerNbrIdx 1 0))) (wag_invBit (c 0)) *
            ψ 1 (wagnerNbr 1 (perm3Fun R.1.1 (wagnerNbrIdx 1 5))) (r 0)) *
           (ψ 2 (wagnerNbr 2 (perm3Fun R.1.2 (wagnerNbrIdx 2 3))) (c 1) *
            ψ 2 (wagnerNbr 2 (perm3Fun R.1.2 (wagnerNbrIdx 2 6))) (r 1)))) *
         (omega (ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 6))))
                (ψ 6 (wagnerNbr 6 (perm3Fun R.2.2 (wagnerNbrIdx 6 5)))) *
-         ((ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 1))) (invBit (r 0)) *
-           ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 4))) (invBit (c 2))) *
-          (ψ 6 (wagnerNbr 6 (perm3Fun R.2.2 (wagnerNbrIdx 6 2))) (invBit (r 1)) *
+         ((ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 1))) (wag_invBit (r 0)) *
+           ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 4))) (wag_invBit (c 2))) *
+          (ψ 6 (wagnerNbr 6 (perm3Fun R.2.2 (wagnerNbrIdx 6 2))) (wag_invBit (r 1)) *
            ψ 6 (wagnerNbr 6 (perm3Fun R.2.2 (wagnerNbrIdx 6 7))) (c 3)))) := by
     intro R
     let f : Fin 2 → Fin 2 → ℂ := fun i k => match i with
       | 0 => ψ 1 (wagnerNbr 1 (perm3Fun R.1.1 (wagnerNbrIdx 1 5))) k *
-             ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 1))) (invBit k)
+             ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 1))) (wag_invBit k)
       | 1 => ψ 2 (wagnerNbr 2 (perm3Fun R.1.2 (wagnerNbrIdx 2 6))) k *
-             ψ 6 (wagnerNbr 6 (perm3Fun R.2.2 (wagnerNbrIdx 6 2))) (invBit k)
+             ψ 6 (wagnerNbr 6 (perm3Fun R.2.2 (wagnerNbrIdx 6 2))) (wag_invBit k)
     have hf0 : omega (ψ 1 (wagnerNbr 1 (perm3Fun R.1.1 (wagnerNbrIdx 1 5))))
                      (ψ 5 (wagnerNbr 5 (perm3Fun R.2.1 (wagnerNbrIdx 5 1)))) = f 0 0 - f 0 1 :=
-      omega_eq_sub_bit _ _
+      wag_omega_eq_sub_bit _ _
     have hf1 : omega (ψ 2 (wagnerNbr 2 (perm3Fun R.1.2 (wagnerNbrIdx 2 6))))
                      (ψ 6 (wagnerNbr 6 (perm3Fun R.2.2 (wagnerNbrIdx 6 2)))) = f 1 0 - f 1 1 :=
-      omega_eq_sub_bit _ _
+      wag_omega_eq_sub_bit _ _
     have hsplit : (∏ i : Fin 2, (f i 0 - f i 1)) =
-        ∑ r : Fin 2 → Fin 2, ∏ i : Fin 2, sgnBitC (r i) * f i (r i) := prod_fin2_sub 2 f
+        ∑ r : Fin 2 → Fin 2, ∏ i : Fin 2, wag_sgnBitC (r i) * f i (r i) := prod_fin2_sub 2 f
     dsimp only
     simp only [wagnerSourceEquiv_apply, pickVert8] at *
     rw [hf0, hf1, mul_assoc (omega _ _ * omega _ _), ← Fin.prod_univ_two (fun i => f i 0 - f i 1), hsplit, ← mul_assoc, Finset.mul_sum]
@@ -702,16 +705,16 @@ private lemma wagner_right_block_eq (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (c 
     (fun R1 : Block2Idx =>
       omega (ψ 1 (wagnerNbr 1 (perm3Fun R1.1 (wagnerNbrIdx 1 2))))
             (ψ 2 (wagnerNbr 2 (perm3Fun R1.2 (wagnerNbrIdx 2 1)))) *
-      ((ψ 1 (wagnerNbr 1 (perm3Fun R1.1 (wagnerNbrIdx 1 0))) (invBit (c 0)) *
+      ((ψ 1 (wagnerNbr 1 (perm3Fun R1.1 (wagnerNbrIdx 1 0))) (wag_invBit (c 0)) *
         ψ 1 (wagnerNbr 1 (perm3Fun R1.1 (wagnerNbrIdx 1 5))) (r 0)) *
        (ψ 2 (wagnerNbr 2 (perm3Fun R1.2 (wagnerNbrIdx 2 3))) (c 1) *
         ψ 2 (wagnerNbr 2 (perm3Fun R1.2 (wagnerNbrIdx 2 6))) (r 1))))
     (fun R2 : Block2Idx =>
       omega (ψ 5 (wagnerNbr 5 (perm3Fun R2.1 (wagnerNbrIdx 5 6))))
             (ψ 6 (wagnerNbr 6 (perm3Fun R2.2 (wagnerNbrIdx 6 5)))) *
-      ((ψ 5 (wagnerNbr 5 (perm3Fun R2.1 (wagnerNbrIdx 5 1))) (invBit (r 0)) *
-        ψ 5 (wagnerNbr 5 (perm3Fun R2.1 (wagnerNbrIdx 5 4))) (invBit (c 2))) *
-       (ψ 6 (wagnerNbr 6 (perm3Fun R2.2 (wagnerNbrIdx 6 2))) (invBit (r 1)) *
+      ((ψ 5 (wagnerNbr 5 (perm3Fun R2.1 (wagnerNbrIdx 5 1))) (wag_invBit (r 0)) *
+        ψ 5 (wagnerNbr 5 (perm3Fun R2.1 (wagnerNbrIdx 5 4))) (wag_invBit (c 2))) *
+       (ψ 6 (wagnerNbr 6 (perm3Fun R2.2 (wagnerNbrIdx 6 2))) (wag_invBit (r 1)) *
         ψ 6 (wagnerNbr 6 (perm3Fun R2.2 (wagnerNbrIdx 6 7))) (c 3)))),
     Fintype.sum_prod_type, Fintype.sum_prod_type]
   simp only [block2ValC]
@@ -732,15 +735,15 @@ theorem malkounNum_wagner_4block (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) :
               (ψ e.1.2 ((wagnerSourceEquiv p) e.1.2 ⟨e.1.1, e.2.1.symm⟩).1)) =
       ∑ c : Fin 4 → Fin 2, sgn4C c *
         (let σL := wagnerSourceEquiv (p.1, zeroHalf8)
-         (ψ 0 (σL 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σL 3 ⟨2, by decide⟩).1 (invBit (c 1)) *
-          ψ 4 (σL 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σL 7 ⟨6, by decide⟩).1 (invBit (c 3))) *
+         (ψ 0 (σL 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σL 3 ⟨2, by decide⟩).1 (wag_invBit (c 1)) *
+          ψ 4 (σL 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σL 7 ⟨6, by decide⟩).1 (wag_invBit (c 3))) *
          (omega (ψ 0 (σL 0 ⟨4, by decide⟩).1) (ψ 4 (σL 4 ⟨0, by decide⟩).1) *
           omega (ψ 3 (σL 3 ⟨7, by decide⟩).1) (ψ 7 (σL 7 ⟨3, by decide⟩).1) *
           omega (ψ 0 (σL 0 ⟨7, by decide⟩).1) (ψ 7 (σL 7 ⟨0, by decide⟩).1) *
           omega (ψ 3 (σL 3 ⟨4, by decide⟩).1) (ψ 4 (σL 4 ⟨3, by decide⟩).1))) *
         (let σR := wagnerSourceEquiv (zeroHalf8, p.2)
-         (ψ 1 (σR 1 ⟨0, by decide⟩).1 (invBit (c 0)) * ψ 2 (σR 2 ⟨3, by decide⟩).1 (c 1) *
-          ψ 5 (σR 5 ⟨4, by decide⟩).1 (invBit (c 2)) * ψ 6 (σR 6 ⟨7, by decide⟩).1 (c 3)) *
+         (ψ 1 (σR 1 ⟨0, by decide⟩).1 (wag_invBit (c 0)) * ψ 2 (σR 2 ⟨3, by decide⟩).1 (c 1) *
+          ψ 5 (σR 5 ⟨4, by decide⟩).1 (wag_invBit (c 2)) * ψ 6 (σR 6 ⟨7, by decide⟩).1 (c 3)) *
          (omega (ψ 1 (σR 1 ⟨2, by decide⟩).1) (ψ 2 (σR 2 ⟨1, by decide⟩).1) *
           omega (ψ 5 (σR 5 ⟨6, by decide⟩).1) (ψ 6 (σR 6 ⟨5, by decide⟩).1) *
           omega (ψ 1 (σR 1 ⟨5, by decide⟩).1) (ψ 5 (σR 5 ⟨1, by decide⟩).1) *
@@ -755,16 +758,16 @@ theorem malkounNum_wagner_4block (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) :
     rw [Fintype.prod_sum_type, Fintype.prod_sum_type, Fintype.prod_sum_type]
     rw [Fin.prod_univ_four, Fin.prod_univ_two, Fin.prod_univ_two]
     let fc : Fin 4 → Fin 2 → ℂ := fun i k => match i with
-      | 0 => ψ 0 (σ 0 ⟨1, by decide⟩).1 k * ψ 1 (σ 1 ⟨0, by decide⟩).1 (invBit k)
-      | 1 => ψ 2 (σ 2 ⟨3, by decide⟩).1 k * ψ 3 (σ 3 ⟨2, by decide⟩).1 (invBit k)
-      | 2 => ψ 4 (σ 4 ⟨5, by decide⟩).1 k * ψ 5 (σ 5 ⟨4, by decide⟩).1 (invBit k)
-      | 3 => ψ 6 (σ 6 ⟨7, by decide⟩).1 k * ψ 7 (σ 7 ⟨6, by decide⟩).1 (invBit k)
+      | 0 => ψ 0 (σ 0 ⟨1, by decide⟩).1 k * ψ 1 (σ 1 ⟨0, by decide⟩).1 (wag_invBit k)
+      | 1 => ψ 2 (σ 2 ⟨3, by decide⟩).1 k * ψ 3 (σ 3 ⟨2, by decide⟩).1 (wag_invBit k)
+      | 2 => ψ 4 (σ 4 ⟨5, by decide⟩).1 k * ψ 5 (σ 5 ⟨4, by decide⟩).1 (wag_invBit k)
+      | 3 => ψ 6 (σ 6 ⟨7, by decide⟩).1 k * ψ 7 (σ 7 ⟨6, by decide⟩).1 (wag_invBit k)
     have hcut : (∏ i : Fin 4,
         omega (ψ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.1 (σ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.1 ⟨(wagnerOriEquiv (.inr (.inr (.inr i)))).1.2, (wagnerOriEquiv (.inr (.inr (.inr i)))).2.1⟩).1)
               (ψ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.2 (σ (wagnerOriEquiv (.inr (.inr (.inr i)))).1.2 ⟨(wagnerOriEquiv (.inr (.inr (.inr i)))).1.1, (wagnerOriEquiv (.inr (.inr (.inr i)))).2.1.symm⟩).1)) =
         ∏ i : Fin 4, (fc i 0 - fc i 1) := by
       refine Finset.prod_congr rfl fun i _ => ?_
-      fin_cases i <;> rw [wagnerOri_term_inrrr] <;> exact omega_eq_sub_bit _ _
+      fin_cases i <;> rw [wagnerOri_term_inrrr] <;> exact wag_omega_eq_sub_bit _ _
     simp_rw [wagnerOri_term_inl, wagnerOri_term_inrl, wagnerOri_term_inrrl]
     rw [hcut, prod_fin2_sub 4 fc]
     simp_rw [Finset.mul_sum]
@@ -781,16 +784,16 @@ theorem malkounNum_wagner_4block (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) :
   rw [sum_prod2 (sgn4C c)
     (fun L : Half8Idx =>
       let σL := wagnerSourceEquiv (L, zeroHalf8)
-      (ψ 0 (σL 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σL 3 ⟨2, by decide⟩).1 (invBit (c 1)) *
-       ψ 4 (σL 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σL 7 ⟨6, by decide⟩).1 (invBit (c 3))) *
+      (ψ 0 (σL 0 ⟨1, by decide⟩).1 (c 0) * ψ 3 (σL 3 ⟨2, by decide⟩).1 (wag_invBit (c 1)) *
+       ψ 4 (σL 4 ⟨5, by decide⟩).1 (c 2) * ψ 7 (σL 7 ⟨6, by decide⟩).1 (wag_invBit (c 3))) *
       (omega (ψ 0 (σL 0 ⟨4, by decide⟩).1) (ψ 4 (σL 4 ⟨0, by decide⟩).1) *
        omega (ψ 3 (σL 3 ⟨7, by decide⟩).1) (ψ 7 (σL 7 ⟨3, by decide⟩).1) *
        omega (ψ 0 (σL 0 ⟨7, by decide⟩).1) (ψ 7 (σL 7 ⟨0, by decide⟩).1) *
        omega (ψ 3 (σL 3 ⟨4, by decide⟩).1) (ψ 4 (σL 4 ⟨3, by decide⟩).1)))
     (fun R : Half8Idx =>
       let σR := wagnerSourceEquiv (zeroHalf8, R)
-      (ψ 1 (σR 1 ⟨0, by decide⟩).1 (invBit (c 0)) * ψ 2 (σR 2 ⟨3, by decide⟩).1 (c 1) *
-       ψ 5 (σR 5 ⟨4, by decide⟩).1 (invBit (c 2)) * ψ 6 (σR 6 ⟨7, by decide⟩).1 (c 3)) *
+      (ψ 1 (σR 1 ⟨0, by decide⟩).1 (wag_invBit (c 0)) * ψ 2 (σR 2 ⟨3, by decide⟩).1 (c 1) *
+       ψ 5 (σR 5 ⟨4, by decide⟩).1 (wag_invBit (c 2)) * ψ 6 (σR 6 ⟨7, by decide⟩).1 (c 3)) *
       (omega (ψ 1 (σR 1 ⟨2, by decide⟩).1) (ψ 2 (σR 2 ⟨1, by decide⟩).1) *
        omega (ψ 5 (σR 5 ⟨6, by decide⟩).1) (ψ 6 (σR 6 ⟨5, by decide⟩).1) *
        omega (ψ 1 (σR 1 ⟨5, by decide⟩).1) (ψ 5 (σR 5 ⟨1, by decide⟩).1) *
@@ -803,53 +806,53 @@ end WagnerDecomposition
 
 section WagnerEvaluators
 
-private def sgnBitGI (b : Fin 2) : GI := if b = 0 then 1 else GI.ofInt (-1)
-private def sgn2GI (b : Fin 2 → Fin 2) : GI := sgnBitGI (b 0) * sgnBitGI (b 1)
-private def sgn4GI (b : Fin 4 → Fin 2) : GI := sgnBitGI (b 0) * sgnBitGI (b 1) * sgnBitGI (b 2) * sgnBitGI (b 3)
-private def sgnIntBit (b : Fin 2) : ℤ := if b = 0 then 1 else -1
-private def sgnInt2 (b : Fin 2 → Fin 2) : ℤ := sgnIntBit (b 0) * sgnIntBit (b 1)
-private def sgnInt4 (b : Fin 4 → Fin 2) : ℤ := sgnIntBit (b 0) * sgnIntBit (b 1) * sgnIntBit (b 2) * sgnIntBit (b 3)
+def wag_sgnBitGI (b : Fin 2) : GI := if b = 0 then 1 else GI.ofInt (-1)
+def sgn2GI (b : Fin 2 → Fin 2) : GI := wag_sgnBitGI (b 0) * wag_sgnBitGI (b 1)
+def sgn4GI (b : Fin 4 → Fin 2) : GI := wag_sgnBitGI (b 0) * wag_sgnBitGI (b 1) * wag_sgnBitGI (b 2) * wag_sgnBitGI (b 3)
+def wag_sgnIntBit (b : Fin 2) : ℤ := if b = 0 then 1 else -1
+def sgnInt2 (b : Fin 2 → Fin 2) : ℤ := wag_sgnIntBit (b 0) * wag_sgnIntBit (b 1)
+def sgnInt4 (b : Fin 4 → Fin 2) : ℤ := wag_sgnIntBit (b 0) * wag_sgnIntBit (b 1) * wag_sgnIntBit (b 2) * wag_sgnIntBit (b 3)
 
-private lemma toC_sgnBitGI (b : Fin 2) : GI.toC (sgnBitGI b) = sgnBitC b := by
-  fin_cases b <;> simp [sgnBitGI, sgnBitC, GI.toC_ofInt]
+lemma wag_toC_sgnBitGI (b : Fin 2) : GI.toC (wag_sgnBitGI b) = wag_sgnBitC b := by
+  fin_cases b <;> simp [wag_sgnBitGI, wag_sgnBitC, GI.toC_ofInt]
 
-private lemma toC_sgn2GI (b : Fin 2 → Fin 2) : GI.toC (sgn2GI b) = sgn2C b := by
-  simp only [sgn2GI, sgn2C, GI.toC_mul, toC_sgnBitGI]
+lemma toC_sgn2GI (b : Fin 2 → Fin 2) : GI.toC (sgn2GI b) = sgn2C b := by
+  simp only [sgn2GI, sgn2C, GI.toC_mul, wag_toC_sgnBitGI]
 
-private lemma toC_sgn4GI (b : Fin 4 → Fin 2) : GI.toC (sgn4GI b) = sgn4C b := by
+lemma toC_sgn4GI (b : Fin 4 → Fin 2) : GI.toC (sgn4GI b) = sgn4C b := by
   rw [sgn4GI, sgn4C, Fin.prod_univ_four]
-  simp only [GI.toC_mul, toC_sgnBitGI]
+  simp only [GI.toC_mul, wag_toC_sgnBitGI]
 
-private lemma sgnInt2_eq (b : Fin 2 → Fin 2) : ((sgnInt2 b : ℤ) : ℂ) = sgn2C b := by
-  rcases fin2_cases (b 0) with h0 | h0 <;> rcases fin2_cases (b 1) with h1 | h1 <;>
-    simp [sgnInt2, sgn2C, sgnIntBit, sgnBitC, h0, h1]
+lemma sgnInt2_eq (b : Fin 2 → Fin 2) : ((sgnInt2 b : ℤ) : ℂ) = sgn2C b := by
+  rcases wag_fin2_cases (b 0) with h0 | h0 <;> rcases wag_fin2_cases (b 1) with h1 | h1 <;>
+    simp [sgnInt2, sgn2C, wag_sgnIntBit, wag_sgnBitC, h0, h1]
 
-private lemma sgnInt4_eq (b : Fin 4 → Fin 2) : ((sgnInt4 b : ℤ) : ℂ) = sgn4C b := by
+lemma sgnInt4_eq (b : Fin 4 → Fin 2) : ((sgnInt4 b : ℤ) : ℂ) = sgn4C b := by
   rw [sgn4C, Fin.prod_univ_four]
   simp only [sgnInt4, Int.cast_mul]
-  have hcast : ∀ x : Fin 2, ((sgnIntBit x : ℤ) : ℂ) = sgnBitC x := fun x => by fin_cases x <;> simp [sgnIntBit, sgnBitC]
+  have hcast : ∀ x : Fin 2, ((wag_sgnIntBit x : ℤ) : ℂ) = wag_sgnBitC x := fun x => by fin_cases x <;> simp [wag_sgnIntBit, wag_sgnBitC]
   rw [hcast, hcast, hcast, hcast]
 
 def sumFin6 {R : Type*} [Add R] (f : Fin 6 → R) : R :=
   f 0 + f 1 + f 2 + f 3 + f 4 + f 5
 
-private lemma sumFin6_eq_sum (f : Fin 6 → ℂ) : (∑ i : Fin 6, f i) = sumFin6 f := by
+lemma sumFin6_eq_sum (f : Fin 6 → ℂ) : (∑ i : Fin 6, f i) = sumFin6 f := by
   rw [Fin.sum_univ_six, sumFin6]
 
-private lemma toC_sumFin6 (f : Fin 6 → GI) : GI.toC (sumFin6 f) = sumFin6 (fun i => GI.toC (f i)) := by
+lemma toC_sumFin6 (f : Fin 6 → GI) : GI.toC (sumFin6 f) = sumFin6 (fun i => GI.toC (f i)) := by
   simp only [sumFin6, GI.toC_add]
 
-private lemma sumFin6_mem (f : Fin 6 → CIntIv) (fc : Fin 6 → ℂ) (hf : ∀ i, (f i).Mem (fc i)) :
+lemma sumFin6_mem (f : Fin 6 → CIntIv) (fc : Fin 6 → ℂ) (hf : ∀ i, (f i).Mem (fc i)) :
     (sumFin6 f).Mem (sumFin6 fc) := by
   simp only [sumFin6]
   exact CIntIv.add_mem (CIntIv.add_mem (CIntIv.add_mem (CIntIv.add_mem (CIntIv.add_mem (hf 0) (hf 1)) (hf 2)) (hf 3)) (hf 4)) (hf 5)
 
-private lemma toC_sumBits : ∀ (m : ℕ) (f : (Fin m → Fin 2) → GI),
+lemma toC_sumBits : ∀ (m : ℕ) (f : (Fin m → Fin 2) → GI),
     GI.toC (sumBits m f) = sumBits m (fun b => GI.toC (f b))
   | 0, _ => rfl
   | m + 1, f => by simp only [sumBits, GI.toC_add, toC_sumBits m]
 
-private lemma sumBits_mem : ∀ (m : ℕ) (f : (Fin m → Fin 2) → CIntIv) (fc : (Fin m → Fin 2) → ℂ),
+lemma sumBits_mem : ∀ (m : ℕ) (f : (Fin m → Fin 2) → CIntIv) (fc : (Fin m → Fin 2) → ℂ),
     (∀ b, (f b).Mem (fc b)) → (sumBits m f).Mem (sumBits m fc)
   | 0, _, _, h => h Fin.elim0
   | m + 1, _f, _fc, h => CIntIv.add_mem (sumBits_mem m _ _ fun _b => h _) (sumBits_mem m _ _ fun _b => h _)
@@ -864,7 +867,7 @@ def block2ValGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI)
      (ψ v (wagnerNbr v (perm3Fun j (wagnerNbrIdx v p2))) b2 *
       ψ v (wagnerNbr v (perm3Fun j (wagnerNbrIdx v p3))) b3))
 
-private lemma toC_block2ValGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (u v p0 p1 p2 p3 : Fin 8) (b0 b1 b2 b3 : Fin 2) :
+lemma toC_block2ValGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (u v p0 p1 p2 p3 : Fin 8) (b0 b1 b2 b3 : Fin 2) :
     GI.toC (block2ValGI ψ u v p0 p1 p2 p3 b0 b1 b2 b3) =
       block2ValC (fun x y k => GI.toC (ψ x y k)) u v p0 p1 p2 p3 b0 b1 b2 b3 := by
   rw [block2ValGI, block2ValC, toC_sumFin6, sumFin6_eq_sum]
@@ -876,14 +879,14 @@ private lemma toC_block2ValGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (u v p0 p1
 def leftHalf8GI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (c : Fin 4 → Fin 2) : GI :=
   sumBits 2 fun b =>
     sgn2GI b *
-      block2ValGI ψ 0 4 1 7 3 5 (c 0) (b 0) (invBit (b 1)) (c 2) *
-      block2ValGI ψ 3 7 2 4 0 6 (invBit (c 1)) (b 1) (invBit (b 0)) (invBit (c 3))
+      block2ValGI ψ 0 4 1 7 3 5 (c 0) (b 0) (wag_invBit (b 1)) (c 2) *
+      block2ValGI ψ 3 7 2 4 0 6 (wag_invBit (c 1)) (b 1) (wag_invBit (b 0)) (wag_invBit (c 3))
 
 def rightHalf8GI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (c : Fin 4 → Fin 2) : GI :=
   sumBits 2 fun r =>
     sgn2GI r *
-      block2ValGI ψ 1 2 0 5 3 6 (invBit (c 0)) (r 0) (c 1) (r 1) *
-      block2ValGI ψ 5 6 1 4 2 7 (invBit (r 0)) (invBit (c 2)) (invBit (r 1)) (c 3)
+      block2ValGI ψ 1 2 0 5 3 6 (wag_invBit (c 0)) (r 0) (c 1) (r 1) *
+      block2ValGI ψ 5 6 1 4 2 7 (wag_invBit (r 0)) (wag_invBit (c 2)) (wag_invBit (r 1)) (c 3)
 
 def wagnerNumGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) : GI :=
   sumBits 4 fun c => sgn4GI c * leftHalf8GI ψ c * rightHalf8GI ψ c
@@ -897,33 +900,33 @@ def wagnerDenGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) : GI :=
   prod2GI' (fun i => omegaGI (ψ (wagnerIntraRightEdges i).1 (wagnerIntraRightEdges i).2) (ψ (wagnerIntraRightEdges i).2 (wagnerIntraRightEdges i).1)) *
   prod4GI (fun i => omegaGI (ψ (wagnerCutEdges i).1 (wagnerCutEdges i).2) (ψ (wagnerCutEdges i).2 (wagnerCutEdges i).1))
 
-private lemma toC_prod4GI (g : Fin 4 → GI) : GI.toC (prod4GI g) = ∏ i : Fin 4, GI.toC (g i) := by
+lemma toC_prod4GI (g : Fin 4 → GI) : GI.toC (prod4GI g) = ∏ i : Fin 4, GI.toC (g i) := by
   rw [Fin.prod_univ_four, prod4GI]; simp only [GI.toC_mul]
 
-private lemma toC_prod2GI' (g : Fin 2 → GI) : GI.toC (prod2GI' g) = ∏ i : Fin 2, GI.toC (g i) := by
+lemma toC_prod2GI' (g : Fin 2 → GI) : GI.toC (prod2GI' g) = ∏ i : Fin 2, GI.toC (g i) := by
   rw [Fin.prod_univ_two, prod2GI']; simp only [GI.toC_mul]
 
-private lemma sumBits_congr {R : Type*} [Add R] :
+lemma wag_sumBits_congr {R : Type*} [Add R] :
     ∀ (m : ℕ) {f g : (Fin m → Fin 2) → R}, (∀ b, f b = g b) → sumBits m f = sumBits m g
   | 0, _, _, h => h Fin.elim0
-  | m + 1, _, _, h => by simp only [sumBits]; rw [sumBits_congr m (fun f => h (Fin.cons 0 f)), sumBits_congr m (fun f => h (Fin.cons 1 f))]
+  | m + 1, _, _, h => by simp only [sumBits]; rw [wag_sumBits_congr m (fun f => h (Fin.cons 0 f)), wag_sumBits_congr m (fun f => h (Fin.cons 1 f))]
 
-private lemma toC_leftHalf8GI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (c : Fin 4 → Fin 2) :
+lemma toC_leftHalf8GI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (c : Fin 4 → Fin 2) :
     GI.toC (leftHalf8GI ψ c) = leftHalf8C (fun u v k => GI.toC (ψ u v k)) c := by
   rw [leftHalf8GI, leftHalf8C, toC_sumBits]
-  refine sumBits_congr 2 fun b => ?_
+  refine wag_sumBits_congr 2 fun b => ?_
   simp only [GI.toC_mul, toC_sgn2GI, toC_block2ValGI]
 
-private lemma toC_rightHalf8GI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (c : Fin 4 → Fin 2) :
+lemma toC_rightHalf8GI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) (c : Fin 4 → Fin 2) :
     GI.toC (rightHalf8GI ψ c) = rightHalf8C (fun u v k => GI.toC (ψ u v k)) c := by
   rw [rightHalf8GI, rightHalf8C, toC_sumBits]
-  refine sumBits_congr 2 fun r => ?_
+  refine wag_sumBits_congr 2 fun r => ?_
   simp only [GI.toC_mul, toC_sgn2GI, toC_block2ValGI]
 
 theorem malkounNum_wagner_giToC (ψ : Fin 8 → Fin 8 → Fin 2 → GI) :
     GI.toC (wagnerNumGI ψ) = malkounNum wagnerGraph (fun u v k => GI.toC (ψ u v k)) := by
   rw [malkounNum_wagner_4block, wagnerNumGI, toC_sumBits]
-  refine sumBits_congr 4 fun c => ?_
+  refine wag_sumBits_congr 4 fun c => ?_
   rw [GI.toC_mul, GI.toC_mul, toC_sgn4GI, toC_leftHalf8GI, toC_rightHalf8GI]
 
 theorem malkounDen_wagner_giToC (ψ : Fin 8 → Fin 8 → Fin 2 → GI) :
@@ -950,7 +953,7 @@ def block2ValIv (ψ : Fin 8 → Fin 8 → Fin 2 → CIntIv)
      (ψ v (wagnerNbr v (perm3Fun j (wagnerNbrIdx v p2))) b2 *
       ψ v (wagnerNbr v (perm3Fun j (wagnerNbrIdx v p3))) b3))
 
-private lemma block2ValIv_mem (ψIv : Fin 8 → Fin 8 → Fin 2 → CIntIv) (ψC : Fin 8 → Fin 8 → Fin 2 → ℂ)
+lemma block2ValIv_mem (ψIv : Fin 8 → Fin 8 → Fin 2 → CIntIv) (ψC : Fin 8 → Fin 8 → Fin 2 → ℂ)
     (hψ : ∀ u v, wagnerGraph.Adj u v → ∀ k, (ψIv u v k).Mem (ψC u v k))
     (u v p0 p1 p2 p3 : Fin 8) (b0 b1 b2 b3 : Fin 2) :
     (block2ValIv ψIv u v p0 p1 p2 p3 b0 b1 b2 b3).Mem (block2ValC ψC u v p0 p1 p2 p3 b0 b1 b2 b3) := by
@@ -968,13 +971,13 @@ def wagnerBlockTab := Fin 2 → Fin 2 → Fin 2 → Fin 2 → CIntIv
 
 def leftHalf8TabsIv (t0 t1 : wagnerBlockTab) (c : Fin 4 → Fin 2) : CIntIv :=
   sumBits 2 fun b =>
-    (t0 (c 0) (b 0) (invBit (b 1)) (c 2) *
-     t1 (invBit (c 1)) (b 1) (invBit (b 0)) (invBit (c 3))).scaleInt (sgnInt2 b)
+    (t0 (c 0) (b 0) (wag_invBit (b 1)) (c 2) *
+     t1 (wag_invBit (c 1)) (b 1) (wag_invBit (b 0)) (wag_invBit (c 3))).scaleInt (sgnInt2 b)
 
 def rightHalf8TabsIv (t2 t3 : wagnerBlockTab) (c : Fin 4 → Fin 2) : CIntIv :=
   sumBits 2 fun r =>
-    (t2 (invBit (c 0)) (r 0) (c 1) (r 1) *
-     t3 (invBit (r 0)) (invBit (c 2)) (invBit (r 1)) (c 3)).scaleInt (sgnInt2 r)
+    (t2 (wag_invBit (c 0)) (r 0) (c 1) (r 1) *
+     t3 (wag_invBit (r 0)) (wag_invBit (c 2)) (wag_invBit (r 1)) (c 3)).scaleInt (sgnInt2 r)
 
 def wagnerNumTabsIv (lTab rTab : (Fin 4 → Fin 2) → CIntIv) : CIntIv :=
   sumBits 4 fun c => (lTab c * rTab c).scaleInt (sgnInt4 c)
@@ -1007,7 +1010,7 @@ theorem wagnerNumIv_mem (ψIv : Fin 8 → Fin 8 → Fin 2 → CIntIv) (ψC : Fin
 
 def prod4Iv (g : Fin 4 → CIntIv) : CIntIv := g 0 * g 1 * g 2 * g 3
 
-private lemma prod4Iv_mem (g : Fin 4 → CIntIv) (gc : Fin 4 → ℂ) (hg : ∀ i, (g i).Mem (gc i)) :
+lemma prod4Iv_mem (g : Fin 4 → CIntIv) (gc : Fin 4 → ℂ) (hg : ∀ i, (g i).Mem (gc i)) :
     (prod4Iv g).Mem (∏ i : Fin 4, gc i) := by
   rw [Fin.prod_univ_four]
   exact CIntIv.mul_mem (CIntIv.mul_mem (CIntIv.mul_mem (hg 0) (hg 1)) (hg 2)) (hg 3)
@@ -1204,24 +1207,24 @@ def wagnerB3Val : Fin 2 → Fin 2 → Fin 2 → Fin 2 → CIntIv
   | 1, 1, 1, 0 => ⟨⟨-132368189257913568434967874669392000000000000000000000000, -132368129164566535849014268167044000000000000000000000000⟩, ⟨14649783758483500589425481914373992000000000000000000000000, 14649783817199995976659083683419304000000000000000000000000⟩⟩
   | 1, 1, 1, 1 => ⟨⟨-10484963267568663178063296976000000000000000000000000000000, -10484963248014168808728667760000000000000000000000000000000⟩, ⟨24811003801082222073039033568000000000000000000000000000000, 24811003815293315477587098080000000000000000000000000000000⟩⟩
 
-private lemma cert_wagnerB0_0000 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 0 0 = wagnerB0Val 0 0 0 0 := by decide
-private lemma cert_wagnerB0_0001 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 0 1 = wagnerB0Val 0 0 0 1 := by decide
-private lemma cert_wagnerB0_0010 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 1 0 = wagnerB0Val 0 0 1 0 := by decide
-private lemma cert_wagnerB0_0011 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 1 1 = wagnerB0Val 0 0 1 1 := by decide
-private lemma cert_wagnerB0_0100 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 0 0 = wagnerB0Val 0 1 0 0 := by decide
-private lemma cert_wagnerB0_0101 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 0 1 = wagnerB0Val 0 1 0 1 := by decide
-private lemma cert_wagnerB0_0110 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 1 0 = wagnerB0Val 0 1 1 0 := by decide
-private lemma cert_wagnerB0_0111 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 1 1 = wagnerB0Val 0 1 1 1 := by decide
-private lemma cert_wagnerB0_1000 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 0 0 = wagnerB0Val 1 0 0 0 := by decide
-private lemma cert_wagnerB0_1001 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 0 1 = wagnerB0Val 1 0 0 1 := by decide
-private lemma cert_wagnerB0_1010 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 1 0 = wagnerB0Val 1 0 1 0 := by decide
-private lemma cert_wagnerB0_1011 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 1 1 = wagnerB0Val 1 0 1 1 := by decide
-private lemma cert_wagnerB0_1100 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 0 0 = wagnerB0Val 1 1 0 0 := by decide
-private lemma cert_wagnerB0_1101 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 0 1 = wagnerB0Val 1 1 0 1 := by decide
-private lemma cert_wagnerB0_1110 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 1 0 = wagnerB0Val 1 1 1 0 := by decide
-private lemma cert_wagnerB0_1111 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 1 1 = wagnerB0Val 1 1 1 1 := by decide
+lemma cert_wagnerB0_0000 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 0 0 = wagnerB0Val 0 0 0 0 := by decide
+lemma cert_wagnerB0_0001 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 0 1 = wagnerB0Val 0 0 0 1 := by decide
+lemma cert_wagnerB0_0010 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 1 0 = wagnerB0Val 0 0 1 0 := by decide
+lemma cert_wagnerB0_0011 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 0 1 1 = wagnerB0Val 0 0 1 1 := by decide
+lemma cert_wagnerB0_0100 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 0 0 = wagnerB0Val 0 1 0 0 := by decide
+lemma cert_wagnerB0_0101 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 0 1 = wagnerB0Val 0 1 0 1 := by decide
+lemma cert_wagnerB0_0110 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 1 0 = wagnerB0Val 0 1 1 0 := by decide
+lemma cert_wagnerB0_0111 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 0 1 1 1 = wagnerB0Val 0 1 1 1 := by decide
+lemma cert_wagnerB0_1000 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 0 0 = wagnerB0Val 1 0 0 0 := by decide
+lemma cert_wagnerB0_1001 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 0 1 = wagnerB0Val 1 0 0 1 := by decide
+lemma cert_wagnerB0_1010 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 1 0 = wagnerB0Val 1 0 1 0 := by decide
+lemma cert_wagnerB0_1011 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 0 1 1 = wagnerB0Val 1 0 1 1 := by decide
+lemma cert_wagnerB0_1100 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 0 0 = wagnerB0Val 1 1 0 0 := by decide
+lemma cert_wagnerB0_1101 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 0 1 = wagnerB0Val 1 1 0 1 := by decide
+lemma cert_wagnerB0_1110 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 1 0 = wagnerB0Val 1 1 1 0 := by decide
+lemma cert_wagnerB0_1111 : block2ValIv spinorsWagnerIv 0 4 1 7 3 5 1 1 1 1 = wagnerB0Val 1 1 1 1 := by decide
 
-private lemma cert_wagnerB0_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 0 4 1 7 3 5 a b c d = wagnerB0Val a b c d := by
+lemma cert_wagnerB0_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 0 4 1 7 3 5 a b c d = wagnerB0Val a b c d := by
   intro a b c d
   fin_cases a <;> fin_cases b <;> fin_cases c <;> fin_cases d
   · exact cert_wagnerB0_0000
@@ -1241,24 +1244,24 @@ private lemma cert_wagnerB0_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagner
   · exact cert_wagnerB0_1110
   · exact cert_wagnerB0_1111
 
-private lemma cert_wagnerB1_0000 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 0 0 = wagnerB1Val 0 0 0 0 := by decide
-private lemma cert_wagnerB1_0001 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 0 1 = wagnerB1Val 0 0 0 1 := by decide
-private lemma cert_wagnerB1_0010 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 1 0 = wagnerB1Val 0 0 1 0 := by decide
-private lemma cert_wagnerB1_0011 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 1 1 = wagnerB1Val 0 0 1 1 := by decide
-private lemma cert_wagnerB1_0100 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 0 0 = wagnerB1Val 0 1 0 0 := by decide
-private lemma cert_wagnerB1_0101 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 0 1 = wagnerB1Val 0 1 0 1 := by decide
-private lemma cert_wagnerB1_0110 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 1 0 = wagnerB1Val 0 1 1 0 := by decide
-private lemma cert_wagnerB1_0111 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 1 1 = wagnerB1Val 0 1 1 1 := by decide
-private lemma cert_wagnerB1_1000 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 0 0 = wagnerB1Val 1 0 0 0 := by decide
-private lemma cert_wagnerB1_1001 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 0 1 = wagnerB1Val 1 0 0 1 := by decide
-private lemma cert_wagnerB1_1010 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 1 0 = wagnerB1Val 1 0 1 0 := by decide
-private lemma cert_wagnerB1_1011 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 1 1 = wagnerB1Val 1 0 1 1 := by decide
-private lemma cert_wagnerB1_1100 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 0 0 = wagnerB1Val 1 1 0 0 := by decide
-private lemma cert_wagnerB1_1101 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 0 1 = wagnerB1Val 1 1 0 1 := by decide
-private lemma cert_wagnerB1_1110 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 1 0 = wagnerB1Val 1 1 1 0 := by decide
-private lemma cert_wagnerB1_1111 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 1 1 = wagnerB1Val 1 1 1 1 := by decide
+lemma cert_wagnerB1_0000 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 0 0 = wagnerB1Val 0 0 0 0 := by decide
+lemma cert_wagnerB1_0001 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 0 1 = wagnerB1Val 0 0 0 1 := by decide
+lemma cert_wagnerB1_0010 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 1 0 = wagnerB1Val 0 0 1 0 := by decide
+lemma cert_wagnerB1_0011 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 0 1 1 = wagnerB1Val 0 0 1 1 := by decide
+lemma cert_wagnerB1_0100 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 0 0 = wagnerB1Val 0 1 0 0 := by decide
+lemma cert_wagnerB1_0101 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 0 1 = wagnerB1Val 0 1 0 1 := by decide
+lemma cert_wagnerB1_0110 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 1 0 = wagnerB1Val 0 1 1 0 := by decide
+lemma cert_wagnerB1_0111 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 0 1 1 1 = wagnerB1Val 0 1 1 1 := by decide
+lemma cert_wagnerB1_1000 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 0 0 = wagnerB1Val 1 0 0 0 := by decide
+lemma cert_wagnerB1_1001 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 0 1 = wagnerB1Val 1 0 0 1 := by decide
+lemma cert_wagnerB1_1010 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 1 0 = wagnerB1Val 1 0 1 0 := by decide
+lemma cert_wagnerB1_1011 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 0 1 1 = wagnerB1Val 1 0 1 1 := by decide
+lemma cert_wagnerB1_1100 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 0 0 = wagnerB1Val 1 1 0 0 := by decide
+lemma cert_wagnerB1_1101 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 0 1 = wagnerB1Val 1 1 0 1 := by decide
+lemma cert_wagnerB1_1110 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 1 0 = wagnerB1Val 1 1 1 0 := by decide
+lemma cert_wagnerB1_1111 : block2ValIv spinorsWagnerIv 3 7 2 4 0 6 1 1 1 1 = wagnerB1Val 1 1 1 1 := by decide
 
-private lemma cert_wagnerB1_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 3 7 2 4 0 6 a b c d = wagnerB1Val a b c d := by
+lemma cert_wagnerB1_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 3 7 2 4 0 6 a b c d = wagnerB1Val a b c d := by
   intro a b c d
   fin_cases a <;> fin_cases b <;> fin_cases c <;> fin_cases d
   · exact cert_wagnerB1_0000
@@ -1278,24 +1281,24 @@ private lemma cert_wagnerB1_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagner
   · exact cert_wagnerB1_1110
   · exact cert_wagnerB1_1111
 
-private lemma cert_wagnerB2_0000 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 0 0 = wagnerB2Val 0 0 0 0 := by decide
-private lemma cert_wagnerB2_0001 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 0 1 = wagnerB2Val 0 0 0 1 := by decide
-private lemma cert_wagnerB2_0010 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 1 0 = wagnerB2Val 0 0 1 0 := by decide
-private lemma cert_wagnerB2_0011 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 1 1 = wagnerB2Val 0 0 1 1 := by decide
-private lemma cert_wagnerB2_0100 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 0 0 = wagnerB2Val 0 1 0 0 := by decide
-private lemma cert_wagnerB2_0101 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 0 1 = wagnerB2Val 0 1 0 1 := by decide
-private lemma cert_wagnerB2_0110 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 1 0 = wagnerB2Val 0 1 1 0 := by decide
-private lemma cert_wagnerB2_0111 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 1 1 = wagnerB2Val 0 1 1 1 := by decide
-private lemma cert_wagnerB2_1000 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 0 0 = wagnerB2Val 1 0 0 0 := by decide
-private lemma cert_wagnerB2_1001 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 0 1 = wagnerB2Val 1 0 0 1 := by decide
-private lemma cert_wagnerB2_1010 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 1 0 = wagnerB2Val 1 0 1 0 := by decide
-private lemma cert_wagnerB2_1011 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 1 1 = wagnerB2Val 1 0 1 1 := by decide
-private lemma cert_wagnerB2_1100 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 0 0 = wagnerB2Val 1 1 0 0 := by decide
-private lemma cert_wagnerB2_1101 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 0 1 = wagnerB2Val 1 1 0 1 := by decide
-private lemma cert_wagnerB2_1110 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 1 0 = wagnerB2Val 1 1 1 0 := by decide
-private lemma cert_wagnerB2_1111 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 1 1 = wagnerB2Val 1 1 1 1 := by decide
+lemma cert_wagnerB2_0000 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 0 0 = wagnerB2Val 0 0 0 0 := by decide
+lemma cert_wagnerB2_0001 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 0 1 = wagnerB2Val 0 0 0 1 := by decide
+lemma cert_wagnerB2_0010 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 1 0 = wagnerB2Val 0 0 1 0 := by decide
+lemma cert_wagnerB2_0011 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 0 1 1 = wagnerB2Val 0 0 1 1 := by decide
+lemma cert_wagnerB2_0100 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 0 0 = wagnerB2Val 0 1 0 0 := by decide
+lemma cert_wagnerB2_0101 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 0 1 = wagnerB2Val 0 1 0 1 := by decide
+lemma cert_wagnerB2_0110 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 1 0 = wagnerB2Val 0 1 1 0 := by decide
+lemma cert_wagnerB2_0111 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 0 1 1 1 = wagnerB2Val 0 1 1 1 := by decide
+lemma cert_wagnerB2_1000 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 0 0 = wagnerB2Val 1 0 0 0 := by decide
+lemma cert_wagnerB2_1001 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 0 1 = wagnerB2Val 1 0 0 1 := by decide
+lemma cert_wagnerB2_1010 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 1 0 = wagnerB2Val 1 0 1 0 := by decide
+lemma cert_wagnerB2_1011 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 0 1 1 = wagnerB2Val 1 0 1 1 := by decide
+lemma cert_wagnerB2_1100 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 0 0 = wagnerB2Val 1 1 0 0 := by decide
+lemma cert_wagnerB2_1101 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 0 1 = wagnerB2Val 1 1 0 1 := by decide
+lemma cert_wagnerB2_1110 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 1 0 = wagnerB2Val 1 1 1 0 := by decide
+lemma cert_wagnerB2_1111 : block2ValIv spinorsWagnerIv 1 2 0 5 3 6 1 1 1 1 = wagnerB2Val 1 1 1 1 := by decide
 
-private lemma cert_wagnerB2_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 1 2 0 5 3 6 a b c d = wagnerB2Val a b c d := by
+lemma cert_wagnerB2_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 1 2 0 5 3 6 a b c d = wagnerB2Val a b c d := by
   intro a b c d
   fin_cases a <;> fin_cases b <;> fin_cases c <;> fin_cases d
   · exact cert_wagnerB2_0000
@@ -1315,24 +1318,24 @@ private lemma cert_wagnerB2_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagner
   · exact cert_wagnerB2_1110
   · exact cert_wagnerB2_1111
 
-private lemma cert_wagnerB3_0000 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 0 0 = wagnerB3Val 0 0 0 0 := by decide
-private lemma cert_wagnerB3_0001 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 0 1 = wagnerB3Val 0 0 0 1 := by decide
-private lemma cert_wagnerB3_0010 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 1 0 = wagnerB3Val 0 0 1 0 := by decide
-private lemma cert_wagnerB3_0011 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 1 1 = wagnerB3Val 0 0 1 1 := by decide
-private lemma cert_wagnerB3_0100 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 0 0 = wagnerB3Val 0 1 0 0 := by decide
-private lemma cert_wagnerB3_0101 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 0 1 = wagnerB3Val 0 1 0 1 := by decide
-private lemma cert_wagnerB3_0110 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 1 0 = wagnerB3Val 0 1 1 0 := by decide
-private lemma cert_wagnerB3_0111 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 1 1 = wagnerB3Val 0 1 1 1 := by decide
-private lemma cert_wagnerB3_1000 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 0 0 = wagnerB3Val 1 0 0 0 := by decide
-private lemma cert_wagnerB3_1001 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 0 1 = wagnerB3Val 1 0 0 1 := by decide
-private lemma cert_wagnerB3_1010 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 1 0 = wagnerB3Val 1 0 1 0 := by decide
-private lemma cert_wagnerB3_1011 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 1 1 = wagnerB3Val 1 0 1 1 := by decide
-private lemma cert_wagnerB3_1100 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 0 0 = wagnerB3Val 1 1 0 0 := by decide
-private lemma cert_wagnerB3_1101 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 0 1 = wagnerB3Val 1 1 0 1 := by decide
-private lemma cert_wagnerB3_1110 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 1 0 = wagnerB3Val 1 1 1 0 := by decide
-private lemma cert_wagnerB3_1111 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 1 1 = wagnerB3Val 1 1 1 1 := by decide
+lemma cert_wagnerB3_0000 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 0 0 = wagnerB3Val 0 0 0 0 := by decide
+lemma cert_wagnerB3_0001 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 0 1 = wagnerB3Val 0 0 0 1 := by decide
+lemma cert_wagnerB3_0010 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 1 0 = wagnerB3Val 0 0 1 0 := by decide
+lemma cert_wagnerB3_0011 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 0 1 1 = wagnerB3Val 0 0 1 1 := by decide
+lemma cert_wagnerB3_0100 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 0 0 = wagnerB3Val 0 1 0 0 := by decide
+lemma cert_wagnerB3_0101 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 0 1 = wagnerB3Val 0 1 0 1 := by decide
+lemma cert_wagnerB3_0110 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 1 0 = wagnerB3Val 0 1 1 0 := by decide
+lemma cert_wagnerB3_0111 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 0 1 1 1 = wagnerB3Val 0 1 1 1 := by decide
+lemma cert_wagnerB3_1000 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 0 0 = wagnerB3Val 1 0 0 0 := by decide
+lemma cert_wagnerB3_1001 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 0 1 = wagnerB3Val 1 0 0 1 := by decide
+lemma cert_wagnerB3_1010 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 1 0 = wagnerB3Val 1 0 1 0 := by decide
+lemma cert_wagnerB3_1011 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 0 1 1 = wagnerB3Val 1 0 1 1 := by decide
+lemma cert_wagnerB3_1100 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 0 0 = wagnerB3Val 1 1 0 0 := by decide
+lemma cert_wagnerB3_1101 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 0 1 = wagnerB3Val 1 1 0 1 := by decide
+lemma cert_wagnerB3_1110 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 1 0 = wagnerB3Val 1 1 1 0 := by decide
+lemma cert_wagnerB3_1111 : block2ValIv spinorsWagnerIv 5 6 1 4 2 7 1 1 1 1 = wagnerB3Val 1 1 1 1 := by decide
 
-private lemma cert_wagnerB3_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 5 6 1 4 2 7 a b c d = wagnerB3Val a b c d := by
+lemma cert_wagnerB3_all : ∀ a b c d : Fin 2, block2ValIv spinorsWagnerIv 5 6 1 4 2 7 a b c d = wagnerB3Val a b c d := by
   intro a b c d
   fin_cases a <;> fin_cases b <;> fin_cases c <;> fin_cases d
   · exact cert_wagnerB3_0000
@@ -1390,27 +1393,27 @@ def wagnerRightVal : (Fin 4 → Fin 2) → CIntIv
     | 1, 1, 1, 0 => ⟨⟨-1059284959157036600920805456130370326511156426691126602605754482031519789659867494287664000000000000000000000000000000, -1059284936585964971691690045071501740321830678394908406697034381674578274373091558059952000000000000000000000000000000⟩, ⟨-373170509808889853345591189648578860613428863129986919690965735966900500507755823947064000000000000000000000000000000, -373170486582754129565095791422863236163600434301814978339047224430623337407172465856768000000000000000000000000000000⟩⟩
     | 1, 1, 1, 1 => ⟨⟨-1107196715122824898527396526495550606515944695861729156699737218993077499336323152000000000000000000000000000000000000, -1107196697287469492402950187715449882730964035141760182789671906445647686160263264000000000000000000000000000000000000⟩, ⟨-188247507471038029428366324001459684052256001887425210915356150287743936135172160000000000000000000000000000000000000, -188247488526068291232210648890046164545474984244048364886279812151101905834227056000000000000000000000000000000000000⟩⟩
 
-private lemma cert_wagnerLeft_0000 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 0, 0] = wagnerLeftVal ![(0 : Fin 2), 0, 0, 0] := by decide
-private lemma cert_wagnerLeft_0001 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 0, 1] = wagnerLeftVal ![(0 : Fin 2), 0, 0, 1] := by decide
-private lemma cert_wagnerLeft_0010 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 1, 0] = wagnerLeftVal ![(0 : Fin 2), 0, 1, 0] := by decide
-private lemma cert_wagnerLeft_0011 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 1, 1] = wagnerLeftVal ![(0 : Fin 2), 0, 1, 1] := by decide
-private lemma cert_wagnerLeft_0100 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 0, 0] = wagnerLeftVal ![(0 : Fin 2), 1, 0, 0] := by decide
-private lemma cert_wagnerLeft_0101 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 0, 1] = wagnerLeftVal ![(0 : Fin 2), 1, 0, 1] := by decide
-private lemma cert_wagnerLeft_0110 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 1, 0] = wagnerLeftVal ![(0 : Fin 2), 1, 1, 0] := by decide
-private lemma cert_wagnerLeft_0111 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 1, 1] = wagnerLeftVal ![(0 : Fin 2), 1, 1, 1] := by decide
-private lemma cert_wagnerLeft_1000 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 0, 0] = wagnerLeftVal ![(1 : Fin 2), 0, 0, 0] := by decide
-private lemma cert_wagnerLeft_1001 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 0, 1] = wagnerLeftVal ![(1 : Fin 2), 0, 0, 1] := by decide
-private lemma cert_wagnerLeft_1010 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 1, 0] = wagnerLeftVal ![(1 : Fin 2), 0, 1, 0] := by decide
-private lemma cert_wagnerLeft_1011 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 1, 1] = wagnerLeftVal ![(1 : Fin 2), 0, 1, 1] := by decide
-private lemma cert_wagnerLeft_1100 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 0, 0] = wagnerLeftVal ![(1 : Fin 2), 1, 0, 0] := by decide
-private lemma cert_wagnerLeft_1101 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 0, 1] = wagnerLeftVal ![(1 : Fin 2), 1, 0, 1] := by decide
-private lemma cert_wagnerLeft_1110 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 1, 0] = wagnerLeftVal ![(1 : Fin 2), 1, 1, 0] := by decide
-private lemma cert_wagnerLeft_1111 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 1, 1] = wagnerLeftVal ![(1 : Fin 2), 1, 1, 1] := by decide
-private lemma cert_wagnerLeft_all : ∀ c : Fin 4 → Fin 2, leftHalf8TabsIv wagnerB0Val wagnerB1Val c = wagnerLeftVal c := by
+lemma cert_wagnerLeft_0000 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 0, 0] = wagnerLeftVal ![(0 : Fin 2), 0, 0, 0] := by decide
+lemma cert_wagnerLeft_0001 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 0, 1] = wagnerLeftVal ![(0 : Fin 2), 0, 0, 1] := by decide
+lemma cert_wagnerLeft_0010 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 1, 0] = wagnerLeftVal ![(0 : Fin 2), 0, 1, 0] := by decide
+lemma cert_wagnerLeft_0011 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 0, 1, 1] = wagnerLeftVal ![(0 : Fin 2), 0, 1, 1] := by decide
+lemma cert_wagnerLeft_0100 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 0, 0] = wagnerLeftVal ![(0 : Fin 2), 1, 0, 0] := by decide
+lemma cert_wagnerLeft_0101 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 0, 1] = wagnerLeftVal ![(0 : Fin 2), 1, 0, 1] := by decide
+lemma cert_wagnerLeft_0110 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 1, 0] = wagnerLeftVal ![(0 : Fin 2), 1, 1, 0] := by decide
+lemma cert_wagnerLeft_0111 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(0 : Fin 2), 1, 1, 1] = wagnerLeftVal ![(0 : Fin 2), 1, 1, 1] := by decide
+lemma cert_wagnerLeft_1000 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 0, 0] = wagnerLeftVal ![(1 : Fin 2), 0, 0, 0] := by decide
+lemma cert_wagnerLeft_1001 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 0, 1] = wagnerLeftVal ![(1 : Fin 2), 0, 0, 1] := by decide
+lemma cert_wagnerLeft_1010 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 1, 0] = wagnerLeftVal ![(1 : Fin 2), 0, 1, 0] := by decide
+lemma cert_wagnerLeft_1011 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 0, 1, 1] = wagnerLeftVal ![(1 : Fin 2), 0, 1, 1] := by decide
+lemma cert_wagnerLeft_1100 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 0, 0] = wagnerLeftVal ![(1 : Fin 2), 1, 0, 0] := by decide
+lemma cert_wagnerLeft_1101 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 0, 1] = wagnerLeftVal ![(1 : Fin 2), 1, 0, 1] := by decide
+lemma cert_wagnerLeft_1110 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 1, 0] = wagnerLeftVal ![(1 : Fin 2), 1, 1, 0] := by decide
+lemma cert_wagnerLeft_1111 : leftHalf8TabsIv wagnerB0Val wagnerB1Val ![(1 : Fin 2), 1, 1, 1] = wagnerLeftVal ![(1 : Fin 2), 1, 1, 1] := by decide
+lemma cert_wagnerLeft_all : ∀ c : Fin 4 → Fin 2, leftHalf8TabsIv wagnerB0Val wagnerB1Val c = wagnerLeftVal c := by
   intro c
   have hc : c = ![c 0, c 1, c 2, c 3] := by ext i; fin_cases i <;> rfl
   rw [hc]
-  rcases fin2_cases (c 0) with h0 | h0 <;> rcases fin2_cases (c 1) with h1 | h1 <;> rcases fin2_cases (c 2) with h2 | h2 <;> rcases fin2_cases (c 3) with h3 | h3 <;> rw [h0, h1, h2, h3]
+  rcases wag_fin2_cases (c 0) with h0 | h0 <;> rcases wag_fin2_cases (c 1) with h1 | h1 <;> rcases wag_fin2_cases (c 2) with h2 | h2 <;> rcases wag_fin2_cases (c 3) with h3 | h3 <;> rw [h0, h1, h2, h3]
   · exact cert_wagnerLeft_0000
   · exact cert_wagnerLeft_0001
   · exact cert_wagnerLeft_0010
@@ -1428,27 +1431,27 @@ private lemma cert_wagnerLeft_all : ∀ c : Fin 4 → Fin 2, leftHalf8TabsIv wag
   · exact cert_wagnerLeft_1110
   · exact cert_wagnerLeft_1111
 
-private lemma cert_wagnerRight_0000 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 0, 0] = wagnerRightVal ![(0 : Fin 2), 0, 0, 0] := by decide
-private lemma cert_wagnerRight_0001 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 0, 1] = wagnerRightVal ![(0 : Fin 2), 0, 0, 1] := by decide
-private lemma cert_wagnerRight_0010 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 1, 0] = wagnerRightVal ![(0 : Fin 2), 0, 1, 0] := by decide
-private lemma cert_wagnerRight_0011 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 1, 1] = wagnerRightVal ![(0 : Fin 2), 0, 1, 1] := by decide
-private lemma cert_wagnerRight_0100 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 0, 0] = wagnerRightVal ![(0 : Fin 2), 1, 0, 0] := by decide
-private lemma cert_wagnerRight_0101 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 0, 1] = wagnerRightVal ![(0 : Fin 2), 1, 0, 1] := by decide
-private lemma cert_wagnerRight_0110 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 1, 0] = wagnerRightVal ![(0 : Fin 2), 1, 1, 0] := by decide
-private lemma cert_wagnerRight_0111 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 1, 1] = wagnerRightVal ![(0 : Fin 2), 1, 1, 1] := by decide
-private lemma cert_wagnerRight_1000 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 0, 0] = wagnerRightVal ![(1 : Fin 2), 0, 0, 0] := by decide
-private lemma cert_wagnerRight_1001 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 0, 1] = wagnerRightVal ![(1 : Fin 2), 0, 0, 1] := by decide
-private lemma cert_wagnerRight_1010 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 1, 0] = wagnerRightVal ![(1 : Fin 2), 0, 1, 0] := by decide
-private lemma cert_wagnerRight_1011 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 1, 1] = wagnerRightVal ![(1 : Fin 2), 0, 1, 1] := by decide
-private lemma cert_wagnerRight_1100 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 0, 0] = wagnerRightVal ![(1 : Fin 2), 1, 0, 0] := by decide
-private lemma cert_wagnerRight_1101 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 0, 1] = wagnerRightVal ![(1 : Fin 2), 1, 0, 1] := by decide
-private lemma cert_wagnerRight_1110 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 1, 0] = wagnerRightVal ![(1 : Fin 2), 1, 1, 0] := by decide
-private lemma cert_wagnerRight_1111 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 1, 1] = wagnerRightVal ![(1 : Fin 2), 1, 1, 1] := by decide
-private lemma cert_wagnerRight_all : ∀ c : Fin 4 → Fin 2, rightHalf8TabsIv wagnerB2Val wagnerB3Val c = wagnerRightVal c := by
+lemma cert_wagnerRight_0000 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 0, 0] = wagnerRightVal ![(0 : Fin 2), 0, 0, 0] := by decide
+lemma cert_wagnerRight_0001 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 0, 1] = wagnerRightVal ![(0 : Fin 2), 0, 0, 1] := by decide
+lemma cert_wagnerRight_0010 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 1, 0] = wagnerRightVal ![(0 : Fin 2), 0, 1, 0] := by decide
+lemma cert_wagnerRight_0011 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 0, 1, 1] = wagnerRightVal ![(0 : Fin 2), 0, 1, 1] := by decide
+lemma cert_wagnerRight_0100 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 0, 0] = wagnerRightVal ![(0 : Fin 2), 1, 0, 0] := by decide
+lemma cert_wagnerRight_0101 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 0, 1] = wagnerRightVal ![(0 : Fin 2), 1, 0, 1] := by decide
+lemma cert_wagnerRight_0110 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 1, 0] = wagnerRightVal ![(0 : Fin 2), 1, 1, 0] := by decide
+lemma cert_wagnerRight_0111 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(0 : Fin 2), 1, 1, 1] = wagnerRightVal ![(0 : Fin 2), 1, 1, 1] := by decide
+lemma cert_wagnerRight_1000 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 0, 0] = wagnerRightVal ![(1 : Fin 2), 0, 0, 0] := by decide
+lemma cert_wagnerRight_1001 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 0, 1] = wagnerRightVal ![(1 : Fin 2), 0, 0, 1] := by decide
+lemma cert_wagnerRight_1010 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 1, 0] = wagnerRightVal ![(1 : Fin 2), 0, 1, 0] := by decide
+lemma cert_wagnerRight_1011 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 0, 1, 1] = wagnerRightVal ![(1 : Fin 2), 0, 1, 1] := by decide
+lemma cert_wagnerRight_1100 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 0, 0] = wagnerRightVal ![(1 : Fin 2), 1, 0, 0] := by decide
+lemma cert_wagnerRight_1101 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 0, 1] = wagnerRightVal ![(1 : Fin 2), 1, 0, 1] := by decide
+lemma cert_wagnerRight_1110 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 1, 0] = wagnerRightVal ![(1 : Fin 2), 1, 1, 0] := by decide
+lemma cert_wagnerRight_1111 : rightHalf8TabsIv wagnerB2Val wagnerB3Val ![(1 : Fin 2), 1, 1, 1] = wagnerRightVal ![(1 : Fin 2), 1, 1, 1] := by decide
+lemma cert_wagnerRight_all : ∀ c : Fin 4 → Fin 2, rightHalf8TabsIv wagnerB2Val wagnerB3Val c = wagnerRightVal c := by
   intro c
   have hc : c = ![c 0, c 1, c 2, c 3] := by ext i; fin_cases i <;> rfl
   rw [hc]
-  rcases fin2_cases (c 0) with h0 | h0 <;> rcases fin2_cases (c 1) with h1 | h1 <;> rcases fin2_cases (c 2) with h2 | h2 <;> rcases fin2_cases (c 3) with h3 | h3 <;> rw [h0, h1, h2, h3]
+  rcases wag_fin2_cases (c 0) with h0 | h0 <;> rcases wag_fin2_cases (c 1) with h1 | h1 <;> rcases wag_fin2_cases (c 2) with h2 | h2 <;> rcases wag_fin2_cases (c 3) with h3 | h3 <;> rw [h0, h1, h2, h3]
   · exact cert_wagnerRight_0000
   · exact cert_wagnerRight_0001
   · exact cert_wagnerRight_0010
@@ -1504,7 +1507,7 @@ def wagnerPath (t : ℝ) : ConfigSpace wagnerGraph :=
 
 lemma wagnerPath_planar (t : ℝ) (u : Fin 8) : (wagnerPath t).1 u 2 = 0 := rfl
 
-private lemma malkounAmplitudeOfSpinors_congr {m : ℕ} (G : SimpleGraph (Fin m)) [DecidableRel G.Adj]
+lemma wag_malkounAmplitudeOfSpinors_congr {m : ℕ} (G : SimpleGraph (Fin m)) [DecidableRel G.Adj]
     (ψ₁ ψ₂ : Fin m → Fin m → Fin 2 → ℂ) (h : ∀ u v, G.Adj u v → ∀ k, ψ₁ u v k = ψ₂ u v k) :
     malkounAmplitudeOfSpinors G ψ₁ = malkounAmplitudeOfSpinors G ψ₂ := by
   have h1 : ∀ u v, G.Adj u v → ψ₁ u v = ψ₂ u v := fun u v huv => funext (h u v huv)
@@ -1516,7 +1519,7 @@ private lemma malkounAmplitudeOfSpinors_congr {m : ℕ} (G : SimpleGraph (Fin m)
     rw [h1 _ _ e.2.1, h1 _ _ e.2.1.symm]
   simp only [malkounAmplitudeOfSpinors, hnum, hden]
 
-private lemma match_collinear_wagner (u v : Fin 8) (dx r g : ℤ) (s : Fin 2 → GI)
+lemma match_collinear_wagner (u v : Fin 8) (dx r g : ℤ) (s : Fin 2 → GI)
     (hr_nn : 0 ≤ r) (hpt0 : wagnerPoint 0 v 0 - wagnerPoint 0 u 0 = (dx : ℝ))
     (hpt1 : wagnerPoint 0 v 1 - wagnerPoint 0 u 1 = 0) (hr_sq : r * r = dx * dx)
     (h0re : r = g * (s 0).re) (h0im : (s 0).im = 0)
@@ -1530,7 +1533,7 @@ private lemma match_collinear_wagner (u v : Fin 8) (dx r g : ℤ) (s : Fin 2 →
     linarith [sq (r : ℝ), sq (dx : ℝ)]
   have heuclid : euclidNorm (fun j => wagnerPoint 0 v j - wagnerPoint 0 u j) = (r : ℝ) := by
     rw [euclidNorm, ← hr_R]; exact Real.sqrt_sq (by exact_mod_cast hr_nn)
-  intro k; rcases fin2_cases k with rfl | rfl
+  intro k; rcases wag_fin2_cases k with rfl | rfl
   · simp only [planarUnnormSpinor, heuclid, GI.toC, h0im, Int.cast_zero, mul_zero, add_zero]; exact_mod_cast h0re
   · simp only [planarUnnormSpinor, hpt0, hpt1, Complex.ofReal_zero, mul_zero, add_zero, GI.toC]
     apply Complex.ext
@@ -1553,22 +1556,22 @@ theorem malkounAmplitude_wagnerPath_zero : malkounAmplitude wagnerGraph (wagnerP
     fun u v huv => (spinorsWagnerColGI_ok u v huv).1
   rw [malkounAmplitude_eq_planarUnnorm wagnerGraph (wagnerPath 0) (wagnerPath_planar 0)]
   change malkounAmplitudeOfSpinors wagnerGraph (fun u v => planarUnnormSpinor (wagnerPoint 0 u) (wagnerPoint 0 v)) = 2304
-  rw [malkounAmplitudeOfSpinors_congr wagnerGraph _ _ hmatch]
+  rw [wag_malkounAmplitudeOfSpinors_congr wagnerGraph _ _ hmatch]
   rw [malkounAmplitude_scale_invariant wagnerGraph _ (fun u v huv => Int.cast_ne_zero.mpr (hscale u v huv)) (fun u v k => GI.toC (spinorsWagnerColGI u v k))]
   simp only [malkounAmplitudeOfSpinors, ← malkounNum_wagner_giToC, ← malkounDen_wagner_giToC, cert_wagner_col_num, cert_wagner_col_den, GI.toC_ofInt]
   norm_num
 
-private lemma nonneg_sq_le_iff {a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) : a ≤ b ↔ a * a ≤ b * b := by
+lemma wag_nonneg_sq_le_iff {a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) : a ≤ b ↔ a * a ≤ b * b := by
   constructor
   · intro hab; exact mul_self_le_mul_self ha hab
   · intro hsq; by_contra! hlt
     have hpos : 0 < (a - b) * (a + b) := mul_pos (sub_pos.mpr hlt) (add_pos_of_pos_of_nonneg (lt_of_le_of_lt hb hlt) hb)
     linarith
 
-private noncomputable def wagnerScaledSpinors (u v : Fin 8) (k : Fin 2) : ℂ :=
+noncomputable def wagnerScaledSpinors (u v : Fin 8) (k : Fin 2) : ℂ :=
   ((wagnerScale : ℤ) : ℂ) * planarUnnormSpinor (wagnerPoint 1 u) (wagnerPoint 1 v) k
 
-private lemma spinorsWagnerIv_mem : ∀ u v : Fin 8, wagnerGraph.Adj u v →
+lemma spinorsWagnerIv_mem : ∀ u v : Fin 8, wagnerGraph.Adj u v →
     ∀ k : Fin 2, (spinorsWagnerIv u v k).Mem (wagnerScaledSpinors u v k) := by
   intro u v huv k
   rcases distWagnerLo_ok u v huv with ⟨hlo_nn, hlo_sq, hhi_sq⟩
@@ -1585,18 +1588,18 @@ private lemma spinorsWagnerIv_mem : ∀ u v : Fin 8, wagnerGraph.Adj u v →
     calc ((wagnerScale : ℝ) * r_real) * ((wagnerScale : ℝ) * r_real) = (wagnerScale : ℝ) * (wagnerScale : ℝ) * (r_real * r_real) := by ring
       _ = ((wagnerScale * wagnerScale * (dx * dx + dy * dy) : ℤ) : ℝ) := by rw [hnorm_sq]; push_cast; ring
   have hlo_R : (distWagnerLo u v : ℝ) ≤ (wagnerScale : ℝ) * r_real := by
-    refine (nonneg_sq_le_iff (by exact_mod_cast hlo_nn) (mul_nonneg hS_pos.le hr_nn)).mpr ?_
+    refine (wag_nonneg_sq_le_iff (by exact_mod_cast hlo_nn) (mul_nonneg hS_pos.le hr_nn)).mpr ?_
     rw [hr_sq]; exact_mod_cast hlo_sq
   have hhi_R : (wagnerScale : ℝ) * r_real ≤ ((distWagnerLo u v + 1 : ℤ) : ℝ) := by
-    refine (nonneg_sq_le_iff (mul_nonneg hS_pos.le hr_nn) (by exact_mod_cast (by omega : 0 ≤ distWagnerLo u v + 1))).mpr ?_
+    refine (wag_nonneg_sq_le_iff (mul_nonneg hS_pos.le hr_nn) (by exact_mod_cast (by omega : 0 ≤ distWagnerLo u v + 1))).mpr ?_
     rw [hr_sq]; exact_mod_cast hhi_sq
-  rcases fin2_cases k with rfl | rfl
+  rcases wag_fin2_cases k with rfl | rfl
   · simp only [wagnerScaledSpinors, planarUnnormSpinor, spinorsWagnerIv, CIntIv.Mem, IntIv.Mem, IntIv.zero]
     have hre : (((wagnerScale : ℤ) : ℂ) * (r_real : ℂ)).re = (wagnerScale : ℝ) * r_real := by
       change ((wagnerScale : ℝ) * (r_real : ℂ)).re = _; simp
     have him : (((wagnerScale : ℤ) : ℂ) * (r_real : ℂ)).im = 0 := by
       change ((wagnerScale : ℝ) * (r_real : ℂ)).im = _; simp
-    rw [hre, him]; exact ⟨⟨hlo_R, by exact_mod_cast hhi_R⟩, ⟨le_rfl, le_rfl⟩⟩
+    rw [hre, him]; exact ⟨⟨hlo_R, by exact_mod_cast hhi_R⟩, ⟨by simp, by simp⟩⟩
   · simp only [wagnerScaledSpinors, planarUnnormSpinor, spinorsWagnerIv, CIntIv.Mem]
     have hdx_r : wagnerPoint 1 v 0 - wagnerPoint 1 u 0 = (dx : ℝ) := by simp [wagnerPoint, dx]
     have hdy_r : wagnerPoint 1 v 1 - wagnerPoint 1 u 1 = (dy : ℝ) := by simp [wagnerPoint, dy]
@@ -1606,23 +1609,23 @@ private lemma spinorsWagnerIv_mem : ∀ u v : Fin 8, wagnerGraph.Adj u v →
     change (IntIv.ofInt (wagnerScale * dx)).Mem _ ∧ (IntIv.ofInt (wagnerScale * dy)).Mem _
     rw [hre, him]; exact ⟨IntIv.ofInt_mem _, IntIv.ofInt_mem _⟩
 
-private lemma div_re_neg_of_iv_dot_neg {N D : ℂ} {numIv denIv : CIntIv}
+lemma wag_div_re_neg_of_iv_dot_neg {N D : ℂ} {numIv denIv : CIntIv}
     (hD : D ≠ 0) (hN_mem : numIv.Mem N) (hD_mem : denIv.Mem D)
     (hdot : ((numIv.re.mul denIv.re).add (numIv.im.mul denIv.im)).hi < 0) : (N / D).re < 0 := by
   have hdot_mem := IntIv.add_mem (IntIv.mul_mem hN_mem.1 hD_mem.1) (IntIv.mul_mem hN_mem.2 hD_mem.2)
-  have hneg : N.re * D.re + N.im * D.im < 0 := lt_of_le_of_lt hdot_mem.2 (Int.cast_lt.mpr hdot)
+  have hneg : N.re * D.re + N.im * D.im < 0 := lt_of_le_of_lt hdot_mem.2 (by exact_mod_cast hdot)
   have hre : (N / D).re = (N.re * D.re + N.im * D.im) / Complex.normSq D := by rw [Complex.div_re]; ring
   rw [hre]; exact div_neg_of_neg_of_pos hneg (Complex.normSq_pos.mpr hD)
 
-@[irreducible] private noncomputable def wagnerNumC : ℂ := malkounNum wagnerGraph wagnerScaledSpinors
-@[irreducible] private noncomputable def wagnerDenC : ℂ := malkounDen wagnerGraph wagnerScaledSpinors
+@[irreducible] noncomputable def wagnerNumC : ℂ := malkounNum wagnerGraph wagnerScaledSpinors
+@[irreducible] noncomputable def wagnerDenC : ℂ := malkounDen wagnerGraph wagnerScaledSpinors
 
 /-- Value of $\mathcal{A}_{M_8}(\gamma(1))$ shielded as `@[irreducible]` so `LT.lt` on `ℝ` does not unfold `malkounNum`. -/
 @[irreducible] noncomputable def wagnerAmpOne : ℂ := malkounAmplitude wagnerGraph (wagnerPath 1)
 
 lemma wagnerAmpOne_eq : wagnerAmpOne = malkounAmplitude wagnerGraph (wagnerPath 1) := by unfold wagnerAmpOne; rfl
-private lemma wagnerNumC_eq : wagnerNumC = malkounNum wagnerGraph wagnerScaledSpinors := by unfold wagnerNumC; rfl
-private lemma wagnerDenC_eq : wagnerDenC = malkounDen wagnerGraph wagnerScaledSpinors := by unfold wagnerDenC; rfl
+lemma wagnerNumC_eq : wagnerNumC = malkounNum wagnerGraph wagnerScaledSpinors := by unfold wagnerNumC; rfl
+lemma wagnerDenC_eq : wagnerDenC = malkounDen wagnerGraph wagnerScaledSpinors := by unfold wagnerDenC; rfl
 
 theorem wagnerAmpOne_re_neg : wagnerAmpOne.re < 0 := by
   have hS_ne : ((wagnerScale : ℤ) : ℂ) ≠ 0 := Int.cast_ne_zero.mpr (by decide)
@@ -1648,9 +1651,9 @@ theorem wagnerAmpOne_re_neg : wagnerAmpOne.re < 0 := by
   have hD : wagnerDenVal.Mem wagnerDenC := by
     rw [wagnerDenC_eq, ← cert_wagner_den_val]
     exact wagnerDenIv_mem spinorsWagnerIv wagnerScaledSpinors spinorsWagnerIv_mem
-  rw [hamp]; exact div_re_neg_of_iv_dot_neg hden_ne hN hD cert_wagner_dot_neg
+  rw [hamp]; exact wag_div_re_neg_of_iv_dot_neg hden_ne hN hD cert_wagner_dot_neg
 
-private lemma continuous_planarUnnorm_wagnerPath (u v : Fin 8) (k : Fin 2) :
+lemma continuous_planarUnnorm_wagnerPath (u v : Fin 8) (k : Fin 2) :
     Continuous (fun t : ℝ => planarUnnormSpinor (wagnerPoint t u) (wagnerPoint t v) k) := by
   fin_cases k
   · dsimp [planarUnnormSpinor, euclidNorm, wagnerPoint]; fun_prop
@@ -1673,7 +1676,7 @@ theorem continuous_malkounAmplitude_wagnerPath :
     dsimp [malkounDen]; fun_prop
   exact hnum.div hden fun t => malkounDen_planarUnnorm_ne_zero wagnerGraph (wagnerPath t) (wagnerPath_planar t)
 
-private lemma exists_wagnerPath_zero :
+lemma exists_wagnerPath_zero :
     ∃ t₀ ∈ Set.Icc (0 : ℝ) 1, malkounAmplitude wagnerGraph (wagnerPath t₀) = 0 := by
   let f : ℝ → ℝ := fun t => (malkounAmplitude wagnerGraph (wagnerPath t)).re
   have hf_cont : Continuous f := Complex.continuous_re.comp continuous_malkounAmplitude_wagnerPath

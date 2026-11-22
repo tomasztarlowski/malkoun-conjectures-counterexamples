@@ -1,6 +1,6 @@
 # Counterexamples to All Four Malkoun Conjectures (A–D), Planar Tree Zeros, and Unconditional Path Positivity
 
-Machine-checked **Lean 4 (`v4.37.0-rc1` + Mathlib)** refutations of all four main conjectures (**A, B, C, D**) and the Section 6 real-positivity question from Joseph Malkoun's preprint [*Finite graphs and configurations of points*](https://arxiv.org/abs/2508.13472) (`arXiv:2508.13472v3`), together with unconditional positive theorems for arbitrary linear paths $LG_n$ and small trees.
+Machine-checked **Lean 4 (`v4.35.0` + Mathlib)** refutations of all four main conjectures (**A, B, C, D**) and the Section 6 real-positivity question from Joseph Malkoun's preprint [*Finite graphs and configurations of points*](https://arxiv.org/abs/2508.13472) (`arXiv:2508.13472v3`), together with unconditional positive theorems for arbitrary linear paths $LG_n$ and small trees.
 
 - **Preprint manuscript:** [`paper/malkoun_counterexamples.tex`](paper/malkoun_counterexamples.tex) ([compiled PDF](paper/malkoun_counterexamples.pdf), 9 pages)
 - **Axiom & Kernel Purity:** Zero `sorry`, zero `admit`, zero `native_decide` across all Lean modules; `#print axioms` and `comparator.json` verification depend strictly on `{propext, Classical.choice, Quot.sound}`.
@@ -53,7 +53,7 @@ In addition, 50-digit `mpmath` scans archived in `data/` exhibit:
 │   └── malkoun_counterexamples.pdf          # Compiled 9-page PDF
 ├── scripts/                                 # Python/mpmath/SciPy search & certificate generation scripts
 ├── data/                                    # JSON witness coordinates and exact certificates
-├── lean-toolchain                           # leanprover/lean4:v4.37.0-rc1
+├── lean-toolchain                           # leanprover/lean4:v4.35.0
 ├── lakefile.toml
 ├── lake-manifest.json
 └── LICENSE                                  # Apache-2.0

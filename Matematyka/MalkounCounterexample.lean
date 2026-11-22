@@ -1,5 +1,6 @@
-import Mathlib
+module
 
+public import Mathlib
 /-!
 # Formal Disproof of Malkoun's Conjectures A, B, and Connected-Graph Real-Part Bound
 
@@ -9,6 +10,8 @@ for any finite simple graph `G : SimpleGraph (Fin n)` and construct an explicit
 connected 8-vertex, 13-edge planar counterexample `barbellK4Graph` (two $K_4$ cliques
 joined by a bridge) along a collision-free straight-line homotopy $\gamma(t)$ ($t \in [0, 1]$).
 -/
+
+@[expose] public section
 
 namespace Matematyka.MalkounCounterexample
 
@@ -194,20 +197,20 @@ lemma omega_opp_ne_zero {v : Fin 3 → ℝ} {ψ φ : Fin 2 → ℂ}
   · exact h0 (congr_fun hcontra 0)
   · exact h1 (congr_fun hcontra 1)
 
-private def unnormPos (v : Fin 3 → ℝ) (i : Fin 2) : ℂ :=
+def unnormPos (v : Fin 3 → ℝ) (i : Fin 2) : ℂ :=
   if i = 0 then ((1 + v 2 : ℝ) : ℂ) else (v 0 : ℂ) + Complex.I * (v 1 : ℂ)
 
-private def unnormNeg (v : Fin 3 → ℝ) (i : Fin 2) : ℂ :=
+def unnormNeg (v : Fin 3 → ℝ) (i : Fin 2) : ℂ :=
   if i = 0 then (v 0 : ℂ) - Complex.I * (v 1 : ℂ) else ((1 - v 2 : ℝ) : ℂ)
 
-private lemma pauliDot_unnormPos {v : Fin 3 → ℝ} (hv : v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2 = 1) :
+lemma pauliDot_unnormPos {v : Fin 3 → ℝ} (hv : v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2 = 1) :
     (pauliDot v).mulVec (unnormPos v) = unnormPos v := by
   ext k
   simp only [unnormPos, Matrix.mulVec, dotProduct, Fin.sum_univ_two, pauliDot, Matrix.of_apply,
     Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one]
   fin_cases k <;> dsimp <;> apply Complex.ext <;> simp [Complex.mul_re, Complex.mul_im] <;> nlinarith
 
-private lemma pauliDot_unnormNeg {v : Fin 3 → ℝ} (hv : v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2 = 1) :
+lemma pauliDot_unnormNeg {v : Fin 3 → ℝ} (hv : v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2 = 1) :
     (pauliDot v).mulVec (unnormNeg v) = unnormNeg v := by
   ext k
   simp only [unnormNeg, Matrix.mulVec, dotProduct, Fin.sum_univ_two, pauliDot, Matrix.of_apply,
@@ -303,7 +306,7 @@ noncomputable def malkounAmplitude (G : SimpleGraph (Fin n)) [DecidableRel G.Adj
 
 /-! ### Phase / Scalar Invariance, Well-Definedness, and Planar Reality -/
 
-private def oriSumEquiv (G : SimpleGraph (Fin n)) :
+def oriSumEquiv (G : SimpleGraph (Fin n)) :
     OriEdge G ⊕ OriEdge G ≃ { p : Fin n × Fin n // G.Adj p.1 p.2 } where
   toFun
     | .inl e => ⟨(e.1.1, e.1.2), e.2.1⟩
@@ -318,14 +321,14 @@ private def oriSumEquiv (G : SimpleGraph (Fin n)) :
   right_inv p := by
     by_cases h : p.1.1 < p.1.2 <;> simp [h]
 
-private def sigmaDirEquiv (G : SimpleGraph (Fin n)) :
+def sigmaDirEquiv (G : SimpleGraph (Fin n)) :
     (Σ u : Fin n, { w : Fin n // G.Adj u w }) ≃ { p : Fin n × Fin n // G.Adj p.1 p.2 } where
   toFun uw := ⟨(uw.1, uw.2.1), uw.2.2⟩
   invFun p := ⟨p.1.1, ⟨p.1.2, p.2⟩⟩
   left_inv uw := by rcases uw with ⟨u, ⟨w, h⟩⟩; rfl
   right_inv p := by rcases p with ⟨⟨u, w⟩, h⟩; rfl
 
-private lemma prod_ori_perm_eq (G : SimpleGraph (Fin n)) [DecidableRel G.Adj]
+lemma prod_ori_perm_eq (G : SimpleGraph (Fin n)) [DecidableRel G.Adj]
     (c : Fin n → Fin n → ℂ) (σ : SourcePerm G) :
     (∏ e : OriEdge G,
       c e.1.1 (σ e.1.1 ⟨e.1.2, e.2.1⟩).1 * c e.1.2 (σ e.1.2 ⟨e.1.1, e.2.1.symm⟩).1) =
@@ -653,16 +656,16 @@ lemma bitSum_le {n : ℕ} (c : Fin n → Fin 2) : bitSum c ≤ n := by
     _ ≤ ∑ _i : Fin n, 1 := Finset.sum_le_sum fun i _ => Nat.le_of_lt_succ (Fin.is_lt (c i))
     _ = n := by simp
 
-private lemma fin2_cases (b : Fin 2) : b = 0 ∨ b = 1 := by
+lemma fin2_cases (b : Fin 2) : b = 0 ∨ b = 1 := by
   fin_cases b <;> simp
 
-private lemma card_filter_bit_one {m : ℕ} (c : Fin m → Fin 2) :
+lemma card_filter_bit_one {m : ℕ} (c : Fin m → Fin 2) :
     (Finset.univ.filter fun i : Fin m => c i = 1).card = bitSum c := by
   rw [Finset.card_filter]
   refine Finset.sum_congr rfl fun i _ => ?_
   rcases fin2_cases (c i) with h | h <;> simp [h]
 
-private lemma card_filter_bit_zero {m : ℕ} (c : Fin m → Fin 2) :
+lemma card_filter_bit_zero {m : ℕ} (c : Fin m → Fin 2) :
     (Finset.univ.filter fun i : Fin m => c i = 0).card = m - bitSum c := by
   have hpart : (Finset.univ.filter fun i : Fin m => c i = 0).card +
       (Finset.univ.filter fun i : Fin m => c i = 1).card = m := by
@@ -896,7 +899,7 @@ def sumBits {R : Type*} [Add R] : ∀ m : ℕ, ((Fin m → Fin 2) → R) → R
   | 0, g => g Fin.elim0
   | m + 1, g => sumBits m (fun f => g (Fin.cons 0 f)) + sumBits m (fun f => g (Fin.cons 1 f))
 
-private def finConsEquiv (m : ℕ) (α : Type*) : (α × (Fin m → α)) ≃ (Fin (m + 1) → α) where
+def finConsEquiv (m : ℕ) (α : Type*) : (α × (Fin m → α)) ≃ (Fin (m + 1) → α) where
   toFun p := Fin.cons p.1 p.2
   invFun f := (f 0, fun i => f i.succ)
   left_inv p := Prod.ext rfl (funext fun i => by simp)
@@ -1074,19 +1077,19 @@ def barbellNbrIdx : ∀ u : Fin 8, Fin 8 → Fin (barbellDeg u)
   | 6 => fun w => if w.val == 4 then 0 else if w.val == 5 then 1 else if w.val == 7 then 2 else 0
   | 7 => fun w => if w.val == 4 then 0 else if w.val == 5 then 1 else if w.val == 6 then 2 else 0
 
-private lemma barbellNbr_adj : ∀ u : Fin 8, ∀ j : Fin (barbellDeg u),
+lemma barbellNbr_adj : ∀ u : Fin 8, ∀ j : Fin (barbellDeg u),
     barbellK4Graph.Adj u (barbellNbr u j) := by
   intro u; fin_cases u <;> decide
 
-private lemma barbellNbr_left_inv : ∀ u : Fin 8, ∀ j : Fin (barbellDeg u),
+lemma barbellNbr_left_inv : ∀ u : Fin 8, ∀ j : Fin (barbellDeg u),
     barbellNbrIdx u (barbellNbr u j) = j := by
   intro u; fin_cases u <;> decide
 
-private lemma barbellNbr_right_inv : ∀ u w : Fin 8,
+lemma barbellNbr_right_inv : ∀ u w : Fin 8,
     barbellK4Graph.Adj u w → barbellNbr u (barbellNbrIdx u w) = w := by
   intro u; fin_cases u <;> decide
 
-private def barbellNbrEquiv (u : Fin 8) :
+def barbellNbrEquiv (u : Fin 8) :
     Fin (barbellDeg u) ≃ { w : Fin 8 // barbellK4Graph.Adj u w } where
   toFun j := ⟨barbellNbr u j, barbellNbr_adj u j⟩
   invFun w := barbellNbrIdx u w.1
@@ -1096,20 +1099,20 @@ private def barbellNbrEquiv (u : Fin 8) :
 abbrev LeftPerm := Equiv.Perm (Fin 3) × Equiv.Perm (Fin 3) × Equiv.Perm (Fin 3) × Equiv.Perm (Fin 4)
 abbrev RightPerm := Equiv.Perm (Fin 4) × Equiv.Perm (Fin 3) × Equiv.Perm (Fin 3) × Equiv.Perm (Fin 3)
 
-private def matchFin8 {P : Fin 8 → Type*}
+def matchFin8 {P : Fin 8 → Type*}
     (x0 : P 0) (x1 : P 1) (x2 : P 2) (x3 : P 3)
     (x4 : P 4) (x5 : P 5) (x6 : P 6) (x7 : P 7) : ∀ u : Fin 8, P u
   | 0 => x0 | 1 => x1 | 2 => x2 | 3 => x3
   | 4 => x4 | 5 => x5 | 6 => x6 | 7 => x7
 
-private def leftRightPiEquiv :
+def leftRightPiEquiv :
     LeftPerm × RightPerm ≃ (∀ u : Fin 8, Equiv.Perm (Fin (barbellDeg u))) where
   toFun p := matchFin8 p.1.1 p.1.2.1 p.1.2.2.1 p.1.2.2.2 p.2.1 p.2.2.1 p.2.2.2.1 p.2.2.2.2
   invFun f := ((f 0, f 1, f 2, f 3), (f 4, f 5, f 6, f 7))
   left_inv _ := rfl
   right_inv f := funext fun u => by fin_cases u <;> rfl
 
-private def barbellSourcePermEquiv : LeftPerm × RightPerm ≃ SourcePerm barbellK4Graph :=
+def barbellSourcePermEquiv : LeftPerm × RightPerm ≃ SourcePerm barbellK4Graph :=
   leftRightPiEquiv.trans (Equiv.piCongrRight fun u => Equiv.permCongr (barbellNbrEquiv u))
 
 def leftEdgePairs : Fin 6 → Fin 8 × Fin 8 :=
@@ -1118,22 +1121,22 @@ def leftEdgePairs : Fin 6 → Fin 8 × Fin 8 :=
 def rightEdgePairs : Fin 6 → Fin 8 × Fin 8 :=
   ![(4, 5), (4, 6), (4, 7), (5, 6), (5, 7), (6, 7)]
 
-private lemma leftEdgePairs_ok : ∀ i : Fin 6,
+lemma leftEdgePairs_ok : ∀ i : Fin 6,
     barbellK4Graph.Adj (leftEdgePairs i).1 (leftEdgePairs i).2 ∧
       (leftEdgePairs i).1 < (leftEdgePairs i).2 := by
   decide
 
-private lemma rightEdgePairs_ok : ∀ i : Fin 6,
+lemma rightEdgePairs_ok : ∀ i : Fin 6,
     barbellK4Graph.Adj (rightEdgePairs i).1 (rightEdgePairs i).2 ∧
       (rightEdgePairs i).1 < (rightEdgePairs i).2 := by
   decide
 
-private def barbellOriToFun : Fin 6 ⊕ Unit ⊕ Fin 6 → OriEdge barbellK4Graph
+def barbellOriToFun : Fin 6 ⊕ Unit ⊕ Fin 6 → OriEdge barbellK4Graph
   | .inl i => ⟨leftEdgePairs i, leftEdgePairs_ok i⟩
   | .inr (.inl ()) => ⟨(3, 4), by decide⟩
   | .inr (.inr i) => ⟨rightEdgePairs i, rightEdgePairs_ok i⟩
 
-private def barbellOriInvFun (e : OriEdge barbellK4Graph) : Fin 6 ⊕ Unit ⊕ Fin 6 :=
+def barbellOriInvFun (e : OriEdge barbellK4Graph) : Fin 6 ⊕ Unit ⊕ Fin 6 :=
   match e.1 with
   | (0, 1) => .inl 0 | (0, 2) => .inl 1 | (0, 3) => .inl 2
   | (1, 2) => .inl 3 | (1, 3) => .inl 4 | (2, 3) => .inl 5
@@ -1142,7 +1145,7 @@ private def barbellOriInvFun (e : OriEdge barbellK4Graph) : Fin 6 ⊕ Unit ⊕ F
   | (5, 6) => .inr (.inr 3) | (5, 7) => .inr (.inr 4) | (6, 7) => .inr (.inr 5)
   | _ => .inr (.inl ())
 
-private def barbellOriEquiv : (Fin 6 ⊕ Unit ⊕ Fin 6) ≃ OriEdge barbellK4Graph where
+def barbellOriEquiv : (Fin 6 ⊕ Unit ⊕ Fin 6) ≃ OriEdge barbellK4Graph where
   toFun := barbellOriToFun
   invFun := barbellOriInvFun
   left_inv x := by rcases x with i | (⟨⟩ | i) <;> [fin_cases i <;> rfl; rfl; fin_cases i <;> rfl]
@@ -1151,7 +1154,7 @@ private def barbellOriEquiv : (Fin 6 ⊕ Unit ⊕ Fin 6) ≃ OriEdge barbellK4Gr
     fin_cases u <;> fin_cases v <;>
       first | exact False.elim ((by decide : ¬(barbellK4Graph.Adj _ _ ∧ _ < _)) h) | rfl)
 
-private def leftU (L : LeftPerm) : Fin 6 → Fin 8 × Fin 8
+def leftU (L : LeftPerm) : Fin 6 → Fin 8 × Fin 8
   | 0 => (0, barbellNbr 0 (L.1 0))
   | 1 => (0, barbellNbr 0 (L.1 1))
   | 2 => (0, barbellNbr 0 (L.1 2))
@@ -1159,7 +1162,7 @@ private def leftU (L : LeftPerm) : Fin 6 → Fin 8 × Fin 8
   | 4 => (1, barbellNbr 1 (L.2.1 2))
   | 5 => (2, barbellNbr 2 (L.2.2.1 2))
 
-private def leftV (L : LeftPerm) : Fin 6 → Fin 8 × Fin 8
+def leftV (L : LeftPerm) : Fin 6 → Fin 8 × Fin 8
   | 0 => (1, barbellNbr 1 (L.2.1 0))
   | 1 => (2, barbellNbr 2 (L.2.2.1 0))
   | 2 => (3, barbellNbr 3 (L.2.2.2 0))
@@ -1167,7 +1170,7 @@ private def leftV (L : LeftPerm) : Fin 6 → Fin 8 × Fin 8
   | 4 => (3, barbellNbr 3 (L.2.2.2 1))
   | 5 => (3, barbellNbr 3 (L.2.2.2 2))
 
-private def rightU (R : RightPerm) : Fin 6 → Fin 8 × Fin 8
+def rightU (R : RightPerm) : Fin 6 → Fin 8 × Fin 8
   | 0 => (4, barbellNbr 4 (R.1 1))
   | 1 => (4, barbellNbr 4 (R.1 2))
   | 2 => (4, barbellNbr 4 (R.1 3))
@@ -1175,7 +1178,7 @@ private def rightU (R : RightPerm) : Fin 6 → Fin 8 × Fin 8
   | 4 => (5, barbellNbr 5 (R.2.1 2))
   | 5 => (6, barbellNbr 6 (R.2.2.1 2))
 
-private def rightV (R : RightPerm) : Fin 6 → Fin 8 × Fin 8
+def rightV (R : RightPerm) : Fin 6 → Fin 8 × Fin 8
   | 0 => (5, barbellNbr 5 (R.2.1 0))
   | 1 => (6, barbellNbr 6 (R.2.2.1 0))
   | 2 => (7, barbellNbr 7 (R.2.2.2 0))
@@ -1183,21 +1186,21 @@ private def rightV (R : RightPerm) : Fin 6 → Fin 8 × Fin 8
   | 4 => (7, barbellNbr 7 (R.2.2.2 1))
   | 5 => (7, barbellNbr 7 (R.2.2.2 2))
 
-private noncomputable def leftHalfVal (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) : ℂ :=
+noncomputable def leftHalfVal (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) : ℂ :=
   ∑ L : LeftPerm, ψ 3 (barbellNbr 3 (L.2.2.2 3)) k *
     ∏ i : Fin 6, omega (ψ (leftU L i).1 (leftU L i).2) (ψ (leftV L i).1 (leftV L i).2)
 
-private noncomputable def rightHalfVal (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) : ℂ :=
+noncomputable def rightHalfVal (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) : ℂ :=
   ∑ R : RightPerm, ψ 4 (barbellNbr 4 (R.1 0)) k *
     ∏ i : Fin 6, omega (ψ (rightU R i).1 (rightU R i).2) (ψ (rightV R i).1 (rightV R i).2)
 
-private lemma barbellSourcePermEquiv_apply (L : LeftPerm) (R : RightPerm) (u w : Fin 8)
+lemma barbellSourcePermEquiv_apply (L : LeftPerm) (R : RightPerm) (u w : Fin 8)
     (hw : barbellK4Graph.Adj u w) :
     (barbellSourcePermEquiv (L, R) u ⟨w, hw⟩).1 =
       barbellNbr u ((leftRightPiEquiv (L, R) u) (barbellNbrIdx u w)) := by
   simp [barbellSourcePermEquiv, Equiv.piCongrRight_apply, Equiv.permCongr_apply, barbellNbrEquiv]
 
-private lemma barbell_term_edge (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : LeftPerm) (R : RightPerm)
+lemma barbell_term_edge (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : LeftPerm) (R : RightPerm)
     (e : OriEdge barbellK4Graph) :
     let σ := barbellSourcePermEquiv (L, R)
     omega (ψ e.1.1 (σ e.1.1 ⟨e.1.2, e.2.1⟩).1) (ψ e.1.2 (σ e.1.2 ⟨e.1.1, e.2.1.symm⟩).1) =
@@ -1206,7 +1209,7 @@ private lemma barbell_term_edge (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : Le
   intro σ
   rw [barbellSourcePermEquiv_apply, barbellSourcePermEquiv_apply]
 
-private lemma barbell_term_left (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : LeftPerm) (R : RightPerm)
+lemma barbell_term_left (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : LeftPerm) (R : RightPerm)
     (i : Fin 6) :
     let σ := barbellSourcePermEquiv (L, R)
     let e := barbellOriEquiv (.inl i)
@@ -1216,7 +1219,7 @@ private lemma barbell_term_left (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : Le
   rw [barbell_term_edge]
   fin_cases i <;> rfl
 
-private lemma barbell_term_right (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : LeftPerm) (R : RightPerm)
+lemma barbell_term_right (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (L : LeftPerm) (R : RightPerm)
     (i : Fin 6) :
     let σ := barbellSourcePermEquiv (L, R)
     let e := barbellOriEquiv (.inr (.inr i))
@@ -1289,21 +1292,21 @@ theorem malkounNum_barbell_bridge (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) :
   simp_rw [hprod, Finset.sum_sub_distrib]
   simp only [leftHalfVal, rightHalfVal, Finset.sum_mul_sum]
 
-private def invBit (b : Fin 2) : Fin 2 := 1 - b
+def invBit (b : Fin 2) : Fin 2 := 1 - b
 
-private lemma omega_eq_sub_bit (a b : Fin 2 → ℂ) :
+lemma omega_eq_sub_bit (a b : Fin 2 → ℂ) :
     omega a b = (a 0 * b (invBit 0)) - (a 1 * b (invBit 1)) := by
   have h0 : invBit 0 = 1 := by decide
   have h1 : invBit 1 = 0 := by decide
   simp [omega, h0, h1]
 
-private def sgn6C (b : Fin 6 → Fin 2) : ℂ :=
+def sgn6C (b : Fin 6 → Fin 2) : ℂ :=
   ∏ i : Fin 6, (if b i = 0 then (1 : ℂ) else -1)
 
-private def vSumC (m : ℕ) (M : Fin m → Fin 2 → ℂ) (c : Fin m → Fin 2) : ℂ :=
+def vSumC (m : ℕ) (M : Fin m → Fin 2 → ℂ) (c : Fin m → Fin 2) : ℂ :=
   (((bitSum c).factorial * (m - bitSum c).factorial : ℕ) : ℂ) * dickePolyCoeff M (bitSum c)
 
-private lemma sum_prod4 {A B C D : Type*} [Fintype A] [Fintype B] [Fintype C] [Fintype D]
+lemma sum_prod4 {A B C D : Type*} [Fintype A] [Fintype B] [Fintype C] [Fintype D]
     (s : ℂ) (fa : A → ℂ) (fb : B → ℂ) (fc : C → ℂ) (fd : D → ℂ) :
     (∑ p : A × B × C × D, s * fa p.1 * fb p.2.1 * fc p.2.2.1 * fd p.2.2.2) =
       s * (∑ a, fa a) * (∑ b, fb b) * (∑ c, fc c) * (∑ d, fd d) := by
@@ -1332,7 +1335,7 @@ private lemma sum_prod4 {A B C D : Type*} [Fintype A] [Fintype B] [Fintype C] [F
           congr 3
           exact (Finset.mul_sum _ _ _).symm
 
-private lemma leftHalfVal_eq_sumBits (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) :
+lemma leftHalfVal_eq_sumBits (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) :
     leftHalfVal ψ k = sumBits 6 fun b =>
       sgn6C b *
       vSumC 3 (fun j => ψ 0 (barbellNbr 0 j)) ![b 0, b 1, b 2] *
@@ -1379,7 +1382,7 @@ private lemma leftHalfVal_eq_sumBits (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k
     perm_sigma_sum_eq_dicke 4 (fun j => ψ 3 (barbellNbr 3 j)) ![invBit (b 2), invBit (b 4), invBit (b 5), k]]
   simp only [vSumC]
 
-private lemma rightHalfVal_eq_sumBits (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) :
+lemma rightHalfVal_eq_sumBits (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (k : Fin 2) :
     rightHalfVal ψ k = sumBits 6 fun b =>
       sgn6C b *
       vSumC 4 (fun j => ψ 4 (barbellNbr 4 j)) ![k, b 0, b 1, b 2] *
@@ -1430,14 +1433,14 @@ private lemma rightHalfVal_eq_sumBits (ψ : Fin 8 → Fin 8 → Fin 2 → ℂ) (
 
 def invBitNat (b : Fin 2) : ℕ := if b = 0 then 1 else 0
 
-private lemma invBit_val (b : Fin 2) : (invBit b).val = invBitNat b := by
+lemma invBit_val (b : Fin 2) : (invBit b).val = invBitNat b := by
   fin_cases b <;> rfl
 
-private lemma bitSum3_eq (a b c : Fin 2) :
+lemma bitSum3_eq (a b c : Fin 2) :
     bitSum ![a, b, c] = a.val + b.val + c.val := by
   simp [bitSum, Fin.sum_univ_three, add_assoc]
 
-private lemma bitSum4_eq (a b c d : Fin 2) :
+lemma bitSum4_eq (a b c d : Fin 2) :
     bitSum ![a, b, c, d] = a.val + b.val + c.val + d.val := by
   simp [bitSum, Fin.sum_univ_four, add_assoc]
 
@@ -1445,7 +1448,7 @@ def sgn6GI (b : Fin 6 → Fin 2) : GI :=
   let s (x : Fin 2) : ℤ := if x = 0 then 1 else -1
   GI.ofInt (s (b 0) * s (b 1) * s (b 2) * s (b 3) * s (b 4) * s (b 5))
 
-private lemma toC_sgn6GI (b : Fin 6 → Fin 2) : GI.toC (sgn6GI b) = sgn6C b := by
+lemma toC_sgn6GI (b : Fin 6 → Fin 2) : GI.toC (sgn6GI b) = sgn6C b := by
   simp only [sgn6GI, sgn6C, GI.toC_ofInt, Fin.prod_univ_six]
   push_cast
   rfl
@@ -1456,11 +1459,11 @@ def factWeight3 : ℕ → ℤ
 def factWeight4 : ℕ → ℤ
   | 0 => 24 | 1 => 6 | 2 => 4 | 3 => 6 | _ => 24
 
-private lemma factWeight3_eq (w : ℕ) (hw : w ≤ 3) :
+lemma factWeight3_eq (w : ℕ) (hw : w ≤ 3) :
     (w.factorial * (3 - w).factorial : ℕ) = (factWeight3 w : ℤ) := by
   interval_cases w <;> decide
 
-private lemma factWeight4_eq (w : ℕ) (hw : w ≤ 4) :
+lemma factWeight4_eq (w : ℕ) (hw : w ≤ 4) :
     (w.factorial * (4 - w).factorial : ℕ) = (factWeight4 w : ℤ) := by
   interval_cases w <;> decide
 
@@ -1477,7 +1480,7 @@ def vTab4GI (M : Fin 4 → Fin 2 → GI) : ℕ → GI
   | 3 => GI.ofInt 6 * GI.dickePolyCoeffGI M 3
   | _ => GI.ofInt 24 * GI.dickePolyCoeffGI M 4
 
-private lemma toC_vTab3GI (M : Fin 3 → Fin 2 → GI) (c : Fin 3 → Fin 2) :
+lemma toC_vTab3GI (M : Fin 3 → Fin 2 → GI) (c : Fin 3 → Fin 2) :
     GI.toC (vTab3GI M (bitSum c)) = vSumC 3 (fun i k => GI.toC (M i k)) c := by
   have hle : bitSum c ≤ 3 := bitSum_le c
   rcases h0 : bitSum c with _ | _ | _ | _ | w
@@ -1486,7 +1489,7 @@ private lemma toC_vTab3GI (M : Fin 3 → Fin 2 → GI) (c : Fin 3 → Fin 2) :
   all_goals
     first | (dsimp; norm_num) | omega
 
-private lemma toC_vTab4GI (M : Fin 4 → Fin 2 → GI) (c : Fin 4 → Fin 2) :
+lemma toC_vTab4GI (M : Fin 4 → Fin 2 → GI) (c : Fin 4 → Fin 2) :
     GI.toC (vTab4GI M (bitSum c)) = vSumC 4 (fun i k => GI.toC (M i k)) c := by
   have hle : bitSum c ≤ 4 := bitSum_le c
   rcases h0 : bitSum c with _ | _ | _ | _ | _ | w
@@ -1530,7 +1533,7 @@ def barbellNumGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) : GI :=
 
 def prod6GI (g : Fin 6 → GI) : GI := g 0 * g 1 * g 2 * g 3 * g 4 * g 5
 
-private lemma toC_prod6GI (g : Fin 6 → GI) : GI.toC (prod6GI g) = ∏ i : Fin 6, GI.toC (g i) := by
+lemma toC_prod6GI (g : Fin 6 → GI) : GI.toC (prod6GI g) = ∏ i : Fin 6, GI.toC (g i) := by
   rw [Fin.prod_univ_six]
   simp [prod6GI]
 
@@ -1541,7 +1544,7 @@ def barbellDenGI (ψ : Fin 8 → Fin 8 → Fin 2 → GI) : GI :=
   prod6GI (fun i => omegaGI (ψ (rightEdgePairs i).1 (rightEdgePairs i).2)
                             (ψ (rightEdgePairs i).2 (rightEdgePairs i).1))
 
-private lemma sumBits_congr {R : Type*} [Add R] :
+lemma sumBits_congr {R : Type*} [Add R] :
     ∀ (m : ℕ) {f g : (Fin m → Fin 2) → R}, (∀ b, f b = g b) → sumBits m f = sumBits m g
   | 0, _, _, h => h Fin.elim0
   | m + 1, _, _, h => by
@@ -1712,7 +1715,7 @@ def barbellPath (t : ℝ) : ConfigSpace barbellK4Graph :=
 
 lemma barbellPath_planar (t : ℝ) (u : Fin 8) : (barbellPath t).1 u 2 = 0 := rfl
 
-private lemma malkounAmplitudeOfSpinors_congr {m : ℕ} (G : SimpleGraph (Fin m)) [DecidableRel G.Adj]
+lemma malkounAmplitudeOfSpinors_congr {m : ℕ} (G : SimpleGraph (Fin m)) [DecidableRel G.Adj]
     (ψ₁ ψ₂ : Fin m → Fin m → Fin 2 → ℂ)
     (h : ∀ u v, G.Adj u v → ∀ k, ψ₁ u v k = ψ₂ u v k) :
     malkounAmplitudeOfSpinors G ψ₁ = malkounAmplitudeOfSpinors G ψ₂ := by
@@ -1725,7 +1728,7 @@ private lemma malkounAmplitudeOfSpinors_congr {m : ℕ} (G : SimpleGraph (Fin m)
     rw [h1 _ _ e.2.1, h1 _ _ e.2.1.symm]
   simp only [malkounAmplitudeOfSpinors, hnum, hden]
 
-private lemma barbell_amplitude_of_spinorGI (t : ℝ) (ψ : Fin 8 → Fin 8 → Fin 2 → GI)
+lemma barbell_amplitude_of_spinorGI (t : ℝ) (ψ : Fin 8 → Fin 8 → Fin 2 → GI)
     (scale : Fin 8 → Fin 8 → ℤ)
     (hscale : ∀ u v, barbellK4Graph.Adj u v → scale u v ≠ 0)
     (hmatch : ∀ u v, barbellK4Graph.Adj u v → ∀ k,
@@ -1742,7 +1745,7 @@ private lemma barbell_amplitude_of_spinorGI (t : ℝ) (ψ : Fin 8 → Fin 8 → 
       (fun u v huv => Int.cast_ne_zero.mpr (hscale u v huv)) (fun u v k => GI.toC (ψ u v k))]
   simp only [malkounAmplitudeOfSpinors, malkounNum_barbell_giToC, malkounDen_barbell_giToC]
 
-private lemma match_planar_endpoint (t : ℝ) (dx dy r g : ℤ) (s : Fin 2 → GI)
+lemma match_planar_endpoint (t : ℝ) (dx dy r g : ℤ) (s : Fin 2 → GI)
     (hr_nn : 0 ≤ r)
     (hpt0 : barbellPoint t v 0 - barbellPoint t u 0 = (dx : ℝ))
     (hpt1 : barbellPoint t v 1 - barbellPoint t u 1 = (dy : ℝ))
@@ -1813,7 +1816,7 @@ theorem malkounAmplitude_barbellPath_one :
   rw [heq, cert_neg_num, cert_neg_den, GI.toC_ofInt, GI.toC_ofInt]
   norm_num
 
-private lemma continuous_planarUnnorm_barbellPath (u v : Fin 8) (k : Fin 2) :
+lemma continuous_planarUnnorm_barbellPath (u v : Fin 8) (k : Fin 2) :
     Continuous (fun t : ℝ => planarUnnormSpinor (barbellPoint t u) (barbellPoint t v) k) := by
   fin_cases k
   · dsimp [planarUnnormSpinor, euclidNorm, barbellPoint]
@@ -1849,7 +1852,7 @@ theorem continuous_malkounAmplitude_barbellPath :
   exact hnum.div hden fun t =>
     malkounDen_planarUnnorm_ne_zero barbellK4Graph (barbellPath t) (barbellPath_planar t)
 
-private lemma exists_barbellPath_zero :
+lemma exists_barbellPath_zero :
     ∃ t₀ ∈ Set.Icc (0 : ℝ) 1, malkounAmplitude barbellK4Graph (barbellPath t₀) = 0 := by
   let f : ℝ → ℝ := fun t => (malkounAmplitude barbellK4Graph (barbellPath t)).re
   have hf_cont : Continuous f := Complex.continuous_re.comp continuous_malkounAmplitude_barbellPath

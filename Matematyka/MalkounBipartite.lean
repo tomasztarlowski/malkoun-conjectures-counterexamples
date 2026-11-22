@@ -1,5 +1,6 @@
-import Matematyka.MalkounCounterexample
+module
 
+public import Matematyka.MalkounCounterexample
 /-!
 # Bipartite Gram-Matrix Reduction for Malkoun's $G$-Amplitude
 
@@ -17,11 +18,13 @@ Specifically, for any bipartition `part : Fin n → Bool` of `G` and any `x : Co
    (and hence Conjectures A, B, and C/Section 6) for **every** finite simple bipartite graph `G`.
 -/
 
+@[expose] public section
+
 namespace Matematyka.MalkounBipartite
 
 open Complex Classical ComplexOrder Matematyka.MalkounCounterexample
 
-private lemma fin2_eq_zero_or_one (k : Fin 2) : k = 0 ∨ k = 1 := by
+lemma fin2_eq_zero_or_one (k : Fin 2) : k = 0 ∨ k = 1 := by
   fin_cases k <;> simp
 
 /-! ### Time-Reversal Spinor Map `jTilde` (Malkoun Eq. (22)) -/
@@ -77,7 +80,7 @@ def IsBipartite {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool) : Pr
 abbrev BipEdge {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool) :=
   { e : Fin n × Fin n // G.Adj e.1 e.2 ∧ part e.1 = false ∧ part e.2 = true }
 
-private def bipOriEquiv {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
+def bipOriEquiv {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
     (hb : IsBipartite G part) : BipEdge G part ≃ OriEdge G where
   toFun e :=
     if h : e.1.1 < e.1.2 then ⟨e.1, e.2.1, h⟩
@@ -155,12 +158,12 @@ def bipP2 {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool) :
     Subgroup (Equiv.Perm (BipEdge G part)) :=
   partitionSubgroup (fun e => e.1.2)
 
-@[simp] private lemma bipP1_fst {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+@[simp] lemma bipP1_fst {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     {τ : Equiv.Perm (BipEdge G part)} (hτ : τ ∈ bipP1 G part) (e : BipEdge G part) :
     (τ e).1.1 = e.1.1 :=
   hτ e
 
-@[simp] private lemma bipP2_snd {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+@[simp] lemma bipP2_snd {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     {τ : Equiv.Perm (BipEdge G part)} (hτ : τ ∈ bipP2 G part) (e : BipEdge G part) :
     (τ e).1.2 = e.1.2 :=
   hτ e
@@ -174,7 +177,7 @@ theorem bipP1_inf_bipP2_eq_bot {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n
   · exact congrArg Fin.val (h1 e)
   · exact congrArg Fin.val (h2 e)
 
-private lemma card_bipP1_inf_bipP2 {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
+lemma card_bipP1_inf_bipP2 {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
     [Fintype ↥(bipP1 G part ⊓ bipP2 G part)] :
     Fintype.card ↥(bipP1 G part ⊓ bipP2 G part) = 1 := by
   rw [Fintype.card_eq_one_iff]
@@ -183,35 +186,29 @@ private lemma card_bipP1_inf_bipP2 {n : ℕ} (G : SimpleGraph (Fin n)) (part : F
     (bipP1_inf_bipP2_eq_bot G part) ▸ y.2
   exact Subgroup.mem_bot.mp hy
 
-private def mkBipFalse {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+def mkBipFalse {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     (hb : IsBipartite G part) {u w : Fin n} (hu : part u = false) (hadj : G.Adj u w) :
     BipEdge G part :=
   ⟨(u, w), hadj, hu, Bool.eq_true_of_not_eq_false fun h => hb u w hadj (hu.trans h.symm)⟩
 
-private def mkBipTrue {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+def mkBipTrue {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     (hb : IsBipartite G part) {u w : Fin n} (hu : part u = true) (hadj : G.Adj u w) :
     BipEdge G part :=
   ⟨(w, u), hadj.symm, Bool.eq_false_of_not_eq_true fun h => hb u w hadj (hu.trans h.symm), hu⟩
 
-private lemma bipP1_mkFalse {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+lemma bipP1_mkFalse {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     (hb : IsBipartite G part) (τ : Equiv.Perm (BipEdge G part)) (hτ : τ ∈ bipP1 G part)
     (e : BipEdge G part) :
-    mkBipFalse hb e.2.2.1 (by have h := (τ e).2.1; rwa [bipP1_fst hτ e] at h) = τ e := by
-  apply Subtype.ext
-  apply Prod.ext
-  · exact (bipP1_fst hτ e).symm
-  · rfl
+    mkBipFalse hb e.2.2.1 ((bipP1_fst hτ e) ▸ (τ e).2.1) = τ e :=
+  Subtype.ext (Prod.ext (bipP1_fst hτ e).symm rfl)
 
-private lemma bipP2_mkTrue {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+lemma bipP2_mkTrue {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     (hb : IsBipartite G part) (τ : Equiv.Perm (BipEdge G part)) (hτ : τ ∈ bipP2 G part)
     (e : BipEdge G part) :
-    mkBipTrue hb e.2.2.2 (by have h := (τ e).2.1.symm; rwa [bipP2_snd hτ e] at h) = τ e := by
-  apply Subtype.ext
-  apply Prod.ext
-  · rfl
-  · exact (bipP2_snd hτ e).symm
+    mkBipTrue hb e.2.2.2 ((bipP2_snd hτ e) ▸ (τ e).2.1.symm) = τ e :=
+  Subtype.ext (Prod.ext rfl (bipP2_snd hτ e).symm)
 
-private def bipPermToSource {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
+def bipPermToSource {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
     (hb : IsBipartite G part) (p : bipP1 G part × bipP2 G part) : SourcePerm G :=
   fun u =>
     if hu : part u = false then
@@ -258,7 +255,7 @@ private def bipPermToSource {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n �
           simp only [Equiv.Perm.inv_def, Equiv.apply_symm_apply] at h
           exact h }
 
-private def bipSourceToPerm {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
+def bipSourceToPerm {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
     (hb : IsBipartite G part) (σ : SourcePerm G) : bipP1 G part × bipP2 G part :=
   ( ⟨ { toFun := fun e => mkBipFalse hb e.2.2.1 (σ e.1.1 ⟨e.1.2, e.2.1⟩).2
         invFun := fun e => mkBipFalse hb e.2.2.1 ((σ e.1.1)⁻¹ ⟨e.1.2, e.2.1⟩).2
@@ -291,7 +288,7 @@ private def bipSourceToPerm {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n �
           · rfl },
       fun _ => rfl ⟩ )
 
-private def bipSourcePermEquiv {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
+def bipSourcePermEquiv {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
     (hb : IsBipartite G part) : (bipP1 G part × bipP2 G part) ≃ SourcePerm G where
   toFun := bipPermToSource G part hb
   invFun := bipSourceToPerm G part hb
@@ -323,13 +320,13 @@ private def bipSourcePermEquiv {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n
       · simp [bipPermToSource, bipSourceToPerm, mkBipFalse, hu]
       · simp [bipPermToSource, bipSourceToPerm, mkBipTrue, hu])
 
-private lemma bipPermToSource_false_apply {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+lemma bipPermToSource_false_apply {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     (hb : IsBipartite G part) (τ₁ : bipP1 G part) (τ₂ : bipP2 G part)
     (e : BipEdge G part) :
     (bipPermToSource G part hb (τ₁, τ₂) e.1.1 ⟨e.1.2, e.2.1⟩).1 = (τ₁.1 e).1.2 := by
   simp [bipPermToSource, mkBipFalse, e.2.2.1]
 
-private lemma bipPermToSource_true_apply {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
+lemma bipPermToSource_true_apply {n : ℕ} {G : SimpleGraph (Fin n)} {part : Fin n → Bool}
     (hb : IsBipartite G part) (τ₁ : bipP1 G part) (τ₂ : bipP2 G part)
     (e : BipEdge G part) :
     (bipPermToSource G part hb (τ₁, τ₂) e.1.2 ⟨e.1.1, e.2.1.symm⟩).1 = (τ₂.1 e).1.1 := by
@@ -343,11 +340,11 @@ noncomputable def bipGramMatrix {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin 
     starRingEnd ℂ (bipEdgeSpinor x a 0) * bipEdgeSpinor x b 0 +
     starRingEnd ℂ (bipEdgeSpinor x a 1) * bipEdgeSpinor x b 1
 
-private noncomputable def bipSpinorMatrix {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
+noncomputable def bipSpinorMatrix {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
     (x : ConfigSpace G) : Matrix (Fin 2) (BipEdge G part) ℂ :=
   fun k e => bipEdgeSpinor x e k
 
-private lemma bipGramMatrix_eq_conjTranspose_mul {n : ℕ} (G : SimpleGraph (Fin n))
+lemma bipGramMatrix_eq_conjTranspose_mul {n : ℕ} (G : SimpleGraph (Fin n))
     (part : Fin n → Bool) (x : ConfigSpace G) :
     bipGramMatrix G part x = (bipSpinorMatrix G part x).conjTranspose * bipSpinorMatrix G part x := by
   ext a b
@@ -387,7 +384,7 @@ def MalkounConjectureDProp : Prop :=
       (Fintype.card ↥(partitionSubgroup κ₁ ⊓ partitionSubgroup κ₂) : ℝ) *
         ∏ e : E, (H e e).re
 
-private lemma prod_term_bipOriEquiv {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
+lemma prod_term_bipOriEquiv {n : ℕ} (G : SimpleGraph (Fin n)) (part : Fin n → Bool)
     (hb : IsBipartite G part) (ψ : Fin n → Fin n → Fin 2 → ℂ) (σ : SourcePerm G)
     (e : BipEdge G part) :
     omega (ψ (bipOriEquiv G part hb e).1.1

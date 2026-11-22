@@ -1,8 +1,9 @@
-import Mathlib
-import Matematyka.Malkoun
-import Matematyka.MalkounBipartite
-import Matematyka.MalkounCounterexample
+module
 
+public import Mathlib
+public import Matematyka.Malkoun
+public import Matematyka.MalkounBipartite
+public import Matematyka.MalkounCounterexample
 /-!
 # Malkoun's Conjecture D Disproofs & Unconditional Tree Conjecture C Theorems
 
@@ -30,34 +31,36 @@ conjectures from *Finite graphs and configurations of points* (`arXiv:2508.13472
    Conjecture D restricted to tree edge-incidence partitions implies Conjecture C for all trees.
 -/
 
+@[expose] public section
+
 namespace Matematyka.MalkounConjectureD
 
 open Complex Classical ComplexOrder Matematyka.Malkoun Matematyka.MalkounBipartite
   Matematyka.MalkounCounterexample
 
-private lemma fin2_eq_cases (k : Fin 2) : k = 0 ∨ k = 1 := by
+lemma fin2_eq_cases (k : Fin 2) : k = 0 ∨ k = 1 := by
   fin_cases k <;> simp
 
 /-! ## Part 1: Even-Cycle Partition Subgroups & Computable Gaussian-Integer Evaluator -/
 
 section EvenCyclePartitions
 
-private def rotFwdNat (m e : ℕ) : ℕ := if e + 1 < m then e + 1 else 0
-private def rotBwdNat (m e : ℕ) : ℕ := if e = 0 then m - 1 else e - 1
+def rotFwdNat (m e : ℕ) : ℕ := if e + 1 < m then e + 1 else 0
+def rotBwdNat (m e : ℕ) : ℕ := if e = 0 then m - 1 else e - 1
 
-private lemma rotFwdNat_lt {m e : ℕ} (hm : 0 < m) (_he : e < m) : rotFwdNat m e < m := by
+lemma rotFwdNat_lt {m e : ℕ} (hm : 0 < m) (_he : e < m) : rotFwdNat m e < m := by
   dsimp [rotFwdNat]; split_ifs <;> omega
 
-private lemma rotBwdNat_lt {m e : ℕ} (hm : 0 < m) (he : e < m) : rotBwdNat m e < m := by
+lemma rotBwdNat_lt {m e : ℕ} (hm : 0 < m) (he : e < m) : rotBwdNat m e < m := by
   dsimp [rotBwdNat]; split_ifs <;> omega
 
-private lemma rotBwd_rotFwd {m e : ℕ} (_hm : 0 < m) (he : e < m) :
+lemma rotBwd_rotFwd {m e : ℕ} (_hm : 0 < m) (he : e < m) :
     rotBwdNat m (rotFwdNat m e) = e := by
   by_cases h : e + 1 < m
   · simp [rotFwdNat, rotBwdNat, h]
   · simp [rotFwdNat, rotBwdNat, h]; omega
 
-private lemma rotFwd_rotBwd {m e : ℕ} (hm : 0 < m) (he : e < m) :
+lemma rotFwd_rotBwd {m e : ℕ} (hm : 0 < m) (he : e < m) :
     rotFwdNat m (rotBwdNat m e) = e := by
   by_cases h : e = 0
   · simp [rotFwdNat, rotBwdNat, h]; omega
@@ -101,7 +104,7 @@ def cycleKappa1 (k : ℕ) (e : Fin (2 * k)) : Fin k :=
 def cycleKappa2 (k : ℕ) [NeZero k] (e : Fin (2 * k)) : Fin k :=
   cycleKappa1 k (cycleRot k e)
 
-private lemma xor_xor_cancel (x y : Bool) : Bool.xor (Bool.xor x y) y = x := by
+lemma xor_xor_cancel (x y : Bool) : Bool.xor (Bool.xor x y) y = x := by
   cases x <;> cases y <;> rfl
 
 /-- Involution swapping `{2j, 2j+1}` iff `b j = true`. -/
@@ -123,24 +126,24 @@ def cyclePerm1 (k : ℕ) (b : Fin k → Bool) : Equiv.Perm (Fin (2 * k)) where
     simp only [xor_xor_cancel]
     exact (pairEquiv k).apply_symm_apply e
 
-private lemma cyclePerm1_pair_false (k : ℕ) (b : Fin k → Bool) (j : Fin k) :
+lemma cyclePerm1_pair_false (k : ℕ) (b : Fin k → Bool) (j : Fin k) :
     cyclePerm1 k b (pairEquiv k (j, false)) = pairEquiv k (j, b j) := by
   dsimp only [cyclePerm1, Equiv.coe_fn_mk]
   rw [(pairEquiv k).symm_apply_apply]
   cases b j <;> rfl
 
-private lemma cyclePerm1_pair_true (k : ℕ) (b : Fin k → Bool) (j : Fin k) :
+lemma cyclePerm1_pair_true (k : ℕ) (b : Fin k → Bool) (j : Fin k) :
     cyclePerm1 k b (pairEquiv k (j, true)) = pairEquiv k (j, !(b j)) := by
   dsimp only [cyclePerm1, Equiv.coe_fn_mk]
   rw [(pairEquiv k).symm_apply_apply]
   cases b j <;> rfl
 
-private lemma cycleKappa1_val (k : ℕ) (e : Fin (2 * k)) : (cycleKappa1 k e).val = e.val / 2 := rfl
+lemma cycleKappa1_val (k : ℕ) (e : Fin (2 * k)) : (cycleKappa1 k e).val = e.val / 2 := rfl
 
-private lemma pairEquiv_false_val (k : ℕ) (j : Fin k) :
+lemma pairEquiv_false_val (k : ℕ) (j : Fin k) :
     (pairEquiv k (j, false)).val = 2 * j.val := rfl
 
-private lemma pairEquiv_true_val (k : ℕ) (j : Fin k) :
+lemma pairEquiv_true_val (k : ℕ) (j : Fin k) :
     (pairEquiv k (j, true)).val = 2 * j.val + 1 := rfl
 
 /-- Computable equivalence `(Fin k → Bool) ≃ partitionSubgroup (cycleKappa1 k)`. -/
@@ -291,7 +294,7 @@ theorem card_cycleP1_inf_cycleP2 (k : ℕ) [NeZero k] (hk : 2 ≤ k)
 /-- Gaussian-integer complex conjugate. -/
 def starGI (z : GI) : GI := ⟨z.re, -z.im⟩
 
-private lemma toC_starGI (z : GI) : GI.toC (starGI z) = starRingEnd ℂ (GI.toC z) := by
+lemma toC_starGI (z : GI) : GI.toC (starGI z) = starRingEnd ℂ (GI.toC z) := by
   simp only [starGI, GI.toC, map_add, map_mul, Complex.conj_I, map_intCast, Int.cast_neg]
   ring
 
@@ -315,19 +318,19 @@ def sumBoolVecGI : ∀ m : ℕ, ((Fin m → Bool) → GI) → GI
   | 0, f => f Fin.elim0
   | m + 1, f => sumBoolVecGI m (fun b => f (Fin.cons false b)) + sumBoolVecGI m (fun b => f (Fin.cons true b))
 
-private lemma toC_sumFinGI : ∀ (m : ℕ) (f : Fin m → GI),
+lemma toC_sumFinGI : ∀ (m : ℕ) (f : Fin m → GI),
     GI.toC (sumFinGI m f) = ∑ i : Fin m, GI.toC (f i)
   | 0, _ => by simp [sumFinGI]
   | m + 1, f => by
       simp only [sumFinGI, GI.toC_add, Fin.sum_univ_succ, toC_sumFinGI m]
 
-private lemma toC_prodFinGI : ∀ (m : ℕ) (f : Fin m → GI),
+lemma toC_prodFinGI : ∀ (m : ℕ) (f : Fin m → GI),
     GI.toC (prodFinGI m f) = ∏ i : Fin m, GI.toC (f i)
   | 0, _ => by simp [prodFinGI]
   | m + 1, f => by
       simp only [prodFinGI, GI.toC_mul, Fin.prod_univ_succ, toC_prodFinGI m]
 
-private lemma prodFinInt_cast (m : ℕ) (f : Fin m → ℤ) :
+lemma prodFinInt_cast (m : ℕ) (f : Fin m → ℤ) :
     ((prodFinInt m f : ℤ) : ℝ) = ∏ i : Fin m, (f i : ℝ) := by
   induction m with
   | zero => simp [prodFinInt]
@@ -335,15 +338,15 @@ private lemma prodFinInt_cast (m : ℕ) (f : Fin m → ℤ) :
       simp only [prodFinInt, Int.cast_mul, Fin.prod_univ_succ]
       rw [ih]
 
-private lemma sum_bool_false_true (g : Bool → ℂ) : (∑ b : Bool, g b) = g false + g true := by
+lemma sum_bool_false_true (g : Bool → ℂ) : (∑ b : Bool, g b) = g false + g true := by
   rw [Fintype.sum_bool]
   ring
 
-private lemma prod_bool_false_true (g : Bool → ℂ) : (∏ b : Bool, g b) = g false * g true := by
+lemma prod_bool_false_true (g : Bool → ℂ) : (∏ b : Bool, g b) = g false * g true := by
   rw [Fintype.prod_bool]
   ring
 
-private lemma sumBoolVecGI_toC : ∀ (m : ℕ) (f : (Fin m → Bool) → GI),
+lemma sumBoolVecGI_toC : ∀ (m : ℕ) (f : (Fin m → Bool) → GI),
     GI.toC (sumBoolVecGI m f) = ∑ b : Fin m → Bool, GI.toC (f b)
   | 0, f => by
       simp only [sumBoolVecGI]
@@ -359,7 +362,7 @@ private lemma sumBoolVecGI_toC : ∀ (m : ℕ) (f : (Fin m → Bool) → GI),
 def gramGI (r k : ℕ) (BGI : Fin r → Fin (2 * k) → GI) (a b : Fin (2 * k)) : GI :=
   sumFinGI r fun i => starGI (BGI i a) * BGI i b
 
-private lemma toC_gramGI (r k : ℕ) (BGI : Fin r → Fin (2 * k) → GI) (a b : Fin (2 * k)) :
+lemma toC_gramGI (r k : ℕ) (BGI : Fin r → Fin (2 * k) → GI) (a b : Fin (2 * k)) :
     GI.toC (gramGI r k BGI a b) =
       ((Matrix.of (fun i e => GI.toC (BGI i e))).conjTranspose *
        Matrix.of (fun i e => GI.toC (BGI i e))) a b := by
@@ -377,7 +380,7 @@ def cycleEvalGI (r k : ℕ) [NeZero k] (BGI : Fin r → Fin (2 * k) → GI) : GI
       gramGI r k BGI e0 t0 * gramGI r k BGI e1 t1 +
       gramGI r k BGI e1 t0 * gramGI r k BGI e0 t1
 
-private lemma sum_prod_fin_bool (m : ℕ) (F : Fin m → Bool → ℂ) :
+lemma sum_prod_fin_bool (m : ℕ) (F : Fin m → Bool → ℂ) :
     (∑ b : Fin m → Bool, ∏ j : Fin m, F j (b j)) = ∏ j : Fin m, (F j false + F j true) := by
   exact (Fintype.prod_sum F).symm.trans <| Finset.prod_congr rfl fun j _ => sum_bool_false_true (F j)
 
@@ -477,7 +480,7 @@ def MalkounRank2ConjectureDProp : Prop :=
       (Fintype.card ↥(partitionSubgroup κ₁ ⊓ partitionSubgroup κ₂) : ℝ) *
         ∏ e : E, (H e e).re
 
-private lemma matrix_fin2_conjMul_apply {E : Type*} (B : Matrix (Fin 2) E ℂ) (a b : E) :
+lemma matrix_fin2_conjMul_apply {E : Type*} (B : Matrix (Fin 2) E ℂ) (a b : E) :
     (B.conjTranspose * B) a b =
       starRingEnd ℂ (B 0 a) * B 0 b + starRingEnd ℂ (B 1 a) * B 1 b := by
   simp [Matrix.mul_apply, Matrix.conjTranspose_apply, Fin.sum_univ_two]
@@ -558,15 +561,15 @@ end DisproofConjectureD
 
 section TreePositivity
 
-private lemma norm_sq_eq_mul_conj (z : ℂ) : ((‖z‖ ^ 2 : ℝ) : ℂ) = z * starRingEnd ℂ z := by
+lemma norm_sq_eq_mul_conj (z : ℂ) : ((‖z‖ ^ 2 : ℝ) : ℂ) = z * starRingEnd ℂ z := by
   rw [Complex.mul_conj, Complex.normSq_eq_norm_sq]
 
-private lemma conj_mul_eq_norm_sq (z : ℂ) : starRingEnd ℂ z * z = ((‖z‖ ^ 2 : ℝ) : ℂ) := by
+lemma conj_mul_eq_norm_sq (z : ℂ) : starRingEnd ℂ z * z = ((‖z‖ ^ 2 : ℝ) : ℂ) := by
   rw [mul_comm, ← norm_sq_eq_mul_conj]
 
-private lemma re_conj_eq_re (z : ℂ) : (starRingEnd ℂ z).re = z.re := by simp
+lemma re_conj_eq_re (z : ℂ) : (starRingEnd ℂ z).re = z.re := by simp
 
-private lemma norm_add_sq_identity (c d : ℂ) :
+lemma norm_add_sq_identity (c d : ℂ) :
     ‖c + d‖ ^ 2 = ‖c‖ ^ 2 + 2 * (d * starRingEnd ℂ c).re + ‖d‖ ^ 2 := by
   have hc : ‖c‖ ^ 2 = c.re ^ 2 + c.im ^ 2 := by rw [← Complex.normSq_eq_norm_sq, Complex.normSq_apply]; ring
   have hd : ‖d‖ ^ 2 = d.re ^ 2 + d.im ^ 2 := by rw [← Complex.normSq_eq_norm_sq, Complex.normSq_apply]; ring
@@ -576,7 +579,7 @@ private lemma norm_add_sq_identity (c d : ℂ) :
   simp only [Complex.add_re, Complex.add_im, Complex.mul_re, Complex.conj_re, Complex.conj_im]
   ring
 
-private lemma two_mul_sqrt_am_gm' (u v : ℝ) (hu : 0 ≤ u) (hu1 : u ≤ 1) (hv : 0 ≤ v) (hv1 : v ≤ 1) :
+lemma two_mul_sqrt_am_gm' (u v : ℝ) (hu : 0 ≤ u) (hu1 : u ≤ 1) (hv : 0 ≤ v) (hv1 : v ≤ 1) :
     2 * (u * v * Real.sqrt ((1 - u ^ 2) * (1 - v ^ 2))) ≤ u ^ 2 + v ^ 2 - 2 * u ^ 2 * v ^ 2 := by
   have h1u : 0 ≤ 1 - u ^ 2 := by nlinarith
   have h1v : 0 ≤ 1 - v ^ 2 := by nlinarith
@@ -807,7 +810,7 @@ theorem psd_path4_re_ge_one (M : Matrix (Fin 3) (Fin 3) ℂ)
   rw [hsum]
   nlinarith [sq_nonneg ‖a‖, sq_nonneg ‖b‖]
 
-private def fin3PermFun : Fin 6 → Equiv.Perm (Fin 3)
+def fin3PermFun : Fin 6 → Equiv.Perm (Fin 3)
   | 0 => 1
   | 1 => Equiv.swap 0 1
   | 2 => Equiv.swap 1 2
@@ -815,7 +818,7 @@ private def fin3PermFun : Fin 6 → Equiv.Perm (Fin 3)
   | 4 => Equiv.swap 0 1 * Equiv.swap 1 2
   | 5 => Equiv.swap 1 2 * Equiv.swap 0 1
 
-private def fin3PermEquiv : Fin 6 ≃ Equiv.Perm (Fin 3) where
+def fin3PermEquiv : Fin 6 ≃ Equiv.Perm (Fin 3) where
   toFun := fin3PermFun
   invFun σ :=
     if σ 0 = 0 then (if σ 1 = 1 then 0 else 2)
@@ -1050,33 +1053,33 @@ def pathGraph5 : SimpleGraph (Fin 5) where
 instance instDecidableRelPath5 : DecidableRel pathGraph5.Adj := fun u v =>
   inferInstanceAs (Decidable ((u.val + 1 = v.val) ∨ (v.val + 1 = u.val)))
 
-private def partParity {n : ℕ} (u : Fin n) : Bool := decide (u.val % 2 = 1)
+def partParity {n : ℕ} (u : Fin n) : Bool := decide (u.val % 2 = 1)
 
-private lemma path_isBipartite_parity {n : ℕ} (G : SimpleGraph (Fin n))
+lemma path_isBipartite_parity {n : ℕ} (G : SimpleGraph (Fin n))
     (hadj : ∀ u v : Fin n, G.Adj u v → (u.val + 1 = v.val) ∨ (v.val + 1 = u.val)) :
     IsBipartite G partParity := by
   intro u v huv
   rcases hadj u v huv with h | h <;> simp [partParity] <;> omega
 
-private def path3Edges : Fin 2 → BipEdge pathGraph3 partParity
+def path3Edges : Fin 2 → BipEdge pathGraph3 partParity
   | 0 => ⟨(0, 1), by decide⟩
   | 1 => ⟨(2, 1), by decide⟩
 
-private lemma path3_bipEdge_cases (e : BipEdge pathGraph3 partParity) :
+lemma path3_bipEdge_cases (e : BipEdge pathGraph3 partParity) :
     e = path3Edges 0 ∨ e = path3Edges 1 := by
   rcases e with ⟨⟨u, v⟩, hadj, hu, hv⟩
   have h : (u = 0 ∧ v = 1) ∨ (u = 2 ∧ v = 1) := by
     revert u v hadj hu hv; decide
   rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> [left; right] <;> rfl
 
-private def path3EdgeEquiv : Fin 2 ≃ BipEdge pathGraph3 partParity where
+def path3EdgeEquiv : Fin 2 ≃ BipEdge pathGraph3 partParity where
   toFun := path3Edges
   invFun e := if e.1.1 = 0 then 0 else 1
   left_inv i := by fin_cases i <;> rfl
   right_inv e := by
     rcases path3_bipEdge_cases e with rfl | rfl <;> rfl
 
-private instance : Unique (bipP1 pathGraph3 partParity) where
+instance : Unique (bipP1 pathGraph3 partParity) where
   default := 1
   uniq σ := by
     apply Subtype.ext; apply Equiv.ext; intro e
@@ -1088,10 +1091,10 @@ private instance : Unique (bipP1 pathGraph3 partParity) where
     · exfalso; rw [h] at h1; exact absurd h1 (by decide)
     · exact h
 
-private def path3Swap2 : Equiv.Perm (BipEdge pathGraph3 partParity) :=
+def path3Swap2 : Equiv.Perm (BipEdge pathGraph3 partParity) :=
   Equiv.swap (path3Edges 0) (path3Edges 1)
 
-private def path3P2Equiv : Bool ≃ bipP2 pathGraph3 partParity where
+def path3P2Equiv : Bool ≃ bipP2 pathGraph3 partParity where
   toFun b := if b then ⟨path3Swap2, fun e => by
     rcases path3_bipEdge_cases e with rfl | rfl <;> simp [path3Swap2, path3Edges]⟩ else 1
   invFun σ := decide (σ.1 (path3Edges 0) ≠ path3Edges 0)
@@ -1158,12 +1161,12 @@ theorem malkounAmplitude_path3_abs_ge_one_and_ne_zero (x : ConfigSpace pathGraph
   rw [h0, norm_zero] at hnorm
   linarith
 
-private def path4Edges : Fin 3 → BipEdge pathGraph4 partParity
+def path4Edges : Fin 3 → BipEdge pathGraph4 partParity
   | 0 => ⟨(0, 1), by decide⟩
   | 1 => ⟨(2, 1), by decide⟩
   | 2 => ⟨(2, 3), by decide⟩
 
-private lemma path4_bipEdge_cases (e : BipEdge pathGraph4 partParity) :
+lemma path4_bipEdge_cases (e : BipEdge pathGraph4 partParity) :
     e = path4Edges 0 ∨ e = path4Edges 1 ∨ e = path4Edges 2 := by
   rcases e with ⟨⟨u, v⟩, hadj, hu, hv⟩
   have h : (u = 0 ∧ v = 1) ∨ (u = 2 ∧ v = 1) ∨ (u = 2 ∧ v = 3) := by
@@ -1173,14 +1176,14 @@ private lemma path4_bipEdge_cases (e : BipEdge pathGraph4 partParity) :
   · right; left; rfl
   · right; right; rfl
 
-private def path4EdgeEquiv : Fin 3 ≃ BipEdge pathGraph4 partParity where
+def path4EdgeEquiv : Fin 3 ≃ BipEdge pathGraph4 partParity where
   toFun := path4Edges
   invFun e := if e.1.1 = 0 then 0 else if e.1.2 = 1 then 1 else 2
   left_inv i := by fin_cases i <;> rfl
   right_inv e := by
     rcases path4_bipEdge_cases e with rfl | rfl | rfl <;> rfl
 
-private def path4P1Equiv : Bool ≃ bipP1 pathGraph4 partParity where
+def path4P1Equiv : Bool ≃ bipP1 pathGraph4 partParity where
   toFun b := if b then ⟨Equiv.swap (path4Edges 1) (path4Edges 2), fun e => by
     rcases path4_bipEdge_cases e with rfl | rfl | rfl <;> simp [path4Edges, Equiv.swap_apply_def]⟩ else 1
   invFun σ := decide (σ.1 (path4Edges 1) ≠ path4Edges 1)
@@ -1231,7 +1234,7 @@ private def path4P1Equiv : Bool ≃ bipP1 pathGraph4 partParity where
           · rw [h21]; exact Equiv.swap_apply_right _ _
         · exact absurd (h12.trans h22.symm) hne
 
-private def path4P2Equiv : Bool ≃ bipP2 pathGraph4 partParity where
+def path4P2Equiv : Bool ≃ bipP2 pathGraph4 partParity where
   toFun b := if b then ⟨Equiv.swap (path4Edges 0) (path4Edges 1), fun e => by
     rcases path4_bipEdge_cases e with rfl | rfl | rfl <;> simp [path4Edges, Equiv.swap_apply_def]⟩ else 1
   invFun σ := decide (σ.1 (path4Edges 0) ≠ path4Edges 0)
@@ -1324,16 +1327,16 @@ theorem malkounAmplitude_path4_abs_ge_one_and_ne_zero (x : ConfigSpace pathGraph
   rw [h0, norm_zero] at hnorm
   linarith
 
-private def clawPart : Fin 4 → Bool
+def clawPart : Fin 4 → Bool
   | 0 => false
   | _ => true
 
-private def clawEdges : Fin 3 → BipEdge clawGraph clawPart
+def clawEdges : Fin 3 → BipEdge clawGraph clawPart
   | 0 => ⟨(0, 1), by decide⟩
   | 1 => ⟨(0, 2), by decide⟩
   | 2 => ⟨(0, 3), by decide⟩
 
-private lemma claw_bipEdge_cases (e : BipEdge clawGraph clawPart) :
+lemma claw_bipEdge_cases (e : BipEdge clawGraph clawPart) :
     e = clawEdges 0 ∨ e = clawEdges 1 ∨ e = clawEdges 2 := by
   rcases e with ⟨⟨u, v⟩, hadj, hu, hv⟩
   have h : (u = 0 ∧ v = 1) ∨ (u = 0 ∧ v = 2) ∨ (u = 0 ∧ v = 3) := by
@@ -1343,14 +1346,14 @@ private lemma claw_bipEdge_cases (e : BipEdge clawGraph clawPart) :
   · right; left; rfl
   · right; right; rfl
 
-private def clawEdgeEquiv : Fin 3 ≃ BipEdge clawGraph clawPart where
+def clawEdgeEquiv : Fin 3 ≃ BipEdge clawGraph clawPart where
   toFun := clawEdges
   invFun e := if e.1.2 = 1 then 0 else if e.1.2 = 2 then 1 else 2
   left_inv i := by fin_cases i <;> rfl
   right_inv e := by
     rcases claw_bipEdge_cases e with rfl | rfl | rfl <;> rfl
 
-private instance : Unique (bipP2 clawGraph clawPart) where
+instance : Unique (bipP2 clawGraph clawPart) where
   default := 1
   uniq σ := by
     apply Subtype.ext; apply Equiv.ext; intro e
@@ -1359,7 +1362,7 @@ private instance : Unique (bipP2 clawGraph clawPart) where
       rcases claw_bipEdge_cases (σ.1 _) with h | h | h <;>
       first | exact h | (exfalso; rw [h] at h2; exact absurd h2 (by decide))
 
-private def clawP1Equiv : Equiv.Perm (Fin 3) ≃ bipP1 clawGraph clawPart where
+def clawP1Equiv : Equiv.Perm (Fin 3) ≃ bipP1 clawGraph clawPart where
   toFun τ := ⟨Equiv.permCongr clawEdgeEquiv τ, fun e => by
     have h0 : ∀ x : BipEdge clawGraph clawPart, x.1.1 = 0 := fun x => by
       rcases claw_bipEdge_cases x with rfl | rfl | rfl <;> rfl
@@ -1407,13 +1410,13 @@ theorem malkounAmplitude_claw_abs_ge_one_and_ne_zero (x : ConfigSpace clawGraph)
   rw [h0, norm_zero] at hnorm
   linarith
 
-private def path5Edges : Fin 4 → BipEdge pathGraph5 partParity
+def path5Edges : Fin 4 → BipEdge pathGraph5 partParity
   | 0 => ⟨(0, 1), by decide⟩
   | 1 => ⟨(2, 1), by decide⟩
   | 2 => ⟨(2, 3), by decide⟩
   | 3 => ⟨(4, 3), by decide⟩
 
-private lemma path5_bipEdge_cases (e : BipEdge pathGraph5 partParity) :
+lemma path5_bipEdge_cases (e : BipEdge pathGraph5 partParity) :
     e = path5Edges 0 ∨ e = path5Edges 1 ∨ e = path5Edges 2 ∨ e = path5Edges 3 := by
   rcases e with ⟨⟨u, v⟩, hadj, hu, hv⟩
   have h : (u = 0 ∧ v = 1) ∨ (u = 2 ∧ v = 1) ∨ (u = 2 ∧ v = 3) ∨ (u = 4 ∧ v = 3) := by
@@ -1424,7 +1427,7 @@ private lemma path5_bipEdge_cases (e : BipEdge pathGraph5 partParity) :
   · right; right; left; rfl
   · right; right; right; rfl
 
-private def path5EdgeEquiv : Fin 4 ≃ BipEdge pathGraph5 partParity where
+def path5EdgeEquiv : Fin 4 ≃ BipEdge pathGraph5 partParity where
   toFun := path5Edges
   invFun e :=
     if e.1.1 = 0 then 0 else if e.1.2 = 1 then 1 else if e.1.1 = 2 then 2 else 3
@@ -1432,7 +1435,7 @@ private def path5EdgeEquiv : Fin 4 ≃ BipEdge pathGraph5 partParity where
   right_inv e := by
     rcases path5_bipEdge_cases e with rfl | rfl | rfl | rfl <;> rfl
 
-private def path5P1Equiv : Bool ≃ bipP1 pathGraph5 partParity where
+def path5P1Equiv : Bool ≃ bipP1 pathGraph5 partParity where
   toFun b := if b then ⟨Equiv.swap (path5Edges 1) (path5Edges 2), fun e => by
     rcases path5_bipEdge_cases e with rfl | rfl | rfl | rfl <;>
       simp [path5Edges, Equiv.swap_apply_def]⟩ else 1
@@ -1496,17 +1499,17 @@ private def path5P1Equiv : Bool ≃ bipP1 pathGraph5 partParity where
           · rw [he3]; exact Equiv.swap_apply_of_ne_of_ne (by decide) (by decide)
         · exact absurd (h12.trans h22.symm) hne
 
-private def path5P2Fun (p : Bool × Bool) : Equiv.Perm (BipEdge pathGraph5 partParity) :=
+def path5P2Fun (p : Bool × Bool) : Equiv.Perm (BipEdge pathGraph5 partParity) :=
   (if p.1 then Equiv.swap (path5Edges 0) (path5Edges 1) else 1) *
   (if p.2 then Equiv.swap (path5Edges 2) (path5Edges 3) else 1)
 
-private lemma path5P2Fun_apply (p1 p2 : Bool) (i : Fin 4) :
+lemma path5P2Fun_apply (p1 p2 : Bool) (i : Fin 4) :
     path5P2Fun (p1, p2) (path5Edges i) =
       path5Edges ((if p1 then (if p2 then ![1, 0, 3, 2] else ![1, 0, 2, 3])
         else (if p2 then ![0, 1, 3, 2] else ![0, 1, 2, 3])) i) := by
   rcases p1 with _ | _ <;> rcases p2 with _ | _ <;> fin_cases i <;> decide
 
-private def path5P2Equiv : (Bool × Bool) ≃ bipP2 pathGraph5 partParity where
+def path5P2Equiv : (Bool × Bool) ≃ bipP2 pathGraph5 partParity where
   toFun p := ⟨path5P2Fun p, fun e => by
     rcases p with ⟨_ | _, _ | _⟩ <;> rcases path5_bipEdge_cases e with rfl | rfl | rfl | rfl <;>
       simp [path5P2Fun, path5Edges, Equiv.swap_apply_def]⟩

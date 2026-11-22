@@ -1,5 +1,6 @@
-import Matematyka.MalkounConjectureC
+module
 
+public import Matematyka.MalkounConjectureC
 /-!
 # Unconditional Path Positivity for Malkoun's $G$-Amplitude ($LG_n$ for All $n \in \mathbb{N}$)
 
@@ -19,6 +20,8 @@ $LG_n$ (`pathGraphN n`) for **all** $n \in \mathbb{N}$ unconditionally in Lean 4
    spinor gauge is real, preserving `0 < a_k` and thus `1 ≤ (malkounAmplitude (pathGraphN n) x).re`
    for **all** $n \in \mathbb{N}$.
 -/
+
+@[expose] public section
 
 namespace Matematyka.MalkounPathPositivity
 
@@ -50,7 +53,7 @@ theorem pathGraphN_connected {n : ℕ} (hn : 1 ≤ n) : (pathGraphN n).Connected
         exact (ih (by omega)).trans hadj.reachable
   exact ⟨fun u v => (hr u.val u.isLt).symm.trans (hr v.val v.isLt)⟩
 
-private def pathEdgeSetEquiv (m : ℕ) : Fin m ≃ (pathGraphN (m + 1)).edgeSet where
+def pathEdgeSetEquiv (m : ℕ) : Fin m ≃ (pathGraphN (m + 1)).edgeSet where
   toFun i := ⟨s(⟨i.val, by omega⟩, ⟨i.val + 1, by omega⟩), Or.inl rfl⟩
   invFun e := ⟨Sym2.lift ⟨fun u v => min u.val v.val, fun u v => by simp [min_comm]⟩ e.1, by
     rcases e with ⟨s, hs⟩
@@ -101,18 +104,18 @@ lemma pathGraphN_isBipartite (n : ℕ) : IsBipartite (pathGraphN n) partEvenN :=
   intro u v huv
   rcases huv with h | h <;> simp [partEvenN] <;> omega
 
-private def pathNEdgeEnd (m : ℕ) (e : Fin m) : Fin (m + 1) × Fin (m + 1) :=
+def pathNEdgeEnd (m : ℕ) (e : Fin m) : Fin (m + 1) × Fin (m + 1) :=
   if e.val % 2 = 0 then (⟨e.val + 1, by omega⟩, ⟨e.val, by omega⟩)
   else (⟨e.val, by omega⟩, ⟨e.val + 1, by omega⟩)
 
-private def pathNEdges (m : ℕ) (e : Fin m) : BipEdge (pathGraphN (m + 1)) partEvenN :=
+def pathNEdges (m : ℕ) (e : Fin m) : BipEdge (pathGraphN (m + 1)) partEvenN :=
   ⟨pathNEdgeEnd m e, by
     unfold pathNEdgeEnd
     split_ifs with h
     · refine ⟨Or.inr rfl, ?_, ?_⟩ <;> simp [partEvenN] <;> omega
     · refine ⟨Or.inl rfl, ?_, ?_⟩ <;> simp [partEvenN] <;> omega⟩
 
-private def pathNEdgeEquiv (m : ℕ) : Fin m ≃ BipEdge (pathGraphN (m + 1)) partEvenN where
+def pathNEdgeEquiv (m : ℕ) : Fin m ≃ BipEdge (pathGraphN (m + 1)) partEvenN where
   toFun := pathNEdges m
   invFun e := ⟨min e.1.1.val e.1.2.val, by
     rcases e with ⟨⟨u, v⟩, hadj, _⟩
@@ -140,12 +143,12 @@ private def pathNEdgeEquiv (m : ℕ) : Fin m ≃ BipEdge (pathGraphN (m + 1)) pa
       simp only [hm, ↓reduceIte]
       exact Prod.ext (Fin.ext (by dsimp only at h ⊢; omega)) (Fin.ext (by dsimp only at h ⊢; omega))
 
-private lemma pathNEdges_fst_val (m : ℕ) (e : Fin m) :
+lemma pathNEdges_fst_val (m : ℕ) (e : Fin m) :
     (pathNEdges m e).1.1.val = 2 * (e.val / 2) + 1 := by
   dsimp only [pathNEdges, pathNEdgeEnd]
   split_ifs <;> dsimp only <;> omega
 
-private lemma pathNEdges_snd_val (m : ℕ) (e : Fin m) :
+lemma pathNEdges_snd_val (m : ℕ) (e : Fin m) :
     (pathNEdges m e).1.2.val = if e.val = 0 then 0 else 2 * ((e.val - 1) / 2) + 2 := by
   dsimp only [pathNEdges, pathNEdgeEnd]
   split_ifs with he hz1 hz2
@@ -192,7 +195,7 @@ def pathNP1Perm (m : ℕ) (b : Fin (m / 2) → Bool) : Equiv.Perm (Fin m) where
       · simp only [hb, Bool.false_eq_true, ↓reduceIte, hm, ↓reduceDIte]
     · simp only [hm, ↓reduceDIte]
 
-private def pathNP1Equiv (m : ℕ) : (Fin (m / 2) → Bool) ≃ bipP1 (pathGraphN (m + 1)) partEvenN where
+def pathNP1Equiv (m : ℕ) : (Fin (m / 2) → Bool) ≃ bipP1 (pathGraphN (m + 1)) partEvenN where
   toFun b := ⟨Equiv.permCongr (pathNEdgeEquiv m) (pathNP1Perm m b), fun e => by
     obtain ⟨i, rfl⟩ := (pathNEdgeEquiv m).surjective e
     simp only [Equiv.permCongr_apply, Equiv.symm_apply_apply]
@@ -343,7 +346,7 @@ def pathNP2Perm (m : ℕ) (b : Fin ((m - 1) / 2) → Bool) : Equiv.Perm (Fin m) 
       · simp only [hb, Bool.false_eq_true, ↓reduceIte, h1.1, h1.2, and_self, ↓reduceDIte]
     · simp only [h1, ↓reduceDIte]
 
-private def pathNP2Equiv (m : ℕ) : (Fin ((m - 1) / 2) → Bool) ≃ bipP2 (pathGraphN (m + 1)) partEvenN where
+def pathNP2Equiv (m : ℕ) : (Fin ((m - 1) / 2) → Bool) ≃ bipP2 (pathGraphN (m + 1)) partEvenN where
   toFun b := ⟨Equiv.permCongr (pathNEdgeEquiv m) (pathNP2Perm m b), fun e => by
     obtain ⟨i, rfl⟩ := (pathNEdgeEquiv m).surjective e
     simp only [Equiv.permCongr_apply, Equiv.symm_apply_apply]
@@ -482,7 +485,7 @@ end PathGraphNDef
 
 section SpinorPathRecurrence
 
-private lemma fin2_eq' (k : Fin 2) : k = 0 ∨ k = 1 := by
+lemma fin2_eq' (k : Fin 2) : k = 0 ∨ k = 1 := by
   fin_cases k <;> simp
 
 /-- Hermitian spinor inner product $\langle u, v \rangle = \overline{u_0}v_0 + \overline{u_1}v_1$. -/
@@ -604,7 +607,7 @@ lemma hyperbolic_step_id (a β U V : ℂ) (hUV : ‖U‖ ^ 2 + ‖V‖ ^ 2 = 1) 
   exact_mod_cast hidentC
 
 /-- Cast equivalence splitting `(Fin m → Bool)` into `(Fin n → Bool) × Bool` when `m = n + 1`. -/
-private def boolSnocCast {m n : ℕ} (h : m = n + 1) : (Fin n → Bool) × Bool ≃ (Fin m → Bool) where
+def boolSnocCast {m n : ℕ} (h : m = n + 1) : (Fin n → Bool) × Bool ≃ (Fin m → Bool) where
   toFun p j := if hj : j.val < n then p.1 ⟨j.val, hj⟩ else p.2
   invFun f := (fun j => f ⟨j.val, by omega⟩, f ⟨n, by omega⟩)
   left_inv p := by
@@ -657,7 +660,7 @@ lemma pathEndSum_self (k : ℕ) (hk : 1 ≤ k) (Φ : ℕ → Fin 2 → ℂ) :
     · simp only [he, hm, ↓reduceIte, hfix2 hm]
   · simp [he]
 
-private lemma pathNP1Perm_castSucc_odd {k : ℕ} (hk1 : k % 2 = 1) (_hk : 1 ≤ k)
+lemma pathNP1Perm_castSucc_odd {k : ℕ} (hk1 : k % 2 = 1) (_hk : 1 ≤ k)
     (b₁ : Fin (k / 2) → Bool) (last : Bool) (e : Fin k) :
     (pathNP1Perm (k + 1) (boolSnocCast (by omega : (k + 1) / 2 = k / 2 + 1) (b₁, last))
         e.castSucc).val =
@@ -695,7 +698,7 @@ private lemma pathNP1Perm_castSucc_odd {k : ℕ} (hk1 : k % 2 = 1) (_hk : 1 ≤ 
       simp only [hm_succ, hm_k, ↓reduceDIte, he, and_false, ↓reduceIte]
       rfl
 
-private lemma pathNP2Perm_castSucc_odd {k : ℕ} (hk1 : k % 2 = 1)
+lemma pathNP2Perm_castSucc_odd {k : ℕ} (hk1 : k % 2 = 1)
     (b₂ : Fin (k / 2) → Bool) (e : Fin k) :
     (pathNP2Perm (k + 1) (fun j => b₂ ⟨j.val, by omega⟩) e.castSucc).val =
       (pathNP2Perm k (fun j => b₂ ⟨j.val, by omega⟩) e).val := by
@@ -717,7 +720,7 @@ private lemma pathNP2Perm_castSucc_odd {k : ℕ} (hk1 : k % 2 = 1)
     simp only [h1, h2, ↓reduceDIte]
     rfl
 
-private lemma pathNP1Perm_castSucc_even {k : ℕ} (hk0 : k % 2 = 0)
+lemma pathNP1Perm_castSucc_even {k : ℕ} (hk0 : k % 2 = 0)
     (b₁ : Fin (k / 2) → Bool) (e : Fin k) :
     (pathNP1Perm (k + 1) (fun j => b₁ ⟨j.val, by omega⟩) e.castSucc).val =
       (pathNP1Perm k b₁ e).val := by
@@ -737,7 +740,7 @@ private lemma pathNP1Perm_castSucc_even {k : ℕ} (hk0 : k % 2 = 0)
     simp only [h1, h2, ↓reduceDIte]
     rfl
 
-private lemma pathNP2Perm_castSucc_even {k : ℕ} (hk0 : k % 2 = 0) (hk : 2 ≤ k)
+lemma pathNP2Perm_castSucc_even {k : ℕ} (hk0 : k % 2 = 0) (hk : 2 ≤ k)
     (b₂ : Fin ((k - 1) / 2) → Bool) (last : Bool) (e : Fin k) :
     (pathNP2Perm (k + 1) (boolSnocCast (by omega : k / 2 = (k - 1) / 2 + 1) (b₂, last))
         e.castSucc).val =
@@ -775,13 +778,13 @@ private lemma pathNP2Perm_castSucc_even {k : ℕ} (hk0 : k % 2 = 0) (hk : 2 ≤ 
       simp only [hm_succ, hm_k, ↓reduceDIte, he, and_false, ↓reduceIte]
       rfl
 
-private def boolCastEquiv {m₁ m₂ : ℕ} (h : m₁ = m₂) : (Fin m₁ → Bool) ≃ (Fin m₂ → Bool) where
+def boolCastEquiv {m₁ m₂ : ℕ} (h : m₁ = m₂) : (Fin m₁ → Bool) ≃ (Fin m₂ → Bool) where
   toFun f j := f ⟨j.val, by omega⟩
   invFun g j := g ⟨j.val, by omega⟩
   left_inv _ := rfl
   right_inv _ := rfl
 
-private lemma pathNP1Perm_last_odd {k : ℕ} (hk1 : k % 2 = 1)
+lemma pathNP1Perm_last_odd {k : ℕ} (hk1 : k % 2 = 1)
     (b₁ : Fin (k / 2) → Bool) (last : Bool) :
     (pathNP1Perm (k + 1) (boolSnocCast (by omega : (k + 1) / 2 = k / 2 + 1) (b₁, last))
         (Fin.last k)).val =
@@ -797,7 +800,7 @@ private lemma pathNP1Perm_last_odd {k : ℕ} (hk1 : k % 2 = 1)
   · simp only [hlast, ↓reduceIte]; omega
   · simp only [hlast, Bool.false_eq_true, ↓reduceIte, Fin.val_last]
 
-private lemma pathNP2Perm_last_even {k : ℕ} (hk0 : k % 2 = 0) (hk : 2 ≤ k)
+lemma pathNP2Perm_last_even {k : ℕ} (hk0 : k % 2 = 0) (hk : 2 ≤ k)
     (b₂ : Fin ((k - 1) / 2) → Bool) (last : Bool) :
     (pathNP2Perm (k + 1) (boolSnocCast (by omega : (k + 1 - 1) / 2 = (k - 1) / 2 + 1) (b₂, last))
         (Fin.last k)).val =
@@ -1174,7 +1177,7 @@ noncomputable def pathRecPair (Φ : ℕ → Fin 2 → ℂ) : ℕ → ℂ × (Fin
         (p.1 + d * spIn (Φ k') (Φ (k' - 1)),
           fun j => p.1 * Φ k' j + d * Φ (k' - 1) j)
 
-private lemma pathRecPair_succ_odd (Φ : ℕ → Fin 2 → ℂ) {k : ℕ} (h : (k + 1) % 2 = 1) :
+lemma pathRecPair_succ_odd (Φ : ℕ → Fin 2 → ℂ) {k : ℕ} (h : (k + 1) % 2 = 1) :
     pathRecPair Φ (k + 2) =
       ((pathRecPair Φ (k + 1)).1 +
           spIn (Φ (k + 1)) (pathRecPair Φ (k + 1)).2 * spIn (Φ k) (Φ (k + 1)),
@@ -1182,7 +1185,7 @@ private lemma pathRecPair_succ_odd (Φ : ℕ → Fin 2 → ℂ) {k : ℕ} (h : (
           starRingEnd ℂ (spIn (Φ (k + 1)) (pathRecPair Φ (k + 1)).2) * Φ k j) := by
   simp only [pathRecPair, h, ↓reduceIte, Nat.add_sub_cancel]
 
-private lemma pathRecPair_succ_even (Φ : ℕ → Fin 2 → ℂ) {k : ℕ} (h : ¬ (k + 1) % 2 = 1) :
+lemma pathRecPair_succ_even (Φ : ℕ → Fin 2 → ℂ) {k : ℕ} (h : ¬ (k + 1) % 2 = 1) :
     pathRecPair Φ (k + 2) =
       ((pathRecPair Φ (k + 1)).1 +
           spIn (pathRecPair Φ (k + 1)).2 (Φ (k + 1)) * spIn (Φ (k + 1)) (Φ k),
@@ -1265,7 +1268,7 @@ lemma pathGramSum_eq_rec (Φ : ℕ → Fin 2 → ℂ)
     have hsp := (hrec.2 hm0).2 (Φ (m - 1))
     rw [hsp, spIn_conj_symm, (hrec.2 hm0).1, Complex.conj_conj]
 
-private noncomputable def pathBeta (Φ : ℕ → Fin 2 → ℂ) (k : ℕ) : ℂ :=
+noncomputable def pathBeta (Φ : ℕ → Fin 2 → ℂ) (k : ℕ) : ℂ :=
   if k % 2 = 1 then spIn (jTilde (Φ (k - 1))) (pathRecPair Φ k).2
   else starRingEnd ℂ (spIn (jTilde (Φ (k - 1))) (pathRecPair Φ k).2)
 
@@ -1398,7 +1401,7 @@ end SpinorPathRecurrence
 
 section PathConjecturesBA
 
-private lemma malkounAmplitude_pathGraphN_small (n : ℕ) (hn : n ≤ 1) (x : ConfigSpace (pathGraphN n)) :
+lemma malkounAmplitude_pathGraphN_small (n : ℕ) (hn : n ≤ 1) (x : ConfigSpace (pathGraphN n)) :
     malkounAmplitude (pathGraphN n) x = 1 := by
   have hempty : IsEmpty (BipEdge (pathGraphN n) partEvenN) := ⟨fun e => by
     have hadj := e.2.1
@@ -1412,7 +1415,7 @@ private lemma malkounAmplitude_pathGraphN_small (n : ℕ) (hn : n ≤ 1) (x : Co
     refine ⟨⟨1⟩, fun a => Subtype.ext (Equiv.ext fun e => False.elim (hempty.false e))⟩
   simp
 
-private lemma pathGraphN_gram_eq_pathGramSum (m : ℕ) (x : ConfigSpace (pathGraphN (m + 1)))
+lemma pathGraphN_gram_eq_pathGramSum (m : ℕ) (x : ConfigSpace (pathGraphN (m + 1)))
     (Φe : BipEdge (pathGraphN (m + 1)) partEvenN → Fin 2 → ℂ)
     (hnorm : ∀ e, ‖Φe e 0‖ ^ 2 + ‖Φe e 1‖ ^ 2 = 1)
     (hmul : ∀ e, (pauliDot (unitDir (x.1 e.1.1) (x.1 e.1.2))).mulVec (Φe e) = Φe e)
@@ -1443,7 +1446,7 @@ private lemma pathGraphN_gram_eq_pathGramSum (m : ℕ) (x : ConfigSpace (pathGra
   rw [hs1, hs2]
   simp only [spIn, Φ, (pathNP1Perm m b₁ e).isLt, (pathNP2Perm m b₂ e).isLt, ↓reduceDIte]
 
-private lemma pathSpinorExt_unit (m : ℕ) (Φe : BipEdge (pathGraphN (m + 1)) partEvenN → Fin 2 → ℂ)
+lemma pathSpinorExt_unit (m : ℕ) (Φe : BipEdge (pathGraphN (m + 1)) partEvenN → Fin 2 → ℂ)
     (hnorm : ∀ e, ‖Φe e 0‖ ^ 2 + ‖Φe e 1‖ ^ 2 = 1)
     {d : Fin 2 → ℂ} (hd : ‖d 0‖ ^ 2 + ‖d 1‖ ^ 2 = 1) :
     ∀ k : ℕ, ‖(if h : k < m then Φe (pathNEdges m ⟨k, h⟩) else d) 0‖ ^ 2 +
@@ -1489,12 +1492,12 @@ end PathConjecturesBA
 
 section PlanarPathConjectureC
 
-private noncomputable def cayleyPlanarHalf (v : Fin 3 → ℝ) : Fin 2 → ℝ :=
+noncomputable def cayleyPlanarHalf (v : Fin 3 → ℝ) : Fin 2 → ℝ :=
   if -1 < v 0 then
     ![Real.sqrt ((1 + v 0) / 2), (if 0 ≤ v 1 then 1 else -1) * Real.sqrt ((1 - v 0) / 2)]
   else ![0, 1]
 
-private lemma cayleyPlanarHalf_props {v : Fin 3 → ℝ}
+lemma cayleyPlanarHalf_props {v : Fin 3 → ℝ}
     (hv : v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2 = 1) (hz : v 2 = 0) :
     let r := cayleyPlanarHalf v
     r 0 ^ 2 + r 1 ^ 2 = 1 ∧ r 0 ^ 2 - r 1 ^ 2 = v 0 ∧ 2 * r 0 * r 1 = v 1 := by
@@ -1533,11 +1536,11 @@ private lemma cayleyPlanarHalf_props {v : Fin 3 → ℝ}
     rw [hv0, hv1]
     norm_num
 
-private noncomputable def cayleySpinor (r : Fin 2 → ℝ) : Fin 2 → ℂ :=
+noncomputable def cayleySpinor (r : Fin 2 → ℝ) : Fin 2 → ℂ :=
   ![((r 0 : ℂ) - Complex.I * (r 1 : ℂ)) / ((Real.sqrt 2 : ℝ) : ℂ),
     ((r 0 : ℂ) + Complex.I * (r 1 : ℂ)) / ((Real.sqrt 2 : ℝ) : ℂ)]
 
-private lemma cayley_comp_norm_sq (a b : ℝ) :
+lemma cayley_comp_norm_sq (a b : ℝ) :
     ‖((a : ℂ) + Complex.I * (b : ℂ)) / ((Real.sqrt 2 : ℝ) : ℂ)‖ ^ 2 = (a ^ 2 + b ^ 2) / 2 := by
   have hs2_sq : Real.sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
   rw [norm_div, div_pow, Complex.norm_real, Real.norm_eq_abs, sq_abs, hs2_sq,
@@ -1546,7 +1549,7 @@ private lemma cayley_comp_norm_sq (a b : ℝ) :
     Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im]
   ring
 
-private lemma cayleySpinor_ok {v : Fin 3 → ℝ}
+lemma cayleySpinor_ok {v : Fin 3 → ℝ}
     (hv : v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2 = 1) (hz : v 2 = 0) :
     let ψ := cayleySpinor (cayleyPlanarHalf v)
     ‖ψ 0‖ ^ 2 + ‖ψ 1‖ ^ 2 = 1 ∧ (pauliDot v).mulVec ψ = ψ := by
@@ -1611,7 +1614,7 @@ private lemma cayleySpinor_ok {v : Fin 3 → ℝ}
         _ = ((r 0 : ℂ) + Complex.I * (r 1 : ℂ)) / ((Real.sqrt 2 : ℝ) : ℂ) := by
             rw [hr_unit, mul_one]
 
-private lemma cayleySpinor_spIn_im_zero (r₁ r₂ : Fin 2 → ℝ) :
+lemma cayleySpinor_spIn_im_zero (r₁ r₂ : Fin 2 → ℝ) :
     (spIn (cayleySpinor r₁) (cayleySpinor r₂)).im = 0 := by
   have hs2_pos : 0 < Real.sqrt 2 := Real.sqrt_pos.mpr (by norm_num)
   simp only [spIn, cayleySpinor, Matrix.cons_val_zero, Matrix.cons_val_one, map_div₀, map_sub,
@@ -1622,7 +1625,7 @@ private lemma cayleySpinor_spIn_im_zero (r₁ r₂ : Fin 2 → ℝ) :
   field_simp [hs2_pos.ne']
   ring
 
-private lemma pathGramSum_im_zero_of_spIn_real (Φ : ℕ → Fin 2 → ℂ)
+lemma pathGramSum_im_zero_of_spIn_real (Φ : ℕ → Fin 2 → ℂ)
     (hreal : ∀ i j, (spIn (Φ i) (Φ j)).im = 0) (k : ℕ) :
     (pathGramSum k Φ).im = 0 := by
   unfold pathGramSum
@@ -1637,7 +1640,7 @@ private lemma pathGramSum_im_zero_of_spIn_real (Φ : ℕ → Fin 2 → ℂ)
         hreal (pathNP1Perm k b₁ e).val (pathNP2Perm k b₂ e).val]
       ring
 
-private lemma pathRecPair_planar_pos (Φ : ℕ → Fin 2 → ℂ)
+lemma pathRecPair_planar_pos (Φ : ℕ → Fin 2 → ℂ)
     (hunit : ∀ e, ‖Φ e 0‖ ^ 2 + ‖Φ e 1‖ ^ 2 = 1)
     (hreal : ∀ i j, (spIn (Φ i) (Φ j)).im = 0) :
     ∀ k : ℕ, 1 ≤ k → 0 < (pathRecPair Φ k).1.re

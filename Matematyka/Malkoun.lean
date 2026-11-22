@@ -1,11 +1,14 @@
-import Mathlib
+module
 
+public import Mathlib
 /-!
 # Malkoun's Graph Generalizations of the Atiyah–Sutcliffe Conjectures
 
 Formal building blocks from Joseph Malkoun,
 *Finite graphs and configurations of points* (`arXiv:2508.13472v3`, Sept 7, 2026).
 -/
+
+@[expose] public section
 
 namespace Matematyka.Malkoun
 
@@ -56,7 +59,7 @@ theorem malkoun_lg3_conj_c_eq_iff (h12 : ℂ) :
     subst h
     simp
 
-private lemma two_mul_sqrt_am_gm (u v : ℝ) (hu : 0 ≤ u) (hu1 : u ≤ 1) (hv : 0 ≤ v) (hv1 : v ≤ 1) :
+lemma two_mul_sqrt_am_gm (u v : ℝ) (hu : 0 ≤ u) (hu1 : u ≤ 1) (hv : 0 ≤ v) (hv1 : v ≤ 1) :
     2 * (u * v * Real.sqrt ((1 - u ^ 2) * (1 - v ^ 2))) ≤ u ^ 2 + v ^ 2 - 2 * u ^ 2 * v ^ 2 := by
   have h1u : 0 ≤ 1 - u ^ 2 := by nlinarith
   have h1v : 0 ≤ 1 - v ^ 2 := by nlinarith

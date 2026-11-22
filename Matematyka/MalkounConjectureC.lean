@@ -1,5 +1,6 @@
-import Matematyka.MalkounConjectureD
+module
 
+public import Matematyka.MalkounConjectureD
 /-!
 # Formal Disproof of Malkoun's Conjecture C (Trees), `MalkounTreeConjectureDProp`, and Conjectures A & B Restricted to Trees
 
@@ -26,23 +27,25 @@ restricted to finite trees:
    and `disproof_malkoun_path_conjecture_C_neg_re`.
 -/
 
+@[expose] public section
+
 namespace Matematyka.MalkounConjectureC
 
 open Complex Classical Matematyka.MalkounCounterexample Matematyka.MalkounBipartite
   Matematyka.MalkounConjectureD
 
-private lemma fin2_eq (k : Fin 2) : k = 0 ∨ k = 1 := by
+lemma fin2_eq (k : Fin 2) : k = 0 ∨ k = 1 := by
   fin_cases k <;> simp
 
-private lemma sum_bool_ft {R : Type*} [AddCommMonoid R] (g : Bool → R) :
+lemma sum_bool_ft {R : Type*} [AddCommMonoid R] (g : Bool → R) :
     (∑ b : Bool, g b) = g false + g true := by
   rw [Fintype.sum_bool, add_comm]
 
-private lemma toC_starGI' (z : GI) : GI.toC (starGI z) = starRingEnd ℂ (GI.toC z) := by
+lemma toC_starGI' (z : GI) : GI.toC (starGI z) = starRingEnd ℂ (GI.toC z) := by
   simp only [starGI, GI.toC, map_add, map_mul, Complex.conj_I, map_intCast, Int.cast_neg]
   ring
 
-private lemma toC_sumFinGI' : ∀ (m : ℕ) (f : Fin m → GI),
+lemma toC_sumFinGI' : ∀ (m : ℕ) (f : Fin m → GI),
     GI.toC (sumFinGI m f) = ∑ i : Fin m, GI.toC (f i)
   | 0, _ => by simp [sumFinGI]
   | m + 1, f => by
@@ -279,7 +282,7 @@ def cherryPart (u : Fin 10) : Bool := decide (u = 1 ∨ u = 4 ∨ u = 7)
 lemma cherryTree10_isBipartite : IsBipartite cherryTree10 cherryPart := by
   intro u v huv; revert u v huv; decide
 
-private def cherryEdges : Fin 9 → BipEdge cherryTree10 cherryPart
+def cherryEdges : Fin 9 → BipEdge cherryTree10 cherryPart
   | 0 => ⟨(0, 1), by decide⟩
   | 1 => ⟨(2, 1), by decide⟩
   | 2 => ⟨(3, 1), by decide⟩
@@ -290,7 +293,7 @@ private def cherryEdges : Fin 9 → BipEdge cherryTree10 cherryPart
   | 7 => ⟨(8, 7), by decide⟩
   | 8 => ⟨(9, 7), by decide⟩
 
-private lemma cherry_bipEdge_cases (e : BipEdge cherryTree10 cherryPart) :
+lemma cherry_bipEdge_cases (e : BipEdge cherryTree10 cherryPart) :
     e = cherryEdges 0 ∨ e = cherryEdges 1 ∨ e = cherryEdges 2 ∨
     e = cherryEdges 3 ∨ e = cherryEdges 4 ∨ e = cherryEdges 5 ∨
     e = cherryEdges 6 ∨ e = cherryEdges 7 ∨ e = cherryEdges 8 := by
@@ -305,7 +308,7 @@ private lemma cherry_bipEdge_cases (e : BipEdge cherryTree10 cherryPart) :
     ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ |
     ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> simp [cherryEdges]
 
-private def cherryEdgeEquiv : Fin 9 ≃ BipEdge cherryTree10 cherryPart where
+def cherryEdgeEquiv : Fin 9 ≃ BipEdge cherryTree10 cherryPart where
   toFun := cherryEdges
   invFun e :=
     if e.1.2 = 1 then (if e.1.1 = 0 then 0 else if e.1.1 = 2 then 1 else 2)
@@ -315,7 +318,7 @@ private def cherryEdgeEquiv : Fin 9 ≃ BipEdge cherryTree10 cherryPart where
   right_inv e := by
     rcases cherry_bipEdge_cases e with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;> rfl
 
-private def fin3PermCycFun : Fin 6 → Equiv.Perm (Fin 3)
+def fin3PermCycFun : Fin 6 → Equiv.Perm (Fin 3)
   | 0 => 1
   | 1 => Equiv.swap 0 1
   | 2 => Equiv.swap 1 2
@@ -323,7 +326,7 @@ private def fin3PermCycFun : Fin 6 → Equiv.Perm (Fin 3)
   | 4 => Equiv.swap 0 1 * Equiv.swap 1 2
   | 5 => Equiv.swap 1 2 * Equiv.swap 0 1
 
-private def fin3PermCycEquiv : Fin 6 ≃ Equiv.Perm (Fin 3) where
+def fin3PermCycEquiv : Fin 6 ≃ Equiv.Perm (Fin 3) where
   toFun := fin3PermCycFun
   invFun σ :=
     if σ 0 = 0 then (if σ 1 = 1 then 0 else 2)
@@ -345,10 +348,10 @@ private def fin3PermCycEquiv : Fin 6 ≃ Equiv.Perm (Fin 3) where
       | ((rcases hc3 x with rfl | rfl | rfl) <;>
           rw [h0] <;> rw [h1] <;> (try rw [h2]) <;> decide)
 
-private lemma fin3_cases (a : Fin 3) : a = 0 ∨ a = 1 ∨ a = 2 := by
+lemma fin3_cases (a : Fin 3) : a = 0 ∨ a = 1 ∨ a = 2 := by
   fin_cases a <;> simp
 
-private def cherryHubPermFun (π : Equiv.Perm (Fin 3)) : Equiv.Perm (Fin 9) where
+def cherryHubPermFun (π : Equiv.Perm (Fin 3)) : Equiv.Perm (Fin 9) where
   toFun i :=
     if i = 0 then ![0, 3, 6] (π 0)
     else if i = 3 then ![0, 3, 6] (π 1)
@@ -388,32 +391,32 @@ private def cherryHubPermFun (π : Equiv.Perm (Fin 3)) : Equiv.Perm (Fin 9) wher
     · rfl
     · rfl
 
-private lemma cherry_fst_hub (u v : Fin 10)
+lemma cherry_fst_hub (u v : Fin 10)
     (h : cherryTree10.Adj u v ∧ cherryPart u = false ∧ cherryPart v = true) (hu : u = 0) :
     cherryEdgeEquiv.symm ⟨(u, v), h⟩ = 0 ∨ cherryEdgeEquiv.symm ⟨(u, v), h⟩ = 3 ∨
       cherryEdgeEquiv.symm ⟨(u, v), h⟩ = 6 := by
   revert u v h hu; decide
 
-private lemma cherry_fst_leaf_fix (i : Fin 9) (hi0 : i ≠ 0) (hi3 : i ≠ 3) (hi6 : i ≠ 6)
+lemma cherry_fst_leaf_fix (i : Fin 9) (hi0 : i ≠ 0) (hi3 : i ≠ 3) (hi6 : i ≠ 6)
     (u v : Fin 10) (h : cherryTree10.Adj u v ∧ cherryPart u = false ∧ cherryPart v = true)
     (hu : u = (cherryEdges i).1.1) :
     cherryEdgeEquiv.symm ⟨(u, v), h⟩ = i := by
   revert i hi0 hi3 hi6 u v h hu; decide
 
-private lemma cherry_hub_fst (a : Fin 3) : (cherryEdges (![0, 3, 6] a)).1.1 = 0 := by
+lemma cherry_hub_fst (a : Fin 3) : (cherryEdges (![0, 3, 6] a)).1.1 = 0 := by
   fin_cases a <;> rfl
 
-private def cherryHubIdx : Fin 9 → Fin 3
+def cherryHubIdx : Fin 9 → Fin 3
   | 0 => 0 | 3 => 1 | 6 => 2 | _ => 2
 
-private lemma cherryHubIdx_hub (a : Fin 3) : cherryHubIdx (![0, 3, 6] a) = a := by
+lemma cherryHubIdx_hub (a : Fin 3) : cherryHubIdx (![0, 3, 6] a) = a := by
   fin_cases a <;> rfl
 
-private lemma cherryHubPermFun_hub (π : Equiv.Perm (Fin 3)) (c : Fin 3) :
+lemma cherryHubPermFun_hub (π : Equiv.Perm (Fin 3)) (c : Fin 3) :
     cherryHubPermFun π (![0, 3, 6] c) = ![0, 3, 6] (π c) := by
   fin_cases c <;> simp [cherryHubPermFun]
 
-private def cherryP1Inv (σ : bipP1 cherryTree10 cherryPart) : Equiv.Perm (Fin 3) :=
+def cherryP1Inv (σ : bipP1 cherryTree10 cherryPart) : Equiv.Perm (Fin 3) :=
   let σ' := Equiv.permCongr cherryEdgeEquiv.symm σ.1
   have himg : ∀ c : Fin 3, σ' (![0, 3, 6] c) = 0 ∨ σ' (![0, 3, 6] c) = 3 ∨ σ' (![0, 3, 6] c) = 6 := by
     intro c
@@ -458,11 +461,11 @@ private def cherryP1Inv (σ : bipP1 cherryTree10 cherryPart) : Equiv.Perm (Fin 3
       rw [hs, Equiv.apply_symm_apply]
       fin_cases c <;> rfl }
 
-private lemma cherry_hub_idx_inv (x : Fin 9) (hx : x = 0 ∨ x = 3 ∨ x = 6) :
+lemma cherry_hub_idx_inv (x : Fin 9) (hx : x = 0 ∨ x = 3 ∨ x = 6) :
     (![0, 3, 6] : Fin 3 → Fin 9) (cherryHubIdx x) = x := by
   rcases hx with rfl | rfl | rfl <;> rfl
 
-private def cherryP1Equiv : Equiv.Perm (Fin 3) ≃ bipP1 cherryTree10 cherryPart where
+def cherryP1Equiv : Equiv.Perm (Fin 3) ≃ bipP1 cherryTree10 cherryPart where
   toFun π := ⟨Equiv.permCongr cherryEdgeEquiv (cherryHubPermFun π), fun e => by
     obtain ⟨i, rfl⟩ := cherryEdgeEquiv.surjective e
     simp only [Equiv.permCongr_apply, Equiv.symm_apply_apply]
@@ -548,7 +551,7 @@ private def cherryP1Equiv : Equiv.Perm (Fin 3) ≃ bipP1 cherryTree10 cherryPart
       conv_lhs => rw [← h8]
       exact cherryEdgeEquiv.apply_symm_apply _
 
-private def cherryBlockPermFun (τ : Fin 3 → Equiv.Perm (Fin 3)) : Equiv.Perm (Fin 9) where
+def cherryBlockPermFun (τ : Fin 3 → Equiv.Perm (Fin 3)) : Equiv.Perm (Fin 9) where
   toFun i :=
     if h3 : i.val < 3 then ⟨(τ 0 ⟨i.val, h3⟩).val, by omega⟩
     else if h6 : i.val < 6 then ⟨3 + (τ 1 ⟨i.val - 3, by omega⟩).val, by omega⟩
@@ -592,17 +595,17 @@ private def cherryBlockPermFun (τ : Fin 3 → Equiv.Perm (Fin 3)) : Equiv.Perm 
         simp [h3, h6, hnot3, hnot6]
         omega
 
-private lemma cherryEdges_snd_eq_of_div3 (a b : Fin 9) (h : a.val / 3 = b.val / 3) :
+lemma cherryEdges_snd_eq_of_div3 (a b : Fin 9) (h : a.val / 3 = b.val / 3) :
     (cherryEdges a).1.2 = (cherryEdges b).1.2 := by
   revert a b h; decide
 
-private lemma cherry_snd_div3 (c j : Fin 3) (u v : Fin 10)
+lemma cherry_snd_div3 (c j : Fin 3) (u v : Fin 10)
     (h : cherryTree10.Adj u v ∧ cherryPart u = false ∧ cherryPart v = true)
     (hv : v = (cherryEdges ⟨3 * c.val + j.val, by omega⟩).1.2) :
     (cherryEdgeEquiv.symm ⟨(u, v), h⟩).val / 3 = c.val := by
   revert c j u v h hv; decide
 
-private lemma cherryP2_hblk (σ : bipP2 cherryTree10 cherryPart) (c j : Fin 3) :
+lemma cherryP2_hblk (σ : bipP2 cherryTree10 cherryPart) (c j : Fin 3) :
     (Equiv.permCongr cherryEdgeEquiv.symm σ.1 ⟨3 * c.val + j.val, by omega⟩).val / 3 = c.val := by
   rcases hσk : σ.1 (cherryEdges ⟨3 * c.val + j.val, by omega⟩) with ⟨⟨u, v⟩, h⟩
   have hv : v = (cherryEdges ⟨3 * c.val + j.val, by omega⟩).1.2 := by
@@ -613,7 +616,7 @@ private lemma cherryP2_hblk (σ : bipP2 cherryTree10 cherryPart) (c j : Fin 3) :
   rw [hσk]
   exact cherry_snd_div3 c j u v h hv
 
-private def cherryP2Inv (σ : bipP2 cherryTree10 cherryPart) : Fin 3 → Equiv.Perm (Fin 3) :=
+def cherryP2Inv (σ : bipP2 cherryTree10 cherryPart) : Fin 3 → Equiv.Perm (Fin 3) :=
   let σ' := Equiv.permCongr cherryEdgeEquiv.symm σ.1
   have hblk : ∀ (c j : Fin 3), (σ' ⟨3 * c.val + j.val, by omega⟩).val / 3 = c.val :=
     cherryP2_hblk σ
@@ -644,12 +647,12 @@ private def cherryP2Inv (σ : bipP2 cherryTree10 cherryPart) : Fin 3 → Equiv.P
             σ'.symm ⟨3 * c.val + j.val, by omega⟩ := Fin.ext (by dsimp only; omega)
         rw [heq, Equiv.apply_symm_apply]; dsimp only; omega }
 
-private lemma cherryP2Inv_apply (σ : bipP2 cherryTree10 cherryPart) (c j : Fin 3) :
+lemma cherryP2Inv_apply (σ : bipP2 cherryTree10 cherryPart) (c j : Fin 3) :
     cherryP2Inv σ c j =
       ⟨((Equiv.permCongr cherryEdgeEquiv.symm σ.1) ⟨3 * c.val + j.val, by omega⟩).val % 3,
         by omega⟩ := rfl
 
-private def cherryP2Equiv : (Fin 3 → Equiv.Perm (Fin 3)) ≃ bipP2 cherryTree10 cherryPart where
+def cherryP2Equiv : (Fin 3 → Equiv.Perm (Fin 3)) ≃ bipP2 cherryTree10 cherryPart where
   toFun τ := ⟨Equiv.permCongr cherryEdgeEquiv (cherryBlockPermFun τ), fun e => by
     obtain ⟨k, rfl⟩ := cherryEdgeEquiv.surjective e
     simp only [Equiv.permCongr_apply, Equiv.symm_apply_apply]
@@ -774,25 +777,25 @@ noncomputable def cherryPinwheelConfig : ConfigSpace cherryTree10 :=
 
 lemma cherryPinwheel_planar (u : Fin 10) : cherryPinwheelConfig.1 u 2 = 0 := rfl
 
-private noncomputable def omega3 : ℂ :=
+noncomputable def omega3 : ℂ :=
   -1 / 2 + (((Real.sqrt 3 : ℝ) : ℂ) / 2) * Complex.I
 
-private noncomputable def pinDir : Fin 3 → Fin 3 → ℝ
+noncomputable def pinDir : Fin 3 → Fin 3 → ℝ
   | 0, 0 => 1 | 0, 1 => 0 | 0, 2 => 0
   | 1, 0 => -1 / 2 | 1, 1 => Real.sqrt 3 / 2 | 1, 2 => 0
   | 2, 0 => -1 / 2 | 2, 1 => -(Real.sqrt 3 / 2) | 2, 2 => 0
 
-private noncomputable def pinSpinor : Fin 3 → Fin 2 → ℂ
+noncomputable def pinSpinor : Fin 3 → Fin 2 → ℂ
   | 0, 0 => 1 | 0, 1 => 1
   | 1, 0 => 1 | 1, 1 => omega3
   | 2, 0 => 1 | 2, 1 => starRingEnd ℂ omega3
 
-private def cherryPinClass : Fin 9 → Fin 3
+def cherryPinClass : Fin 9 → Fin 3
   | 0 => 0 | 1 => 1 | 2 => 1
   | 3 => 1 | 4 => 2 | 5 => 2
   | 6 => 2 | 7 => 0 | 8 => 0
 
-private lemma pinSpinor_norm_sq (a : Fin 3) :
+lemma pinSpinor_norm_sq (a : Fin 3) :
     ‖pinSpinor a 0‖ ^ 2 + ‖pinSpinor a 1‖ ^ 2 = 2 := by
   have hs3 : Real.sqrt 3 ^ 2 = 3 := Real.sq_sqrt (by norm_num)
   have hn1 : ‖omega3‖ ^ 2 = 1 := by
@@ -806,7 +809,7 @@ private lemma pinSpinor_norm_sq (a : Fin 3) :
   · simp [pinSpinor, hn1]; norm_num
   · simp [pinSpinor, hn1]; norm_num
 
-private lemma pinSpinor_pauli (a : Fin 3) :
+lemma pinSpinor_pauli (a : Fin 3) :
     (pauliDot (pinDir a)).mulVec (pinSpinor a) = pinSpinor a := by
   have hs3 : Real.sqrt 3 ^ 2 = 3 := Real.sq_sqrt (by norm_num)
   funext k
@@ -821,39 +824,39 @@ private lemma pinSpinor_pauli (a : Fin 3) :
       Complex.one_re, Complex.one_im] <;>
     nlinarith [hs3]
 
-private def cherryDA (i : Fin 9) : ℤ :=
+def cherryDA (i : Fin 9) : ℤ :=
   cherryIntA (cherryEdges i).1.2 - cherryIntA (cherryEdges i).1.1
 
-private def cherryDB (i : Fin 9) : ℤ :=
+def cherryDB (i : Fin 9) : ℤ :=
   cherryIntB (cherryEdges i).1.2 - cherryIntB (cherryEdges i).1.1
 
-private def cherryStepLen : Fin 9 → ℤ
+def cherryStepLen : Fin 9 → ℤ
   | 0 => 2 | 1 => 2 | 2 => 4
   | 3 => 2 | 4 => 2 | 5 => 4
   | 6 => 2 | 7 => 2 | 8 => 4
 
-private def pinXCoeff : Fin 3 → ℤ
+def pinXCoeff : Fin 3 → ℤ
   | 0 => 2 | 1 => -1 | 2 => -1
 
-private def pinYCoeff : Fin 3 → ℤ
+def pinYCoeff : Fin 3 → ℤ
   | 0 => 0 | 1 => 1 | 2 => -1
 
-private lemma cherryStepLen_pos (i : Fin 9) : 0 < cherryStepLen i := by
+lemma cherryStepLen_pos (i : Fin 9) : 0 < cherryStepLen i := by
   revert i; decide
 
-private lemma cherryStepLen_sq (i : Fin 9) :
+lemma cherryStepLen_sq (i : Fin 9) :
     cherryDA i ^ 2 + 3 * cherryDB i ^ 2 = cherryStepLen i ^ 2 := by
   revert i; decide
 
-private lemma cherryDA_eq_class (i : Fin 9) :
+lemma cherryDA_eq_class (i : Fin 9) :
     2 * cherryDA i = cherryStepLen i * pinXCoeff (cherryPinClass i) := by
   revert i; decide
 
-private lemma cherryDB_eq_class (i : Fin 9) :
+lemma cherryDB_eq_class (i : Fin 9) :
     2 * cherryDB i = cherryStepLen i * pinYCoeff (cherryPinClass i) := by
   revert i; decide
 
-private lemma cherry_unitDir_eq (i : Fin 9) :
+lemma cherry_unitDir_eq (i : Fin 9) :
     unitDir (cherryPinwheelPts (cherryEdges i).1.1) (cherryPinwheelPts (cherryEdges i).1.2) =
       pinDir (cherryPinClass i) := by
   have hs3 : Real.sqrt 3 ^ 2 = 3 := Real.sq_sqrt (by norm_num)
@@ -900,28 +903,28 @@ private lemma cherry_unitDir_eq (i : Fin 9) :
   · rw [unitDir, heuclid, hd2, zero_div]
     rcases fin3_cases (cherryPinClass i) with h | h | h <;> rw [h] <;> rfl
 
-private def chNext : Fin 3 → Fin 3
+def chNext : Fin 3 → Fin 3
   | 0 => 1 | 1 => 2 | 2 => 0
 
-private def chRowCls (a c : Fin 3) : Fin 3 → Fin 3
+def chRowCls (a c : Fin 3) : Fin 3 → Fin 3
   | 0 => a | 1 => chNext c | 2 => chNext c
 
-private def chColCls (c : Fin 3) : Fin 3 → Fin 3
+def chColCls (c : Fin 3) : Fin 3 → Fin 3
   | 0 => c | 1 => chNext c | 2 => chNext c
 
-private lemma cherryPinClass_hub (a : Fin 3) :
+lemma cherryPinClass_hub (a : Fin 3) :
     cherryPinClass (![0, 3, 6] a) = a := by
   fin_cases a <;> decide
 
-private lemma cherryPinClass_block (c a : Fin 3) :
+lemma cherryPinClass_block (c a : Fin 3) :
     cherryPinClass ⟨3 * c.val + a.val, by omega⟩ = chColCls c a := by
   revert c a; decide
 
-private lemma cherry_prod_val (c j : Fin 3) :
+lemma cherry_prod_val (c j : Fin 3) :
     ((finProdFinEquiv : Fin 3 × Fin 3 ≃ Fin 9) (c, j)).val = 3 * c.val + j.val := by
   revert c j; decide
 
-private lemma cherryBlockPermFun_pair (τ : Fin 3 → Equiv.Perm (Fin 3)) (c j : Fin 3) :
+lemma cherryBlockPermFun_pair (τ : Fin 3 → Equiv.Perm (Fin 3)) (c j : Fin 3) :
     cherryBlockPermFun τ ((finProdFinEquiv : Fin 3 × Fin 3 ≃ Fin 9) (c, j)) =
       ⟨3 * c.val + (τ c j).val, by omega⟩ := by
   dsimp only [cherryBlockPermFun, Equiv.coe_fn_mk]
@@ -958,7 +961,7 @@ private lemma cherryBlockPermFun_pair (τ : Fin 3 → Equiv.Perm (Fin 3)) (c j :
     have h2 : 3 * (2 : Fin 3).val = 6 := rfl
     rw [h2]
 
-private lemma cherryHub_pinClass (π : Equiv.Perm (Fin 3)) (c j : Fin 3) :
+lemma cherryHub_pinClass (π : Equiv.Perm (Fin 3)) (c j : Fin 3) :
     cherryPinClass (cherryHubPermFun π ((finProdFinEquiv : Fin 3 × Fin 3 ≃ Fin 9) (c, j))) =
       chRowCls (π c) c j := by
   rcases fin3_cases c with rfl | rfl | rfl <;> rcases fin3_cases j with rfl | rfl | rfl
@@ -972,13 +975,13 @@ private lemma cherryHub_pinClass (π : Equiv.Perm (Fin 3)) (c j : Fin 3) :
   · rfl
   · rfl
 
-private noncomputable def pinGram (a b : Fin 3) : ℂ :=
+noncomputable def pinGram (a b : Fin 3) : ℂ :=
   starRingEnd ℂ (pinSpinor a 0) * pinSpinor b 0 + starRingEnd ℂ (pinSpinor a 1) * pinSpinor b 1
 
-private noncomputable def chVal (a c : Fin 3) : ℂ :=
+noncomputable def chVal (a c : Fin 3) : ℂ :=
   ∑ τ : Equiv.Perm (Fin 3), ∏ j : Fin 3, pinGram (chRowCls a c j) (chColCls c (τ j))
 
-private lemma chVal_eval_all :
+lemma chVal_eval_all :
     omega3 ^ 3 = 1 ∧
     chVal 0 0 = 24 ∧ chVal 1 0 = -24 * omega3 ∧ chVal 2 0 = 0 ∧
     chVal 0 1 = 0 ∧ chVal 1 1 = 24 ∧ chVal 2 1 = -24 * omega3 ∧
@@ -1212,18 +1215,18 @@ lemma path15_isBipartite : IsBipartite pathGraph15 partEvenTrue := by
   intro u v huv
   rcases huv with h | h <;> simp [partEvenTrue] <;> omega
 
-private def path15EdgeEnd (e : Fin 14) : Fin 15 × Fin 15 :=
+def path15EdgeEnd (e : Fin 14) : Fin 15 × Fin 15 :=
   if e.val % 2 = 0 then (⟨e.val + 1, by omega⟩, ⟨e.val, by omega⟩)
   else (⟨e.val, by omega⟩, ⟨e.val + 1, by omega⟩)
 
-private def path15Edges (e : Fin 14) : BipEdge pathGraph15 partEvenTrue :=
+def path15Edges (e : Fin 14) : BipEdge pathGraph15 partEvenTrue :=
   ⟨path15EdgeEnd e, by
     unfold path15EdgeEnd
     split_ifs with h
     · refine ⟨Or.inr rfl, ?_, ?_⟩ <;> simp [partEvenTrue] <;> omega
     · refine ⟨Or.inl rfl, ?_, ?_⟩ <;> simp [partEvenTrue] <;> omega⟩
 
-private def path15EdgeEquiv : Fin 14 ≃ BipEdge pathGraph15 partEvenTrue where
+def path15EdgeEquiv : Fin 14 ≃ BipEdge pathGraph15 partEvenTrue where
   toFun := path15Edges
   invFun e := ⟨min e.1.1.val e.1.2.val, by
     rcases e with ⟨⟨⟨uv, huv⟩, ⟨vv, hvv⟩⟩, hadj, _⟩
@@ -1243,7 +1246,7 @@ private def path15EdgeEquiv : Fin 14 ≃ BipEdge pathGraph15 partEvenTrue where
       split_ifs <;>
       exact Prod.ext (Fin.ext (by dsimp only; omega)) (Fin.ext (by dsimp only; omega))
 
-private lemma path15P1Perm_invol (b : Fin 7 → Bool) (e : Fin 14) :
+lemma path15P1Perm_invol (b : Fin 7 → Bool) (e : Fin 14) :
     (fun x : Fin 14 => if b ⟨x.val / 2, by omega⟩ then ⟨2 * (x.val / 2) + (1 - x.val % 2), by omega⟩ else x)
       ((fun x : Fin 14 => if b ⟨x.val / 2, by omega⟩ then ⟨2 * (x.val / 2) + (1 - x.val % 2), by omega⟩ else x) e) = e := by
   dsimp only
@@ -1257,21 +1260,21 @@ private lemma path15P1Perm_invol (b : Fin 7 → Bool) (e : Fin 14) :
     apply Fin.ext; dsimp only; omega
   · simp only [h, Bool.false_eq_true, ↓reduceIte]
 
-private def path15P1Perm (b : Fin 7 → Bool) : Equiv.Perm (Fin 14) where
+def path15P1Perm (b : Fin 7 → Bool) : Equiv.Perm (Fin 14) where
   toFun e := if b ⟨e.val / 2, by omega⟩ then ⟨2 * (e.val / 2) + (1 - e.val % 2), by omega⟩ else e
   invFun e := if b ⟨e.val / 2, by omega⟩ then ⟨2 * (e.val / 2) + (1 - e.val % 2), by omega⟩ else e
   left_inv e := path15P1Perm_invol b e
   right_inv e := path15P1Perm_invol b e
 
-private lemma path15Edges_fst_val (i : Fin 14) :
+lemma path15Edges_fst_val (i : Fin 14) :
     (path15Edges i).1.1.val = 2 * (i.val / 2) + 1 := by
   revert i; decide
 
-private lemma path15Edges_snd_val (i : Fin 14) :
+lemma path15Edges_snd_val (i : Fin 14) :
     (path15Edges i).1.2.val = if i.val = 0 then 0 else if i.val = 13 then 14 else 2 * ((i.val - 1) / 2) + 2 := by
   revert i; decide
 
-private def path15P1Equiv : (Fin 7 → Bool) ≃ bipP1 pathGraph15 partEvenTrue where
+def path15P1Equiv : (Fin 7 → Bool) ≃ bipP1 pathGraph15 partEvenTrue where
   toFun b := ⟨Equiv.permCongr path15EdgeEquiv (path15P1Perm b), fun e => by
     obtain ⟨i, rfl⟩ := path15EdgeEquiv.surjective e
     simp only [Equiv.permCongr_apply, Equiv.symm_apply_apply]
@@ -1373,7 +1376,7 @@ private def path15P1Equiv : (Fin 7 → Bool) ≃ bipP1 pathGraph15 partEvenTrue 
       exact path15EdgeEquiv.apply_symm_apply _
     · exact absurd (h01.trans h11.symm) hne
 
-private lemma path15P2Perm_invol (b : Fin 6 → Bool) (e : Fin 14) :
+lemma path15P2Perm_invol (b : Fin 6 → Bool) (e : Fin 14) :
     (fun x : Fin 14 =>
       if h1 : 1 ≤ x.val ∧ x.val ≤ 12 then
         if b ⟨(x.val - 1) / 2, by omega⟩ then
@@ -1403,7 +1406,7 @@ private lemma path15P2Perm_invol (b : Fin 6 → Bool) (e : Fin 14) :
     · simp only [hb, Bool.false_eq_true, ↓reduceIte, h1.1, h1.2, and_self, ↓reduceDIte]
   · simp only [h1, ↓reduceDIte]
 
-private def path15P2Perm (b : Fin 6 → Bool) : Equiv.Perm (Fin 14) where
+def path15P2Perm (b : Fin 6 → Bool) : Equiv.Perm (Fin 14) where
   toFun e :=
     if h1 : 1 ≤ e.val ∧ e.val ≤ 12 then
       if b ⟨(e.val - 1) / 2, by omega⟩ then ⟨2 * ((e.val - 1) / 2) + 1 + (1 - (e.val - 1) % 2), by omega⟩
@@ -1417,7 +1420,7 @@ private def path15P2Perm (b : Fin 6 → Bool) : Equiv.Perm (Fin 14) where
   left_inv e := path15P2Perm_invol b e
   right_inv e := path15P2Perm_invol b e
 
-private def path15P2Equiv : (Fin 6 → Bool) ≃ bipP2 pathGraph15 partEvenTrue where
+def path15P2Equiv : (Fin 6 → Bool) ≃ bipP2 pathGraph15 partEvenTrue where
   toFun b := ⟨Equiv.permCongr path15EdgeEquiv (path15P2Perm b), fun e => by
     obtain ⟨i, rfl⟩ := path15EdgeEquiv.surjective e
     simp only [Equiv.permCongr_apply, Equiv.symm_apply_apply]
@@ -1591,12 +1594,12 @@ def matProdGI : ∀ k : ℕ, (Fin (k + 1) → Bool → Bool → GI) → Bool →
       F 0 a false * matProdGI k (fun j => F j.succ) false c +
       F 0 a true * matProdGI k (fun j => F j.succ) true c
 
-private def matChainC : ∀ k : ℕ, (Fin (k + 1) → Bool → Bool → ℂ) → (Fin k → Bool) → Bool → Bool → ℂ
+def matChainC : ∀ k : ℕ, (Fin (k + 1) → Bool → Bool → ℂ) → (Fin k → Bool) → Bool → Bool → ℂ
   | 0, F, _, a, c => F 0 a c
   | k + 1, F, b, a, c =>
       F 0 a (b 0) * matChainC k (fun j => F j.succ) (fun j => b j.succ) (b 0) c
 
-private lemma matProdC_eq_sum :
+lemma matProdC_eq_sum :
     ∀ (k : ℕ) (FGI : Fin (k + 1) → Bool → Bool → GI) (a c : Bool),
       GI.toC (matProdGI k FGI a c) =
         ∑ b : Fin k → Bool,
@@ -1612,13 +1615,13 @@ private lemma matProdC_eq_sum :
         (fun _ => rfl)]
       rw [Fintype.sum_prod_type, sum_bool_ft, Finset.mul_sum, Finset.mul_sum]
 
-private def bitLeft (b₂ : Fin 6 → Bool) (j : Fin 7) : Bool :=
+def bitLeft (b₂ : Fin 6 → Bool) (j : Fin 7) : Bool :=
   if h : 0 < j.val then b₂ ⟨j.val - 1, by omega⟩ else false
 
-private def bitRight (b₂ : Fin 6 → Bool) (j : Fin 7) : Bool :=
+def bitRight (b₂ : Fin 6 → Bool) (j : Fin 7) : Bool :=
   if h : j.val < 6 then b₂ ⟨j.val, h⟩ else false
 
-private lemma matChain6_eq_prod (F : Fin 7 → Bool → Bool → ℂ) (b₂ : Fin 6 → Bool) :
+lemma matChain6_eq_prod (F : Fin 7 → Bool → Bool → ℂ) (b₂ : Fin 6 → Bool) :
     matChainC 6 F b₂ false false = ∏ j : Fin 7, F j (bitLeft b₂ j) (bitRight b₂ j) := by
   have hL0 : bitLeft b₂ 0 = false := rfl
   have hL1 : bitLeft b₂ 1 = b₂ 0 := rfl
@@ -1822,7 +1825,7 @@ noncomputable def lg15NegConfig : ConfigSpace pathGraph15 :=
   ⟨fun u j => (lg15PtsInt u j : ℝ), fun _ _ hadj h =>
     pathGraph15.ne_of_adj hadj (lg15Pts_injective h)⟩
 
-private lemma lg15Pts_edge_diff (e : Fin 14) (j : Fin 3) :
+lemma lg15Pts_edge_diff (e : Fin 14) (j : Fin 3) :
     (lg15PtsInt (path15Edges e).1.2 j : ℝ) - (lg15PtsInt (path15Edges e).1.1 j : ℝ) =
       (hopfVecGI (fun k => lg15BGI k e) j : ℝ) := by
   have hi : (lg15PtsInt (path15Edges e).1.2 j) - (lg15PtsInt (path15Edges e).1.1 j) =

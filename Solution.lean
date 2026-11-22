@@ -1,7 +1,9 @@
-import Mathlib
-import Matematyka.MalkounN7Counterexample
-import Matematyka.MalkounWagnerCounterexample
-import Matematyka.MalkounPathPositivity
+module
+
+public import Mathlib
+public import Matematyka.MalkounN7Counterexample
+public import Matematyka.MalkounWagnerCounterexample
+public import Matematyka.MalkounPathPositivity
 
 /-!
 # Solution: Counterexamples to All Four Malkoun Conjectures (A–D) & Unconditional Path Positivity
@@ -10,6 +12,8 @@ Supplies kernel-verified proofs for every theorem declared in `Challenge.lean` a
 `comparator.json`, bridging identically structured public definitions in `namespace Challenge` to
 `Matematyka.Malkoun*`.
 -/
+
+@[expose] public section
 
 namespace Challenge
 
@@ -91,14 +95,9 @@ def IsThreeVertexConnected {n : ℕ} (G : SimpleGraph (Fin n)) : Prop :=
 def partitionSubgroup {E V : Type*} (κ : E → V) : Subgroup (Equiv.Perm E) where
   carrier := { σ | ∀ e, κ (σ e) = κ e }
   one_mem' _ := rfl
-  mul_mem' {a b} h1 h2 e := by
-    change κ (a (b e)) = κ e
-    rw [h1, h2]
-  inv_mem' {a} h e := by
-    change κ (a⁻¹ e) = κ e
-    have ha := (h (a⁻¹ e)).symm
-    have he : a (a⁻¹ e) = e := congrArg (fun g : Equiv.Perm E => g e) (mul_inv_cancel a)
-    rwa [he] at ha
+  mul_mem' h1 h2 e := (h1 _).trans (h2 e)
+  inv_mem' {a} h e :=
+    ((h (a⁻¹ e)).symm).trans (congrArg (fun g : Equiv.Perm E => κ (g e)) (mul_inv_cancel a))
 
 /-- Matrix-analytic **Conjecture D** of Malkoun (`arXiv:2508.13472v3`, Section 4). -/
 def MalkounConjectureDProp : Prop :=
@@ -130,16 +129,16 @@ def MalkounConjectureCProp : Prop :=
 def pathGraphN (n : ℕ) : SimpleGraph (Fin n) where
   Adj u v := (u.val + 1 = v.val) ∨ (v.val + 1 = u.val)
   symm := ⟨fun _ _ h => h.symm⟩
-  loopless := ⟨fun _ h => by omega⟩
+  loopless := ⟨fun u h => h.elim (Nat.succ_ne_self u.val) (Nat.succ_ne_self u.val)⟩
 
 instance instDecidableRelPathN (n : ℕ) : DecidableRel (pathGraphN n).Adj := fun u v =>
   inferInstanceAs (Decidable ((u.val + 1 = v.val) ∨ (v.val + 1 = u.val)))
 
-private lemma pathGraphN_eq (n : ℕ) :
+lemma pathGraphN_eq (n : ℕ) :
     pathGraphN n = Matematyka.MalkounPathPositivity.pathGraphN n :=
   rfl
 
-private lemma malkounAmplitude_eq_mat {n : ℕ} (G : SimpleGraph (Fin n))
+lemma malkounAmplitude_eq_mat {n : ℕ} (G : SimpleGraph (Fin n))
     [inst1 : DecidableRel G.Adj] (inst2 : DecidableRel G.Adj)
     (x : ConfigSpace G) :
     @malkounAmplitude n G inst1 x =
