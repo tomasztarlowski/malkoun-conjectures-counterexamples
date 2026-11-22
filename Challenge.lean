@@ -6,9 +6,38 @@ public import Mathlib
 # Challenge: Counterexamples to All Four Malkoun Conjectures (A–D) & Unconditional Path Positivity
 
 This lightweight Challenge module declares Malkoun's `G`-amplitude definitions
-(`arXiv:2508.13472v3`), graph connectivity predicates, Conjectures C and D, and 12 headline
-theorems refuting all four main conjectures (A, B, C, D) and Section 6 while proving Path
-Conjecture B and Planar Path Conjecture C unconditionally for all `n`.
+(`arXiv:2508.13472v3`), graph connectivity predicates, explicit witness graphs
+(`k4e2k3Graph`, `wagnerGraph`, `cherryTree10`, `pathGraphN`), Conjectures C and D, and
+12 headline theorems refuting all four main conjectures (A, B, C, D) and Section 6 while
+proving Path Conjecture B and Planar Path Conjecture C unconditionally for all `n`.
+
+## Scope of Compared Declarations, Proof Constructions, and Numerical Observations
+
+- **General existential/negation theorems (6 declarations):**
+  `disproof_malkoun_conjecture_A`, `disproof_malkoun_conjecture_B`,
+  `disproof_malkoun_section_6`, `disproof_malkoun_conjecture_D`,
+  `disproof_malkoun_rank2_conjecture_D`, and `disproof_malkoun_conjecture_C` state pure
+  negations or existential refutations without fixing a witness inside their signatures;
+  the explicit constructions (`barbellK4Graph` $B_8$, rank-3 $4\times 6$ witness on $C_6$,
+  rank-2 $2\times 12$ Gaussian-integer witness on $C_{12}$, and $T_{10}$) live inside
+  `Solution.lean` and `Matematyka/`.
+- **Witness-pinned formal theorems (4 declarations):**
+  `disproof_malkoun_n7_biconnected_conjecture_A`,
+  `disproof_malkoun_wagner_triangleFree_conjecture_A`,
+  `disproof_malkoun_tree_conjecture_A`, and `disproof_malkoun_path_conjecture_C_neg_re`
+  explicitly bind `k4e2k3Graph` ($H_7$ on `Fin 7`), `wagnerGraph` ($M_8$ on `Fin 8`),
+  `cherryTree10` ($T_{10}$ on `Fin 10`), and `pathGraphN 15` ($LG_{15}$ on `Fin 15`),
+  together with coplanarity (`∀ u, x.1 u 2 = 0`, points in $\mathbb{R}^2 \times \{0\}$)
+  where stated. Topological graph planarity of $H_7$ and vertex-transitivity of $M_8$ are
+  elementary background graph-theoretic remarks outside this Lean formalization.
+- **Unconditional path positivity (2 declarations):**
+  `malkounAmplitude_pathGraphN_norm_ge_one` and
+  `malkounAmplitude_pathGraphN_planar_re_ge_one` hold for every `n : ℕ`.
+- **Empirical / numerical observations (not proved in Lean):**
+  Absence of connected counterexamples on $n \le 6$ vertices and tree counterexamples on
+  $4 \le n \le 9$ vertices (making $H_7$ and $T_{10}$ the smallest examples found in our scan),
+  as well as 50-digit `mpmath` evaluations ($K_4 \square K_2$, $A_4$, $C_{18}$–$C_{28}$,
+  $LG_{16}$–$LG_{17}$, spiders), are numerical search observations rather than formal proofs.
 
 Proofs are supplied in `Solution.lean` and audited using strictly `{propext, Quot.sound, Classical.choice}`.
 -/
@@ -134,60 +163,125 @@ def pathGraphN (n : ℕ) : SimpleGraph (Fin n) where
 instance instDecidableRelPathN (n : ℕ) : DecidableRel (pathGraphN n).Adj := fun u v =>
   inferInstanceAs (Decidable ((u.val + 1 = v.val) ∨ (v.val + 1 = u.val)))
 
-/-- Disproof of Malkoun's Conjecture A (`∃ G` connected, `x ∈ C_G(ℝ³)`, `A_G(x) = 0`). -/
+/-- Symmetric irreflexive simple graph on `Fin n` induced by a Boolean generator `b`. -/
+def mkGraphOfBool {n : ℕ} (b : Fin n → Fin n → Bool) : SimpleGraph (Fin n) where
+  Adj u v := u ≠ v ∧ (b u v = true ∨ b v u = true)
+  symm := ⟨fun _ _ h => ⟨h.1.symm, h.2.symm⟩⟩
+  loopless := ⟨fun _ h => h.1 rfl⟩
+
+instance instDecidableRelMkGraphOfBool {n : ℕ} (b : Fin n → Fin n → Bool) :
+    DecidableRel (mkGraphOfBool b).Adj := fun u v =>
+  inferInstanceAs (Decidable (u ≠ v ∧ (b u v = true ∨ b v u = true)))
+
+/-- Directed edge generator for the 7-vertex, 11-edge graph $H_7 = K_4 \cup_{2e} K_3$. -/
+def k4e2k3GenBool (u v : Fin 7) : Bool :=
+  (u.val ≤ 3 && v.val ≤ 3) ||
+  (4 ≤ u.val && 4 ≤ v.val) ||
+  (u.val == 2 && v.val == 5) ||
+  (u.val == 3 && v.val == 4)
+
+/-- Explicit 7-vertex, 11-edge graph $H_7 = K_4 \cup_{2e} K_3$ on `Fin 7`. -/
+def k4e2k3Graph : SimpleGraph (Fin 7) := mkGraphOfBool k4e2k3GenBool
+
+instance instDecidableRelK4e2k3 : DecidableRel k4e2k3Graph.Adj :=
+  instDecidableRelMkGraphOfBool k4e2k3GenBool
+
+/-- Directed edge generator for the 8-vertex, 12-edge cubic Möbius ladder $M_8$ (Wagner graph). -/
+def wagnerGenBool (u v : Fin 8) : Bool :=
+  (u.val == 0 && v.val == 1) || (u.val == 1 && v.val == 2) ||
+  (u.val == 2 && v.val == 3) || (u.val == 3 && v.val == 4) ||
+  (u.val == 4 && v.val == 5) || (u.val == 5 && v.val == 6) ||
+  (u.val == 6 && v.val == 7) || (u.val == 7 && v.val == 0) ||
+  (u.val == 0 && v.val == 4) || (u.val == 1 && v.val == 5) ||
+  (u.val == 2 && v.val == 6) || (u.val == 3 && v.val == 7)
+
+/-- Explicit 8-vertex, 12-edge Wagner graph $M_8$ on `Fin 8`. -/
+def wagnerGraph : SimpleGraph (Fin 8) := mkGraphOfBool wagnerGenBool
+
+instance instDecidableRelWagner : DecidableRel wagnerGraph.Adj :=
+  instDecidableRelMkGraphOfBool wagnerGenBool
+
+/-- Directed edge generator for the 10-vertex, 9-edge cubic cherry tree $T_{10}$. -/
+def cherry10GenBool (u v : Fin 10) : Bool :=
+  (u.val == 0 && (v.val == 1 || v.val == 4 || v.val == 7)) ||
+  (u.val == 1 && (v.val == 2 || v.val == 3)) ||
+  (u.val == 4 && (v.val == 5 || v.val == 6)) ||
+  (u.val == 7 && (v.val == 8 || v.val == 9))
+
+/-- Explicit 10-vertex, 9-edge cubic cherry tree $T_{10}$ on `Fin 10`. -/
+def cherryTree10 : SimpleGraph (Fin 10) := mkGraphOfBool cherry10GenBool
+
+instance instDecidableRelCherry10 : DecidableRel cherryTree10.Adj :=
+  instDecidableRelMkGraphOfBool cherry10GenBool
+
+/-- Disproof of Malkoun's Conjecture A (`∃ G` connected, `x ∈ C_G(ℝ³)`, `A_G(x) = 0`),
+proved in `Solution` via the barbell graph `B_8`. -/
 theorem disproof_malkoun_conjecture_A :
     ∃ (n : ℕ) (G : SimpleGraph (Fin n)) (_ : DecidableRel G.Adj),
       G.Connected ∧ ∃ x : ConfigSpace G, malkounAmplitude G x = 0 := by
   sorry
 
-/-- Disproof of Malkoun's Conjecture B (`∃ G` connected, `x ∈ C_G(ℝ³)`, `‖A_G(x)‖ < 1`). -/
+/-- Disproof of Malkoun's Conjecture B (`∃ G` connected, `x ∈ C_G(ℝ³)`, `‖A_G(x)‖ < 1`),
+proved in `Solution` via the barbell graph `B_8`. -/
 theorem disproof_malkoun_conjecture_B :
     ∃ (n : ℕ) (G : SimpleGraph (Fin n)) (_ : DecidableRel G.Adj),
       G.Connected ∧ ∃ x : ConfigSpace G, ‖malkounAmplitude G x‖ < 1 := by
   sorry
 
-/-- Disproof of Malkoun's Section 6 connected-graph question (`Re(A_G) < 0`, `Im(A_G) = 0`). -/
+/-- Disproof of Malkoun's Section 6 connected-graph question (`Re(A_G) < 0`, `Im(A_G) = 0`),
+proved in `Solution` via the barbell graph `B_8`. -/
 theorem disproof_malkoun_section_6 :
     ∃ (n : ℕ) (G : SimpleGraph (Fin n)) (_ : DecidableRel G.Adj),
       G.Connected ∧ ∃ x : ConfigSpace G,
         (malkounAmplitude G x).re < 0 ∧ (malkounAmplitude G x).im = 0 := by
   sorry
 
-/-- Minimal planar 2-vertex-connected disproof of Conjecture A (`n = 7`, `H_7`). -/
+/-- Disproof of Conjecture A on the explicit 7-vertex 2-vertex-connected graph `k4e2k3Graph`
+($H_7 = K_4 \cup_{2e} K_3$) via a planar point configuration (`∀ u, x.1 u 2 = 0`).
+(Smallest counterexample found numerically; absence of $n \le 6$ violations is a numerical
+search observation rather than a formal proof.) -/
 theorem disproof_malkoun_n7_biconnected_conjecture_A :
-    ∃ (n : ℕ) (G : SimpleGraph (Fin n)) (_ : DecidableRel G.Adj),
-      G.Connected ∧ IsTwoVertexConnected G ∧ ∃ x : ConfigSpace G, malkounAmplitude G x = 0 := by
+    k4e2k3Graph.Connected ∧ IsTwoVertexConnected k4e2k3Graph ∧
+      ∃ x : ConfigSpace k4e2k3Graph,
+        (∀ u, x.1 u 2 = 0) ∧ malkounAmplitude k4e2k3Graph x = 0 := by
   sorry
 
-/-- Triangle-free 3-regular 3-vertex-connected disproof on the Wagner graph $M_8$ (`n = 8`). -/
+/-- Disproof of Conjecture A on the explicit 8-vertex triangle-free 3-regular 3-vertex-connected
+Wagner graph `wagnerGraph` ($M_8$) via a planar point configuration (`∀ u, x.1 u 2 = 0`). -/
 theorem disproof_malkoun_wagner_triangleFree_conjecture_A :
-    ∃ (n : ℕ) (G : SimpleGraph (Fin n)) (_ : DecidableRel G.Adj),
-      G.Connected ∧ IsThreeVertexConnected G ∧ G.IsRegularOfDegree 3 ∧ G.CliqueFree 3 ∧
-        ∃ x : ConfigSpace G, malkounAmplitude G x = 0 := by
+    wagnerGraph.Connected ∧ IsThreeVertexConnected wagnerGraph ∧
+      wagnerGraph.IsRegularOfDegree 3 ∧ wagnerGraph.CliqueFree 3 ∧
+      ∃ x : ConfigSpace wagnerGraph,
+        (∀ u, x.1 u 2 = 0) ∧ malkounAmplitude wagnerGraph x = 0 := by
   sorry
 
-/-- Disproof of General Conjecture D (`m = 6`, rank-3 Gram matrix on `C_6`). -/
+/-- Disproof of General Conjecture D, proved in `Solution` via a rank-3 matrix on `C_6`. -/
 theorem disproof_malkoun_conjecture_D : ¬ MalkounConjectureDProp := by
   sorry
 
-/-- Disproof of Rank-2 Spinor Conjecture D (`m = 12`, `2 × 12` Gaussian-integer witness on `C_12`). -/
+/-- Disproof of Rank-2 Spinor Conjecture D, proved in `Solution` via a `2 × 12` matrix on `C_12`. -/
 theorem disproof_malkoun_rank2_conjecture_D : ¬ MalkounRank2ConjectureDProp := by
   sorry
 
-/-- Disproof of Conjecture C on finite trees (`n = 10` planar cherry tree `T_{10}`). -/
+/-- Disproof of Conjecture C on finite trees, proved in `Solution` via `cherryTree10` ($T_{10}$). -/
 theorem disproof_malkoun_conjecture_C : ¬ MalkounConjectureCProp := by
   sorry
 
-/-- Disproof of Conjecture A even restricted to planar configurations on finite trees (`T_{10}`). -/
+/-- Disproof of Conjecture A restricted to planar point configurations (`∀ u, x.1 u 2 = 0`) on
+finite trees, proved on the explicit 10-vertex cubic cherry tree `cherryTree10` ($T_{10}$). -/
 theorem disproof_malkoun_tree_conjecture_A :
-    ∃ (n : ℕ) (T : SimpleGraph (Fin n)) (_ : DecidableRel T.Adj) (x : ConfigSpace T),
-      T.IsTree ∧ Function.Injective x.1 ∧ (∀ u, x.1 u 2 = 0) ∧ malkounAmplitude T x = 0 := by
+    cherryTree10.IsTree ∧ ∃ x : ConfigSpace cherryTree10,
+      Function.Injective x.1 ∧ (∀ u, x.1 u 2 = 0) ∧ malkounAmplitude cherryTree10 x = 0 := by
   sorry
 
-/-- Disproof of Conjecture C even restricted to linear paths (`LG_15`). -/
+/-- Disproof of Conjecture C restricted to linear path graphs: on the explicit 15-vertex path
+`pathGraphN 15` ($LG_{15}$), there exists `x ∈ C_{LG_15}(ℝ³)` with exact negative rational real
+part `-40605770611892600000 / 58001564658819600000 < 0`. -/
 theorem disproof_malkoun_path_conjecture_C_neg_re :
-    ∃ (n : ℕ) (T : SimpleGraph (Fin n)) (_ : DecidableRel T.Adj) (x : ConfigSpace T),
-      T.IsTree ∧ (malkounAmplitude T x).re < 0 := by
+    ∃ x : ConfigSpace (pathGraphN 15),
+      (malkounAmplitude (pathGraphN 15) x).re =
+        (-40605770611892600000 : ℝ) / 58001564658819600000 ∧
+      (malkounAmplitude (pathGraphN 15) x).re < 0 := by
   sorry
 
 /-- Unconditional Path Conjecture B for all $n \in \mathbb{N}$: $|\mathcal{A}_{LG_n}(\mathbf{x})| \ge 1$. -/

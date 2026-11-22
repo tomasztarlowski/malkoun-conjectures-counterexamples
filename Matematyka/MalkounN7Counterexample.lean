@@ -4,7 +4,9 @@ public import Matematyka.MalkounCounterexample
 /-!
 # Formal Disproof of Malkoun's Conjectures on a 7-Vertex 2-Vertex-Connected Planar Graph
 
-We formalize the vertex-minimal (`n = 7`, `m = 11`) counterexample discovered in our scan:
+We formalize the 7-vertex, 11-edge (`n = 7`, `m = 11`, smallest counterexample found in our
+numerical scan; absence of `n ≤ 6` counterexamples is a numerical search observation, not a formal
+proof):
 `k4e2k3Graph` ($K_4 \cup_{2e} K_3$), formed from a $K_4$ block on $\{0, 1, 2, 3\}$ and a $K_3$
 block on $\{4, 5, 6\}$ joined across the 2-edge cut $\{(2, 5), (3, 4)\}$.
 

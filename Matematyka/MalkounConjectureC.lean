@@ -12,7 +12,7 @@ restricted to finite trees:
 1. **Unnormalized Bipartite Spinor Reduction & Hopf-Pythagorean Map:**
    Proves `malkounAmplitude_bipartite_unnorm` (factoring arbitrary positive edge spinor norms `r e`)
    and `hopfVecGI_spinor_ok` mapping Gaussian-integer edge spinors to exact integer 3D edge vectors.
-2. **Exact Planar Zero on the Minimal 10-Vertex Cubic Cherry Tree `cherryTree10` ($n=10, m=9$):**
+2. **Exact Planar Zero on the 10-Vertex Cubic Cherry Tree `cherryTree10` ($n=10, m=9$, smallest tree counterexample found in our numerical scan):**
    An explicit planar $120^\circ$ pinwheel configuration `cherryPinwheelConfig` in $z=0$ with pairwise
    distance $\ge 2$ gives $\mathcal{A}_{T_{10}}(\mathbf{x}) = 0$, proving:
    - `malkounAmplitude_cherryPinwheel_eq_zero`
@@ -225,7 +225,7 @@ lemma hopfVecGI_spinor_ok (s : Fin 2 → GI) (hr : 0 < hopfNormGI s) (pu pv : Fi
       Int.cast_pow, Int.cast_ofNat] <;>
     (field_simp [hr_ne]; simp only [hopfNormGI, Int.cast_add, Int.cast_pow]; ring)
 
-/-! ## Part 2: Exact Planar Zero on the Minimal 10-Vertex Cubic Cherry Tree `cherryTree10` -/
+/-! ## Part 2: Exact Planar Zero on the 10-Vertex Cubic Cherry Tree `cherryTree10` -/
 
 section CherryTree10
 
@@ -1068,7 +1068,7 @@ lemma chVal_eval_all :
     rw [hG22, hG00, hG20, hG02]; linear_combination -8 * ho_sq
   exact ⟨ho_cube, hc00, hc10, hc20, hc01, hc11, hc21, hc02, hc12, hc22⟩
 
-/-- **Exact Planar Zero on the Minimal 10-Vertex Cubic Cherry Tree `cherryTree10`:**
+/-- **Exact Planar Zero on the 10-Vertex Cubic Cherry Tree `cherryTree10`:**
 $\mathcal{A}_{T_{10}}(\mathbf{x}) = 0$ at `cherryPinwheelConfig` in $C_{T_{10}}(\mathbb{R}^3)$. -/
 theorem malkounAmplitude_cherryPinwheel_eq_zero :
     malkounAmplitude cherryTree10 cherryPinwheelConfig = 0 := by
