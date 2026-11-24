@@ -2,9 +2,12 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24443725.svg)](https://doi.org/10.5281/zenodo.24443725)
 
+- **Palomar Registry (6-kernel verified):** [`PALOMAR-2026-11-23-000018`](https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-23-000018&version=1) | **Zenodo DOI:** [`10.5281/zenodo.24443725`](https://doi.org/10.5281/zenodo.24443725)
+
 Machine-checked **Lean 4 (`v4.35.0` + Mathlib)** refutations of all four main conjectures (**A, B, C, D**) and the Section 6 real-positivity question from Joseph Malkoun's preprint [*Finite graphs and configurations of points*](https://arxiv.org/abs/2508.13472) (`arXiv:2508.13472v3`), together with unconditional positive theorems for arbitrary linear paths $LG_n$ and small trees.
 
 - **Preprint manuscript:** [`paper/malkoun_counterexamples.tex`](paper/malkoun_counterexamples.tex) ([compiled PDF](paper/malkoun_counterexamples.pdf), 9 pages)
+- **Palomar Registry record:** https://palomar-registry.org/entry.html?id=PALOMAR-2026-11-23-000018&version=1
 - **Zenodo archive & DOI:** https://doi.org/10.5281/zenodo.24443725
 - **Axiom & Kernel Purity:** Zero `sorry`, zero `admit`, zero `native_decide` across all Lean modules; `#print axioms` and `comparator.json` verification depend strictly on `{propext, Classical.choice, Quot.sound}`.
 
